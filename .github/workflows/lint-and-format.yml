@@ -1,0 +1,31 @@
+name: Lint and Format Code
+
+on: [push, pull_request]
+
+jobs:
+  lint-and-format:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run Biome for JS and CSS Linting
+        run: npm run lint:css-js
+
+      - name: Format JS and CSS with Biome
+        run: npm run format:css-js
+
+      - name: Run HTMLHint for HTML Linting
+        run: npm run lint:html
+
+      - name: Format HTML with Prettier
+        run: npm run format
