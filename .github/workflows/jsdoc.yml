@@ -4,7 +4,8 @@ name: Generate JS Docs # this runs JSDocs on all JS files
 on: [push] 
 
 permissions:
-  contents: write # 
+  contents: write
+  pull-requests: write
 
 jobs: 
   jsdocs: 
