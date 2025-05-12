@@ -1,6 +1,5 @@
 name: Generate JS Docs # this runs JSDocs on all JS files
 
-
 on: [push] 
 
 permissions:
@@ -16,12 +15,6 @@ jobs:
       - name: Install Dependency
         run: npm install -g jsdoc
 
-      - name: Making JS Docs
-        run: jsdoc -r .
-
-      - name: Commit and Push Docs Thru Pull Request
-        uses: peter-evans/create-pull-request@v5
-        with:
-          commit-message: "Update JS docs"
-          branch: jsdocs-update
-          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Making JS Docs and Print to Output
+        run: |
+          jsdoc -r . -d /dev/null
