@@ -1,3 +1,7 @@
+name: Lint and Format Code
+
+on: [push, pull_request]
+
 jobs:
   lint-and-format:
     runs-on: ubuntu-latest
@@ -14,22 +18,14 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Run Biome for JS and CSS Linting
+      - name: Lint JS and CSS with Biome
         run: npm run lint:css-js
 
-      - name: Format JS and CSS with Biome
-        run: npm run format:css-js
+      - name: Check formatting for JS and CSS with Biome
+        run: npm run format:css-js -- --check
 
-      - name: Run HTMLHint for HTML Linting
+      - name: Lint HTML with HTMLHint
         run: npm run lint:html
 
-      - name: Format HTML with Prettier
-        run: npm run format
-
-      - name: Commit formatted code (if any changes)
-        run: |
-          git config --global user.name "github-actions"
-          git config --global user.email "github-actions@github.com"
-          git add .
-          git diff --cached --exit-code || git commit -m "Auto-format code"
-          git push
+      - name: Check HTML formatting with Prettier
+        run: prettier --check '**/*.html'
