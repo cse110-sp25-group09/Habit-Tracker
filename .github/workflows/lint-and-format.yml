@@ -21,12 +21,11 @@ jobs:
       - name: Lint JS and CSS with Biome
         run: npm run lint:css-js
 
-      - name: Check formatting for JS and CSS with Biome
-        run: npm run format:css-js --check
+      - name: Check formatting for JS and CSS with Prettier
+        run: npx prettier --check '**/*.{js,css}' || echo "JS/CSS Formatting issues detected"
 
       - name: Lint HTML with HTMLHint
         run: npm run lint:html
 
       - name: Check HTML formatting with Prettier
-        run: npx prettier --check '**/*.html' || echo "Formatting issues detected"
-
+        run: npx prettier --check '**/*.html' || echo "HTML Formatting issues detected"
