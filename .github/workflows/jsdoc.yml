@@ -1,10 +1,13 @@
 name: Generate JS Docs # this runs JSDocs on all JS files
 
-on: [push] # the Github Action will activate "on" the event that you "push" to the repo
+on: [push] 
 
-jobs: # the things being executed
-  jsdocs: # the name of your status check, will become important when you do branch protection
-    runs-on: ubuntu-latest # which device on Github's server that you are running the Actions on
+permissions:
+  contents: write
+
+jobs: 
+  jsdocs: 
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
