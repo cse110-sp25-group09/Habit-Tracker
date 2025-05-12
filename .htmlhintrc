@@ -6,5 +6,6 @@
   "src-not-empty": true,
   "alt-require": true,
   "attr-value-double-quotes": true,
-  "title-require": true
+  "title-require": true,
+  "exclude": ["out/**"]
 }
