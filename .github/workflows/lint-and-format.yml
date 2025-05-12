@@ -1,3 +1,6 @@
+name: Linting and Formatting
+
+on: [push]
 jobs:
   lint-and-format:
     runs-on: ubuntu-latest
