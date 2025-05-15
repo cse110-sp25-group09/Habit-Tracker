@@ -1,52 +1,65 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Local Storage Test</title>
-		<link rel="stylesheet" href="styles/jsdoc-default.css">
-		<script src="scripts/local.js" type="module"></script>
-	</head>
-	<body>
-		<main>
-		</main>
-		<form id="new-habit">
-  <fieldset>
-    <legend>Habit Information:</legend>
-    <label for="habitName">Habit Name:
-      <input type="text" id="habitName" name="habitName" required />
-    </label>
-    <label for="theme">Theme:
-      <input type="text" id="theme" name="theme" required />
-    </label>
-    <label for="frequency">Frequency:
-      <select id="frequency" name="frequency" required>
-        <option value="daily">Daily</option>
-        <option value="weekly">Weekly</option>
-        <option value="monthly">Monthly</option>
-      </select>
-    </label>
-    <label for="startDate">Start Date:
-      <input type="date" id="startDate" name="startDate" required />
-    </label>
-    <label for="reminderTime">Reminder Time:
-      <input type="time" id="reminderTime" name="reminderTime" />
-    </label>
-  </fieldset>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Local Storage Test</title>
+    <link rel="stylesheet" href="styles/jsdoc-default.css" />
+    <script src="scripts/local.js" type="module"></script>
+  </head>
+  <body>
+    <main id="habit-cards"></main>
+    <form id="new-habit">
+      <fieldset>
+        <legend>Habit Information:</legend>
+        <label for="habitName"
+          >Habit Name:
+          <input type="text" id="habitName" name="habitName" required />
+        </label>
+        <label for="theme"
+          >Theme:
+          <input type="text" id="theme" name="theme" required />
+        </label>
+        <label for="frequency"
+          >Frequency:
+          <select id="frequency" name="frequency" required>
+            <option value="daily">Daily</option>
+            <option value="weekly">Weekly</option>
+            <option value="monthly">Monthly</option>
+          </select>
+        </label>
+        <label for="startDate"
+          >Start Date:
+          <input type="date" id="startDate" name="startDate" required />
+        </label>
+        <label for="reminderTime"
+          >Reminder Time:
+          <input type="time" id="reminderTime" name="reminderTime" />
+        </label>
+      </fieldset>
 
-  <fieldset>
-    <legend>Priority and Progress:</legend>
-    <label for="priority">Priority (1-5):
-      <input type="number" id="priority" name="priority" min="1" max="5" required />
-    </label>
-    <label for="streakCount">Streak Count:
-      <input type="number" id="streakCount" name="streakCount" min="0" />
-    </label>
-  </fieldset>
+      <fieldset>
+        <legend>Priority and Progress:</legend>
+        <label for="priority"
+          >Priority (1-5):
+          <input
+            type="number"
+            id="priority"
+            name="priority"
+            min="1"
+            max="5"
+            required
+          />
+        </label>
+        <label for="streakCount"
+          >Streak Count:
+          <input type="number" id="streakCount" name="streakCount" min="0" />
+        </label>
+      </fieldset>
 
-  <button type="submit">Add Habit</button>
-  <button type="button" class="danger">Clear Local Storage</button>
-</form>
-	</body>
+      <button type="submit">Add Habit</button>
+      <button type="button" class="danger">Clear All</button>
+    </form>
+  </body>
 </html>
