@@ -4,8 +4,59 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Daily Calendar</title>
+
+  
+    <link rel="stylesheet" href="admin/cipipeline/style.css" />
   </head>
+
   <body>
     <h1>Daily Calendar</h1>
+
+    <div class="calendar-wheel">
+      
+      <!-- Sunday -->
+      <div class="day-card">
+        <span class="day-label">Sun</span>
+        <span class="day-date">18</span>
+      </div>
+
+      <!-- Monday (completed) -->
+      <div class="day-card completed">
+        <span class="day-label">Mon</span>
+        <span class="day-date">19</span>
+        <span class="badge dot"></span>
+      </div>
+
+      <!-- Tuesday (today & active) -->
+      <div class="day-card today active">
+        <span class="day-label">Tue</span>
+        <span class="day-date">20</span>
+      </div>
+
+      <!-- Wednesday -->
+      <div class="day-card">
+        <span class="day-label">Wed</span>
+        <span class="day-date">21</span>
+      </div>
+
+      <!-- Thursday (completed) -->
+      <div class="day-card completed">
+        <span class="day-label">Thu</span>
+        <span class="day-date">22</span>
+        <span class="badge dot"></span>
+      </div>
+
+      <!-- Friday -->
+      <div class="day-card">
+        <span class="day-label">Fri</span>
+        <span class="day-date">23</span>
+      </div>
+
+      <!-- Saturday -->
+      <div class="day-card">
+        <span class="day-label">Sat</span>
+        <span class="day-date">24</span>
+      </div>
+    </div>
   </body>
 </html>

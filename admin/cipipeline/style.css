@@ -17,3 +17,12 @@ h1 {
   border-bottom: 2px solid #3498db;
   padding-bottom: 10px;
 }
+/* Color Wheel*/
+:root {
+  --color-primary-dark:    #27187E;   /* active day background */
+  --color-primary:         #758BFD;   /* card accent */
+  --color-primary-light:   #AEB8FE;   /* card background */
+  --color-bg:              #F1F2F6;   /* screen background */
+  --color-highlight:       #FF8600;   /* completed badge */
+}
+
