@@ -27,8 +27,8 @@ class HabitCard extends HTMLElement {
         .card {
           border-radius: 1rem;
           padding: 1rem;
-          background:rgb(61, 176, 201);
-          box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+          background:#b8bcfc;
+          box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
           width: 250px;
           margin: 1rem;
           font-family: sans-serif;
