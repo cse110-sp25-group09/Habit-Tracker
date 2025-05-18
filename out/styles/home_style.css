@@ -11,7 +11,7 @@
   align-items: center;
   width: 100%; /* temp fix */
   background-color: #7c8efc;
-  padding: 0.75rem 0;
+  padding: 0.75rem;
   position: fixed;
   margin: auto;
   max-width: 400px;
@@ -33,7 +33,7 @@ body {
   position: relative;
   padding-bottom: 4rem
 }
-.add-button {
+.create-button {
   background-color: orange;
   color: white;
   font-size: 2rem;
@@ -70,4 +70,26 @@ body {
   width: 28px;
   height: 28px;
   filter: brightness(0) invert(1);
+}
+#habit-form {
+  display: none;
+  position: fixed;
+  bottom: 140px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #fff;
+  padding: 1rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 0.75rem;
+  z-index: 100;
+  width: 90%;
+  max-width: 350px;
+}
+#card-container {
+  display: flex;
+  flex-direction: column; /* or row if you want cards side-by-side */
+  align-items: center;
+  justify-content: center; /* use only if you want vertical centering too */
+  min-height: 100vh; 
+  padding: 3.5rem;
 }

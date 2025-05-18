@@ -9,7 +9,14 @@
   <body>
     <div class="app">
       <h1 class="app-header">Habit Tracker</h1>
-      <button class="add-button">+</button>
+      <div id="card-container"></div>
+      <div id="habit-form" style="display: none; padding: 1rem">
+        <label for="habit-name">Name:</label>
+        <input type="text" id="habit-name" />
+        <button id="submit-habit">Add Habit</button>
+      </div>
+      <button class="create-button" id="create-button">+</button>
+
       <footer class="nav-bar">
         <div id="home-selection" class="nav-item">
           <img src="/out/icons/house-solid.svg" alt="home" />
