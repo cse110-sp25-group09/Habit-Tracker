@@ -12,11 +12,11 @@
   },
   "scripts": {
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
-    "lint:css-js": "biome check .", 
-    "format:css-js": "prettier --write '**/*.{js,css}'", 
-    "lint:html": "htmlhint '**/*.html'", 
-    "format": "npm run format:css-js && prettier --write '**/*.html'", 
-    "lint": "npm run lint:css-js && npm run lint:html"  
+    "lint:css-js": "biome check .",
+    "format:css-js": "prettier --write '**/*.{js,css}'",
+    "lint:html": "htmlhint '**/*.html'",
+    "format": "npm run format:css-js && prettier --write '**/*.html'",
+    "lint": "npm run lint:css-js && npm run lint:html"
   },
   "jest": {
     "transform": {},

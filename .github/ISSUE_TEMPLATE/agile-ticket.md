@@ -1,44 +1,52 @@
 ---
 name: Agile Ticket
 about: Template for Ticket Generation
-title: "[TASK] - "
+title: '[TASK] - '
 labels: ''
 assignees: ''
-
 ---
 
-### Summary  
-<!-- Brief description of the task or issue -->  
+### Summary
 
-### Description  
-<!-- A detailed explanation of what needs to be done -->  
+<!-- Brief description of the task or issue -->
 
-### Acceptance Criteria  
-- [ ] Criteria 1:  
-- [ ] Criteria 2:  
-- [ ] Criteria 3:  
+### Description
 
-### Subtasks  
-- [ ] Subtask 1  
-- [ ] Subtask 2  
-- [ ] Subtask 3  
+<!-- A detailed explanation of what needs to be done -->
 
-### Priority  
-<!-- Choose one: Low / Medium / High / Critical -->  
+### Acceptance Criteria
 
-### Estimated Effort  
-<!-- Choose one: Small / Medium / Large / X-Large -->  
+- [ ] Criteria 1:
+- [ ] Criteria 2:
+- [ ] Criteria 3:
 
-### Related Links  
-- PR: #  
-- Epic: #  
-- Dependencies: #  
+### Subtasks
 
-### Status  
-- [ ] Not Started  
-- [ ] In Progress  
-- [ ] In Review  
-- [ ] Done  
+- [ ] Subtask 1
+- [ ] Subtask 2
+- [ ] Subtask 3
 
-### Additional Context  
+### Priority
+
+<!-- Choose one: Low / Medium / High / Critical -->
+
+### Estimated Effort
+
+<!-- Choose one: Small / Medium / Large / X-Large -->
+
+### Related Links
+
+- PR: #
+- Epic: #
+- Dependencies: #
+
+### Status
+
+- [ ] Not Started
+- [ ] In Progress
+- [ ] In Review
+- [ ] Done
+
+### Additional Context
+
 <!-- Add any other context or screenshots here -->
