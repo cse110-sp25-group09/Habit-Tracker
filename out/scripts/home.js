@@ -61,9 +61,12 @@ class HabitCard extends HTMLElement {
         display: flex;
         justify-content: center;
         align-items: center;
+        flex-direction: column;
         font-family: sans-serif;
         box-sizing: border-box;
         backface-visibility: hidden;
+        overflow: hidden;
+
       }
  
       .flip-card-front {
@@ -89,7 +92,18 @@ class HabitCard extends HTMLElement {
       #card_frequency {
       font-family: sans-serif;
       }
-
+      .flip-card-back p {
+        margin: 0.5em 0;
+        font-size: 0.75em;
+        line-height: 1.4;
+        max-width: 90%;
+        word-wrap: break-word;
+        word-break: break-word;
+      }
+      .streak_number{
+        color: orange;
+        font-weight:bold;
+      }
 
     </style>
  
@@ -99,7 +113,11 @@ class HabitCard extends HTMLElement {
           <h1 id="card_name">${this.getAttribute("card-name") || "Untitled Habit"}</h1>
         </div>
         <div class="flip-card-back">
+          <p id="card_description">${this.getAttribute("card-description")|| "None"}</p>
           <p id="card_frequency">${this.getAttribute("card-frequency")|| "None"}</p>
+          <p id="card_time">${this.getAttribute("card-time")|| "None"}</p>
+          <p id="card_streak">${this.getAttribute("card-streak")|| "None"}</p>
+
         </div>
       </div>
     </div>
@@ -112,7 +130,12 @@ class HabitCard extends HTMLElement {
   connectedCallback() {
     const titleEl = this.shadowRoot.getElementById("card_name");
     const freqEl = this.shadowRoot.getElementById("card_frequency");
-    if (titleEl) {
+    const descrEl = this.shadowRoot.getElementById("card_description");
+    const timeEl = this.shadowRoot.getElementById("card_time");
+    const streakEl = this.shadowRoot.getElementById("card_streak");
+
+
+    if (titleEl) {  
         titleEl.textContent = this.getAttribute("card-name") || "Untitled Habit";
     }
 
@@ -120,7 +143,16 @@ class HabitCard extends HTMLElement {
     if (freqEl) {
       freqEl.textContent = `Frequency: ${this.getAttribute("card-frequency") || "None"}`;
     }
-
+    if (descrEl) {
+      descrEl.textContent = `Description: ${this.getAttribute("card-description") || "None"}`;
+    }
+    if (timeEl) {
+      timeEl.textContent = `Description: ${this.getAttribute("card-time") || "None"}`;
+    }
+    if (streakEl) {
+      streakEl.innerHTML = `Current Streak: <span class="streak_number"> ${this.getAttribute("card-streak") || "None"} </span>`;
+    }
+    
 
     }
 }
@@ -140,6 +172,11 @@ document.getElementById("create-button").addEventListener("click", () => {
 document.getElementById("submit-habit").addEventListener("click", () => {
   const name = document.getElementById("habit-name").value.trim();
   const frequency = document.getElementById("habit-frequency").value;
+  const descr = document.getElementById("habitDescription").value;
+  const timeStr = document.getElementById("habit-time").value;
+
+  let streak = 0;
+
 
 
 
@@ -148,7 +185,9 @@ document.getElementById("submit-habit").addEventListener("click", () => {
     const newCard = document.createElement("habit-card");
     newCard.setAttribute("card-name", name);
     newCard.setAttribute("card-frequency", frequency);
-
+    newCard.setAttribute("card-description", descr);
+    newCard.setAttribute("card-time", timeStr);
+    newCard.setAttribute("card-streak", streak);
 
     document.getElementById("card-container").appendChild(newCard);
   }
@@ -156,6 +195,9 @@ document.getElementById("submit-habit").addEventListener("click", () => {
 
   // Reset and hide form
   document.getElementById("habit-name").value = "";
+  document.getElementById("habitDescription").value = "";
   document.getElementById("habit-frequency").value = "Daily";
+  document.getElementById("habit-time").value="";
+
   document.getElementById("habit-form").style.display = "none";
 });

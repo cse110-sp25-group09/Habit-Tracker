@@ -148,6 +148,20 @@ label[for="habit-name"] {
   font-size: 1rem;
   padding: 4px 0;
   outline: none;
+}
+label[for="habitDescription"] {
+  font-size: 1rem;
+  font-weight:bold;
+}
+
+#habitDescription {
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid white;
+  width: 150px;
+  font-size: 1rem;
+  padding: 4px 0;
+  outline: none;
 
 
 }
