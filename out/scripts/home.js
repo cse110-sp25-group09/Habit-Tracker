@@ -45,10 +45,10 @@ class HabitCard extends HTMLElement {
         position: relative;
       }
  
-      :host(:hover) .flip-card-inner {
+      .flip-card-inner.flipped {
         transform: rotateY(180deg);
       }
- 
+
       .flip-card-front,
       .flip-card-back {
         position: absolute;
@@ -106,7 +106,7 @@ class HabitCard extends HTMLElement {
       }
 
     </style>
- 
+
     <div class="flip-card">
       <div class="flip-card-inner">
         <div class="flip-card-front">
@@ -117,11 +117,17 @@ class HabitCard extends HTMLElement {
           <p id="card_frequency">${this.getAttribute("card-frequency")|| "None"}</p>
           <p id="card_time">${this.getAttribute("card-time")|| "None"}</p>
           <p id="card_streak">${this.getAttribute("card-streak")|| "None"}</p>
-
         </div>
       </div>
     </div>
   `;
+  const flipCard = shadow.querySelector('.flip-card');
+  const flipInner = shadow.querySelector('.flip-card-inner');
+
+  flipCard.addEventListener('click', () => {
+  flipInner.classList.toggle('flipped');
+});
+
   }
   static get observedAttributes() {
     return ["card-name"];
@@ -133,7 +139,6 @@ class HabitCard extends HTMLElement {
     const descrEl = this.shadowRoot.getElementById("card_description");
     const timeEl = this.shadowRoot.getElementById("card_time");
     const streakEl = this.shadowRoot.getElementById("card_streak");
-
 
     if (titleEl) {  
         titleEl.textContent = this.getAttribute("card-name") || "Untitled Habit";
@@ -147,7 +152,7 @@ class HabitCard extends HTMLElement {
       descrEl.textContent = `Description: ${this.getAttribute("card-description") || "None"}`;
     }
     if (timeEl) {
-      timeEl.textContent = `Description: ${this.getAttribute("card-time") || "None"}`;
+      timeEl.textContent = `Time: ${this.getAttribute("card-time") || "None"}`;
     }
     if (streakEl) {
       streakEl.innerHTML = `Current Streak: <span class="streak_number"> ${this.getAttribute("card-streak") || "None"} </span>`;
