@@ -16,5 +16,6 @@ jobs: # the things being executed
       - name: Install jest-environment-jsdom
         run: npm install --save-dev jest-environment-jsdom
       - name: Unit Test
-        run: node --experimental-vm-modules node_modules/jest/bin/jest.js admin/cipipeline/unit.test.js
-
+        run: npm test -- ./admin/cipipeline/unit.test.js
+      - name: CRUD Unit Tests
+        run: npm test -- ./admin/cipipeline/createCardUnit.test.js
