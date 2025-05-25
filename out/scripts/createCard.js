@@ -46,8 +46,10 @@ export function createCard(habitName, habitDescription, habitFrequency, startDat
    if(typeof habitFrequency != "number"){
      throw new Error (typeErrorTemplate(habitFrequency, typeof(habitFrequency)));
    }
-   //check that startDateTime is a valid dateString
-  // Requires regex to do properly: https://stackoverflow.com/questions/7445328/check-if-a-string-is-a-date-value
+   /*check that startDateTime is a valid dateString (could be in standard or UTC string format, just need to be acceptable to Date.parse())
+   https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/parse
+    Requires regex to do properly: https://stackoverflow.com/questions/7445328/check-if-a-string-is-a-date-value
+    */
 
 
     let card = {
