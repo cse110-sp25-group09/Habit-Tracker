@@ -1,3 +1,4 @@
+import {createCard, localStorageAdapter} from "./createCard.js"
 window.addEventListener('DOMContentLoaded', init);
 
 function init() {
@@ -16,12 +17,22 @@ function initFormHandler() {
   let habitForm = document.querySelector('form');
   habitForm.addEventListener('submit', (event) => {
     event.preventDefault();
-    let formData = new FormData(habitForm);
-    let habit = {};
-    for (const key of formData) {
-      habit[key[0]] = key[1];
-    }
-
+    //take data from form input 
+    let habitNameOpt = document.getElementById("habitName"); 
+    let habitDescriptionOpt = document.getElementById("description"); 
+    let habitFrequencyOpt = document.getElementById("frequency"); 
+    let habitFrequencyNumber = Number(habitFrequencyOpt.value); 
+    let habitStartDateOpt = document.getElementById("startDate"); 
+    let habitStartTimeOpt = document.getElementById("reminderTime"); 
+    let habitStartDateTime = habitStartDateOpt.value + 'T' +habitStartTimeOpt.value; 
+    //call createCard
+    createCard(habitNameOpt.value,
+      habitDescriptionOpt.value, 
+      habitFrequencyNumber, 
+      habitStartDateTime, 
+      localStorageAdapter
+    ); 
+/*
     let habits = getHabits() || [];
     const existingHabitIndex = habits.findIndex(
       (h) => h.habitName === habit.habitName,
@@ -38,6 +49,7 @@ function initFormHandler() {
     saveHabits(habits);
 
     displayHabits();
+  */ 
   });
 
   let clearBtn = document.querySelector('button.danger');
