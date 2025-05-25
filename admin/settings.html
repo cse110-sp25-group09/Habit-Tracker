@@ -3,9 +3,40 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Commissioner:wght@100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/out/styles/setting_style.css" />
     <title>Settings</title>
   </head>
   <body>
-    <h1>Settings</h1>
+    <h1 class="header">Settings</h1>
+    <div class="contents">
+    <div class="theme-selection">
+      <h2>Theme Selection</h2>
+      <label for="theme-select">Choose a theme:</label>
+      <select id="theme-select">
+        <option value="default">Default</option>
+        <option value="pink">Pink</option>
+        <option value="tritons">Tritons</option>
+      </select>
+    </div>
+    <div class="reset-cards">
+      <h2>Reset Cards</h2>
+      <p>This will remove all your current cards and reset the app to its initial state.</p>
+      <button id="reset-cards">Reset Cards</button>
+    </div>
+    </div>
+    <footer class="nav-bar">
+        <div id="home-selection" class="nav-item">
+          <img src="/out/icons/house-solid.svg" alt="home" />
+        </div>
+        <div id="calendar-selection" class="nav-item">
+          <img src="/out/icons/calendar-days-solid.svg" alt="calendar" />
+        </div>
+        <div id="settings-selection" class="nav-item">
+          <img src="/out/icons/gear-solid.svg" alt="settings" />
+        </div>
+      </footer>
   </body>
 </html>
