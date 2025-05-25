@@ -190,70 +190,24 @@ class HabitCard extends HTMLElement {
       </div>
     </div>
   `;
-    const flipCard = shadow.querySelector('.flip-card');
-    const flipInner = shadow.querySelector('.flip-card-inner');
+  const flipCard = shadow.querySelector('.flip-card');
+  const flipInner = shadow.querySelector('.flip-card-inner');
 
-    const deleteBtn = this.shadowRoot.querySelector('.delete-btn');
-    const confirmDialog = this.shadowRoot.querySelector('.confirm-dialog');
-    const deleteDialog = this.shadowRoot.querySelector('.delete-dialog');
+  flipCard.addEventListener('click', () => {
+  flipInner.classList.toggle('flipped');
+});
 
-    const yesBtn = this.shadowRoot.querySelector('.confirm-yes');
-    const noBtn = this.shadowRoot.querySelector('.confirm-no');
-
-    deleteBtn.addEventListener('click', () => {
-      confirmDialog.hidden = false;
-      yesBtn.hidden = false;
-      noBtn.hidden = false;
-      deleteDialog.hidden = false;
-
-      deleteBtn.hidden = true;
-    });
-
-    noBtn.addEventListener('click', () => {
-      deleteBtn.hidden = false;
-      confirmDialog.hidden = true;
-      yesBtn.hidden = true;
-      noBtn.hidden = true;
-      deleteDialog.hidden = true;
-    });
-
-    // yesBtn.addEventListener('click', () => {
-
-    //   this.remove(); // removes the card from the DOM
-
-    // });
-    yesBtn?.addEventListener('click', (e) => {
-      e.stopPropagation(); // prevent card flip
-
-      const idElement = this.shadowRoot.querySelector('#card_id');
-      if (idElement) {
-        const cardId = idElement.textContent.trim();
-        console.log(cardId);
-        deleteHabit(cardId);
-        this.remove(); // This removes the custom element from the DOM
-      }
-    });
-
-    [deleteBtn, yesBtn, noBtn].forEach((btn) => {
-      btn?.addEventListener('click', (e) => e.stopPropagation());
-    });
-
-    flipCard.addEventListener('click', () => {
-      flipInner.classList.toggle('flipped');
-    });
   }
-
   static get observedAttributes() {
-    return ['card-name'];
+    return ["card-name"];
   }
-
+ 
   connectedCallback() {
-    const titleEl = this.shadowRoot.getElementById('card_name');
-    const freqEl = this.shadowRoot.getElementById('card_frequency');
-    const descrEl = this.shadowRoot.getElementById('card_description');
-    const timeEl = this.shadowRoot.getElementById('card_time');
-    const streakEl = this.shadowRoot.getElementById('card_streak');
-    const idEl = this.shadowRoot.getElementById('card_id');
+    const titleEl = this.shadowRoot.getElementById("card_name");
+    const freqEl = this.shadowRoot.getElementById("card_frequency");
+    const descrEl = this.shadowRoot.getElementById("card_description");
+    const timeEl = this.shadowRoot.getElementById("card_time");
+    const streakEl = this.shadowRoot.getElementById("card_streak");
 
     if (titleEl) {  
         titleEl.textContent = this.getAttribute("card-name") || "Untitled Habit";
@@ -266,7 +220,7 @@ class HabitCard extends HTMLElement {
       descrEl.textContent = `Description: ${this.getAttribute('card-description') || 'None'}`;
     }
     if (timeEl) {
-      timeEl.textContent = `Time: ${this.getAttribute('card-time') || 'None'}`;
+      timeEl.textContent = `Time: ${this.getAttribute("card-time") || "None"}`;
     }
     if (streakEl) {
       streakEl.innerHTML = `Current Streak: <span class="streak_number"> ${this.getAttribute('card-streak') || 'None'} </span>`;
