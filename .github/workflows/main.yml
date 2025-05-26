@@ -11,3 +11,5 @@ jobs: # the things being executed
         run: npm install
       - name: Unit Test
         run: npm test -- ./admin/cipipeline/unit.test.js
+      - name: Home Page Test
+        run: npm test -- ./admin/cipipeline/home.test.js
