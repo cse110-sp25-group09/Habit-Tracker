@@ -7,7 +7,14 @@ jobs: # the things being executed
     runs-on: ubuntu-latest # which device on Github's server that you are running the Actions on
     steps:
       - uses: actions/checkout@v4 # using version 4 of Actions
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
       - name: Install Dependencies
-        run: npm install
+        run: npm ci
+      - name: Install jest-environment-jsdom
+        run: npm install --save-dev jest-environment-jsdom
       - name: Unit Test
-        run: npm test -- ./admin/cipipeline/unit.test.js
+        run: node --experimental-vm-modules node_modules/jest/bin/jest.js admin/cipipeline/unit.test.js
+

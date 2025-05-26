@@ -2,17 +2,20 @@
  * @jest-environment jsdom
  */
 
-const fs = require('fs');
-const path = require('path');
-beforeAll(() => {
-  const html = fs.readFileSync(
-    path.resolve(__dirname, '../home-page.html'),
-    'utf8',
-  );
+import { readFileSync } from 'fs';
+import { fileURLToPath } from 'url';
+import { dirname, resolve } from 'path';
 
+// Emulate __dirname in ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+beforeAll(async () => {
+  const html = readFileSync(resolve(__dirname, '../home-page.html'), 'utf8');
   document.body.innerHTML = html;
 
-  require('../../out/scripts/home.js');
+  // Dynamically import the script so it works with ESM
+  await import('../../out/scripts/home.js');
 });
 
 describe('HabitCard component', () => {
