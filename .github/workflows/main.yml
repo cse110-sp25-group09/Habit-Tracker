@@ -10,4 +10,5 @@ jobs: # the things being executed
       - name: Install Dependencies
         run: npm install
       - name: Unit Test
-        run: npm test -- ./admin/cipipeline/unit.test.js
+        run: node --experimental-vm-modules node_modules/jest/bin/jest.js admin/cipipeline/unit.test.js
+
