@@ -11,10 +11,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 beforeAll(async () => {
-  const html = readFileSync(
-    resolve(__dirname, '../home-page.html'),
-    'utf8',
-  );
+  const html = readFileSync(resolve(__dirname, '../home-page.html'), 'utf8');
   document.body.innerHTML = html;
 
   // Dynamically import the script so it works with ESM
