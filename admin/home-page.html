@@ -3,9 +3,54 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Home Page</title>
+    <title>Habit Tracker</title>
+    <link rel="stylesheet" href="/out/styles/home_style.css" />
   </head>
   <body>
-    <h1>Home Page</h1>
+    <div class="app">
+      <h1 class="app-header">Habit Tracker</h1>
+      <div id="card-container"></div>
+
+      <div id="habit-form" class="form-row">
+        <div id="create-card">
+          <h3>Create Card</h3>
+        </div>
+
+        <label for="habit-name">Habit Name:</label>
+        <input type="text" id="habit-name" name="habit-name" />
+        <label for="habitDescription">Description:</label>
+        <input
+          type="textarea"
+          id="habitDescription"
+          name="habitDescription"
+          maxlength="29"
+        />
+
+        <label for="habit-frequency">Frequency:</label>
+        <select id="habit-frequency" name="habit-frequency">
+          <option value="Daily">Daily</option>
+          <option value="Weekly">Weekly</option>
+          <option value="Monthly">Monthly</option>
+        </select>
+        <label for="habit-time">Notification time:</label>
+        <input type="time" id="habit-time" name="habit-time" />
+        <button id="submit-habit">Create Habit</button>
+      </div>
+
+      <button class="create-button" id="create-button">+</button>
+
+      <footer class="nav-bar">
+        <div id="home-selection" class="nav-item">
+          <img src="/out/icons/house-solid.svg" alt="home" />
+        </div>
+        <div id="calendar-selection" class="nav-item">
+          <img src="/out/icons/calendar-days-solid.svg" alt="calendar" />
+        </div>
+        <div id="settings-selection" class="nav-item">
+          <img src="/out/icons/gear-solid.svg" alt="settings" />
+        </div>
+      </footer>
+    </div>
+    <script src="/out/scripts/home.js"></script>
   </body>
 </html>
