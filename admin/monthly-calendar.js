@@ -1,20 +1,17 @@
 //Menu Navigation Bar
-const home_select = document.getElementById("home-selection");
-const calendar_select = document.getElementById("calendar-selection");
-const settings_select = document.getElementById("settings-selection");
+const home_select = document.getElementById('home-selection');
+const calendar_select = document.getElementById('calendar-selection');
+const settings_select = document.getElementById('settings-selection');
 
-home_select.addEventListener("click",() =>{
-    window.location.href = "home-page.html"
+home_select.addEventListener('click', () => {
+  window.location.href = 'home-page.html';
 });
-calendar_select.addEventListener("click",() =>{
-    window.location.href = "monthly-calendar.html"
+calendar_select.addEventListener('click', () => {
+  window.location.href = 'monthly-calendar.html';
 });
-settings_select.addEventListener("click",() =>{
-    window.location.href = "settings.html"
+settings_select.addEventListener('click', () => {
+  window.location.href = 'settings.html';
 });
-
-
-
 
 let currentYear = new Date().getFullYear();
 export const monthNames = [
