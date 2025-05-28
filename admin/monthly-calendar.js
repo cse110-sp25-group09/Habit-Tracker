@@ -1,8 +1,23 @@
-const calendarContainer = document.getElementById('calendar');
-const monthLabel = document.getElementById('month-label');
-let currentYear = new Date().getFullYear();
+//Menu Navigation Bar
+const home_select = document.getElementById("home-selection");
+const calendar_select = document.getElementById("calendar-selection");
+const settings_select = document.getElementById("settings-selection");
 
-const monthNames = [
+home_select.addEventListener("click",() =>{
+    window.location.href = "home-page.html"
+});
+calendar_select.addEventListener("click",() =>{
+    window.location.href = "monthly-calendar.html"
+});
+settings_select.addEventListener("click",() =>{
+    window.location.href = "settings.html"
+});
+
+
+
+
+let currentYear = new Date().getFullYear();
+export const monthNames = [
   'January',
   'February',
   'March',
@@ -17,7 +32,9 @@ const monthNames = [
   'December',
 ];
 
-function generateCalendar(year) {
+export function generateCalendar(year) {
+  const calendarContainer = document.getElementById('calendar');
+  const monthLabel = document.getElementById('month-label');
   calendarContainer.innerHTML = '';
   monthLabel.textContent = year;
 
@@ -54,10 +71,20 @@ function generateCalendar(year) {
     }
 
     // Fill current month
+    const today = new Date(); //this is purely visual, to highlight today's date
+    const todayDate = today.getDate();
+    const todayMonth = today.getMonth();
+    const todayYear = today.getFullYear();
+
     for (let day = 1; day <= daysInMonth; day++) {
       const dayDiv = document.createElement('div');
       dayDiv.className = 'day';
       dayDiv.textContent = day;
+
+      if (day === todayDate && month === todayMonth && year === todayYear) {
+        dayDiv.classList.add('today');
+      }
+
       grid.appendChild(dayDiv);
     }
 
@@ -76,14 +103,29 @@ function generateCalendar(year) {
   }
 }
 
-document.getElementById('prev-year').addEventListener('click', () => {
-  currentYear--;
-  generateCalendar(currentYear);
-});
+// document.getElementById('prev-year').addEventListener('click', () => {
+//   currentYear--;
+//   generateCalendar(currentYear);
+// });
 
-document.getElementById('next-year').addEventListener('click', () => {
-  currentYear++;
-  generateCalendar(currentYear);
-});
+// document.getElementById('next-year').addEventListener('click', () => {
+//   currentYear++;
+//   generateCalendar(currentYear);
+// });
 
-generateCalendar(currentYear);
+export function setupEventListeners() {
+  document.getElementById('prev-year').addEventListener('click', () => {
+    currentYear--;
+    generateCalendar(currentYear);
+  });
+
+  document.getElementById('next-year').addEventListener('click', () => {
+    currentYear++;
+    generateCalendar(currentYear);
+  });
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  generateCalendar(currentYear);
+  setupEventListeners();
+});
