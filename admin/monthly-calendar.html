@@ -3,9 +3,30 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="monthly.css" />
     <title>Monthly Calendar</title>
   </head>
+
   <body>
-    <h1>Monthly Calendar</h1>
+    <span class="header">Monthly Calendar</span>
+    <div class="controls">
+      <button id="prev-year">Previous Year</button>
+      <span class="month-label" id="month-label"></span>
+      <button id="next-year">Next Year</button>
+    </div>
+    <div class="calendar" id="calendar"></div>
+
+    <footer class="nav-bar">
+      <div id="home-selection" class="nav-item">
+        <img src="/out/icons/house-solid.svg" alt="home" />
+      </div>
+      <div id="calendar-selection" class="nav-item">
+        <img src="/out/icons/calendar-days-solid.svg" alt="calendar" />
+      </div>
+      <div id="settings-selection" class="nav-item">
+        <img src="/out/icons/gear-solid.svg" alt="settings" />
+      </div>
+    </footer>
+    <script type="module" src="monthly-calendar.js"></script>
   </body>
 </html>
