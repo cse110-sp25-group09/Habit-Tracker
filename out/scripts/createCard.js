@@ -1,5 +1,3 @@
-//global.self = global; //remove this code in the browser, test in browser 
-
 export const localStorageAdapter = {
     get: (key) => localStorage.getItem(key),
     set: (key, value) => localStorage.setItem(key, value )
@@ -57,11 +55,55 @@ export function createCard(habitName, habitDescription, habitFrequency, startDat
         habitDescription: habitDescription,
         habitFrequency: habitFrequency,
         startDateTime: startDateTime,
-        streak: 0
+        habitStreak: 0
     };
 
     let cardID = "id" + self.crypto.randomUUID();
     adapter.set(cardID, JSON.stringify(card));
     return cardID;
+}
+
+/**
+ * @param {string} cardID the string id of the card being read
+ * @param {object} adapter an object representing our database (currenly only use localStorageAdapter)
+ */
+export function readCard(cardID, adapter){
+  return adapter.get(cardID);
+}
+
+/**
+ * @param {string} cardID string ID of card (ex
+ * @param {list} fields list of fields to update in the given card object
+ * @param {list} newValues list of new values for fields (passed in the same order).
+ * New values should follow the type requirements of createCard()
+ */
+export function updateCard(cardID, fields, newValues){
+  //check that fields and newValues are the same length
+  if(fields.length != newValues.length){
+    throw new Error ('fields and newValues must have the same length');
+  }
+  const stringFields = new Set ("habitName", "habitDescription" );
+  const numberFields = new Set ("habitFrequency", "habitStreak");
+  let cardToUpdate = adapter.get(cardID);
+  cardToUpdate = JSON.parse(cardToUpdate);
+  for (let i = 0; i < fields.length; i++){
+      if (!Object.hasOwn(cardToUpdate, fields[i])) {
+        throw new Error (`${fields[i]} is not a valid card field`);
+      }
+      if (fields[i] in stringFields){
+        cardToUpdate.fields[i] = newValues[i];
+      }
+      else if (fields[i] in numberFields){
+        if (!newValues[i]){ //will reject null, false, 0 but not "0", dependent on all values being parsed as strings
+          throw new Error (`${fields[i]} is not a valid number field`);
+        }
+        cardToUpdate.fields[i] =  newValues[i];
+      }
+      //checking for date strings, rejecting everything else (requires regex)
+      else{
+
+      }
+      cardToUpdate.fields[i] = newValues[i]; 
+    }
 }
 
