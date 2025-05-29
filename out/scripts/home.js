@@ -1,30 +1,24 @@
-
-
 //below is the code for the menu bar
 
+const home_select = document.getElementById('home-selection');
+const calendar_select = document.getElementById('calendar-selection');
+const settings_select = document.getElementById('settings-selection');
 
-const home_select = document.getElementById("home-selection");
-const calendar_select = document.getElementById("calendar-selection");
-const settings_select = document.getElementById("settings-selection");
-
-
-home_select.addEventListener("click",() =>{
-    window.location.href = "home-page.html"
+home_select.addEventListener('click', () => {
+  window.location.href = 'home-page.html';
 });
-calendar_select.addEventListener("click",() =>{
-    window.location.href = "monthly-calendar.html"
+calendar_select.addEventListener('click', () => {
+  window.location.href = 'monthly-calendar.html';
 });
-settings_select.addEventListener("click",() =>{
-    window.location.href = "settings.html"
+settings_select.addEventListener('click', () => {
+  window.location.href = 'settings.html';
 });
-
 
 //shadow card code below
 class HabitCard extends HTMLElement {
   constructor() {
     super();
-    const shadow = this.attachShadow({ mode: "open" });
-
+    const shadow = this.attachShadow({ mode: 'open' });
 
     shadow.innerHTML = `
     <style>
@@ -110,13 +104,13 @@ class HabitCard extends HTMLElement {
     <div class="flip-card">
       <div class="flip-card-inner">
         <div class="flip-card-front">
-          <h1 id="card_name">${this.getAttribute("card-name") || "Untitled Habit"}</h1>
+          <h1 id="card_name">${this.getAttribute('card-name') || 'Untitled Habit'}</h1>
         </div>
         <div class="flip-card-back">
-          <p id="card_description">${this.getAttribute("card-description")|| "None"}</p>
-          <p id="card_frequency">${this.getAttribute("card-frequency")|| "None"}</p>
-          <p id="card_time">${this.getAttribute("card-time")|| "None"}</p>
-          <p id="card_streak">${this.getAttribute("card-streak")|| "None"}</p>
+          <p id="card_description">${this.getAttribute('card-description') || 'None'}</p>
+          <p id="card_frequency">${this.getAttribute('card-frequency') || 'None'}</p>
+          <p id="card_time">${this.getAttribute('card-time') || 'None'}</p>
+          <p id="card_streak">${this.getAttribute('card-streak') || 'None'}</p>
 
         </div>
       </div>
@@ -124,80 +118,67 @@ class HabitCard extends HTMLElement {
   `;
   }
   static get observedAttributes() {
-    return ["card-name"];
+    return ['card-name'];
   }
- 
+
   connectedCallback() {
-    const titleEl = this.shadowRoot.getElementById("card_name");
-    const freqEl = this.shadowRoot.getElementById("card_frequency");
-    const descrEl = this.shadowRoot.getElementById("card_description");
-    const timeEl = this.shadowRoot.getElementById("card_time");
-    const streakEl = this.shadowRoot.getElementById("card_streak");
+    const titleEl = this.shadowRoot.getElementById('card_name');
+    const freqEl = this.shadowRoot.getElementById('card_frequency');
+    const descrEl = this.shadowRoot.getElementById('card_description');
+    const timeEl = this.shadowRoot.getElementById('card_time');
+    const streakEl = this.shadowRoot.getElementById('card_streak');
 
-
-    if (titleEl) {  
-        titleEl.textContent = this.getAttribute("card-name") || "Untitled Habit";
+    if (titleEl) {
+      titleEl.textContent = this.getAttribute('card-name') || 'Untitled Habit';
     }
-
 
     if (freqEl) {
-      freqEl.textContent = `Frequency: ${this.getAttribute("card-frequency") || "None"}`;
+      freqEl.textContent = `Frequency: ${this.getAttribute('card-frequency') || 'None'}`;
     }
     if (descrEl) {
-      descrEl.textContent = `Description: ${this.getAttribute("card-description") || "None"}`;
+      descrEl.textContent = `Description: ${this.getAttribute('card-description') || 'None'}`;
     }
     if (timeEl) {
-      timeEl.textContent = `Description: ${this.getAttribute("card-time") || "None"}`;
+      timeEl.textContent = `Description: ${this.getAttribute('card-time') || 'None'}`;
     }
     if (streakEl) {
-      streakEl.innerHTML = `Current Streak: <span class="streak_number"> ${this.getAttribute("card-streak") || "None"} </span>`;
+      streakEl.innerHTML = `Current Streak: <span class="streak_number"> ${this.getAttribute('card-streak') || 'None'} </span>`;
     }
-    
-
-    }
+  }
 }
 
-
-customElements.define("habit-card", HabitCard);
- 
-
+customElements.define('habit-card', HabitCard);
 
 // Show form when "+" is clicked
-document.getElementById("create-button").addEventListener("click", () => {
-  document.getElementById("habit-form").style.display = "block";
+document.getElementById('create-button').addEventListener('click', () => {
+  document.getElementById('habit-form').style.display = 'block';
 });
 
-
 // On form submit
-document.getElementById("submit-habit").addEventListener("click", () => {
-  const name = document.getElementById("habit-name").value.trim();
-  const frequency = document.getElementById("habit-frequency").value;
-  const descr = document.getElementById("habitDescription").value;
-  const timeStr = document.getElementById("habit-time").value;
+document.getElementById('submit-habit').addEventListener('click', () => {
+  const name = document.getElementById('habit-name').value.trim();
+  const frequency = document.getElementById('habit-frequency').value;
+  const descr = document.getElementById('habitDescription').value;
+  const timeStr = document.getElementById('habit-time').value;
 
   let streak = 0;
 
+  if (name !== '') {
+    const newCard = document.createElement('habit-card');
+    newCard.setAttribute('card-name', name);
+    newCard.setAttribute('card-frequency', frequency);
+    newCard.setAttribute('card-description', descr);
+    newCard.setAttribute('card-time', timeStr);
+    newCard.setAttribute('card-streak', streak);
 
-
-
-
-  if (name !== "") {
-    const newCard = document.createElement("habit-card");
-    newCard.setAttribute("card-name", name);
-    newCard.setAttribute("card-frequency", frequency);
-    newCard.setAttribute("card-description", descr);
-    newCard.setAttribute("card-time", timeStr);
-    newCard.setAttribute("card-streak", streak);
-
-    document.getElementById("card-container").appendChild(newCard);
+    document.getElementById('card-container').appendChild(newCard);
   }
 
-
   // Reset and hide form
-  document.getElementById("habit-name").value = "";
-  document.getElementById("habitDescription").value = "";
-  document.getElementById("habit-frequency").value = "Daily";
-  document.getElementById("habit-time").value="";
+  document.getElementById('habit-name').value = '';
+  document.getElementById('habitDescription').value = '';
+  document.getElementById('habit-frequency').value = 'Daily';
+  document.getElementById('habit-time').value = '';
 
-  document.getElementById("habit-form").style.display = "none";
+  document.getElementById('habit-form').style.display = 'none';
 });
