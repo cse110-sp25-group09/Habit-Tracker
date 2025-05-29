@@ -60,7 +60,6 @@ body {
   bottom: 0;
   margin: auto;
   max-width: 400px;
-  z-index: 200;
 }
 
 .nav-item {
@@ -88,7 +87,8 @@ body {
   z-index: 100;
   width: 90%;
   max-width: 350px;
-  color: var(--text-color);
+  background: #758bfd;
+  color: white;
 }
 
 #card-container {
@@ -103,15 +103,15 @@ body {
 #submit-habit {
   display: block;
   margin: auto;
-  background: var(--accent-color);
+  background: #ff8600;
   text-align: center;
   font-size: 20px;
   max-width: 250px;
   width: 90%;
-  padding: 10px 0;
-  border-radius: 16px;
-  border-color: var(--text-color);
-  color: var(--text-color);
+  padding: 10px 0; /* vertical padding, no horizontal padding to keep text centered */
+  border-radius: 16px; /* rounded corners */
+  border-color: white;
+  color: white;
 }
 
 #habit-form {
@@ -120,21 +120,32 @@ body {
 }
 
 #create-card {
-  background-color: var(--card-color);
-  color: var(--text-color);
-  padding-top: 30px;
-  padding-bottom: 30px;
+  background-color: #b8bcfc;
+  color: white;
+  padding-top: 30px; /* space within the header is spaced 10px  */
+  padding-bottom: 30px; /* space within the header is spaced 20px  */
   border-radius: 0 0 0 0;
   text-align: center;
   font-weight: bold;
   font-size: 1.2rem;
 }
 
-label[for='habit-name'],
-label[for='habitDescription'],
-label[for='habit-frequency'],
-label[for='habit-time'] {
+label[for='habit-name'] {
   font-size: 1.25rem;
+  font-weight: bold;
+}
+
+#habit-name {
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid white;
+  width: 150px;
+  font-size: 1rem;
+  padding: 4px 0;
+  outline: none;
+}
+label[for='habitDescription'] {
+  font-size: 1rem;
   font-weight: bold;
 }
 
@@ -149,27 +160,35 @@ label[for='habit-time'] {
   outline: none;
 }
 
-#habit-frequency {
-  background: var(--input-bg-color);
-  border-radius: 4px;
-  width: 170px;
-  height: 35px;
+label[for='habit-frequency'] {
   font-size: 1rem;
+  font-weight: bold;
+}
+#habit-frequency {
+  background: #aeb8fe;
+  border-radius: 4px;
+  width: 170px; /* Increase width */
+  height: 35px; /* Increase height */
+  font-size: 1rem; /* Make text a bit larger */
   text-align: center;
-  color: var(--text-color);
+  color: white;
   margin-top: 1rem;
-  border: 2px solid var(--input-border-color);
+  border: 2px solid white; /* This defines width, style, and color */
   font-family: sans-serif;
+}
+label[for='habit-time'] {
+  font-size: 1rem;
+  font-weight: bold;
 }
 
 #habit-time {
-  width: 120px;
-  height: 32px;
-  font-size: 1rem;
+  width: 120px; /* Increase width */
+  height: 32px; /* Increase height */
+  font-size: 1rem; /* Make text a bit larger */
   text-align: center;
-  background: var(--input-bg-color);
-  color: var(--text-color);
-  border: 2px solid var(--input-border-color);
+  background: #aeb8fe;
+  color: white;
+  border: 2px solid white; /* This defines width, style, and color */
   margin-top: 1rem;
   margin-bottom: 1rem;
   display: inline-block;
@@ -178,48 +197,12 @@ label[for='habit-time'] {
 
 .form-row {
   display: flex;
-  align-items: center;
-  gap: 1rem;
+  align-items: center; /* vertically centers them */
+  gap: 1rem; /* spacing between label and input */
   margin-top: 1rem;
 }
 
 .form-row label {
   margin: 0;
   white-space: nowrap;
-}
-
-#calendar-menu {
-  position: absolute;
-  bottom: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: var(--input-bg-color);
-  padding: 5px;
-  z-index: 101;
-  display: none;
-  border: 4px solid var(--form-color);
-  border-radius: 16px;
-}
-
-#calendar-menu.show {
-  display: block;
-  font-size: 28px;
-  z-index: 101;
-  border-radius: 2px solid var(--input-border-color);
-}
-
-#calendar-menu li {
-  padding: 5px 0;
-  cursor: pointer;
-  border-bottom: 2px solid var(--form-color);
-}
-
-#calendar-menu li:last-child {
-  border-bottom: none;
-}
-
-ul {
-  list-style: none;
-  padding-left: 0; /* optional, removes indentation */
-  margin: 0; /* optional */
 }

@@ -1,44 +1,17 @@
 //below is the code for the menu bar
 
-// Wait for the DOM to load before referencing elements
-document.addEventListener('DOMContentLoaded', function () {
-  const home_select = document.getElementById('home-selection');
-  const settings_select = document.getElementById('settings-selection');
-  const calendarSelection = document.getElementById('calendar-selection');
-  const calendarMenu = document.getElementById('calendar-menu');
+const home_select = document.getElementById('home-selection');
+const calendar_select = document.getElementById('calendar-selection');
+const settings_select = document.getElementById('settings-selection');
 
-  // Home button navigation
-  home_select.addEventListener('click', () => {
-    window.location.href = 'home-page.html';
-  });
-
-  // Calendar menu toggle
-  calendarSelection.addEventListener('click', function (event) {
-    event.stopPropagation();
-    calendarMenu.classList.toggle('show');
-  });
-
-  // Close the menu if clicking outside
-  document.addEventListener('click', function () {
-    calendarMenu.classList.remove('show');
-  });
-
-  document
-    .getElementById('daily-option')
-    .addEventListener('click', function (event) {
-      window.location.href = 'daily-calendar.html';
-    });
-
-  document
-    .getElementById('monthly-option')
-    .addEventListener('click', function (event) {
-      window.location.href = 'monthly-calendar.html';
-    });
-
-  // Settings button navigation
-  settings_select.addEventListener('click', () => {
-    window.location.href = 'settings.html';
-  });
+home_select.addEventListener('click', () => {
+  window.location.href = 'home-page.html';
+});
+calendar_select.addEventListener('click', () => {
+  window.location.href = 'monthly-calendar.html';
+});
+settings_select.addEventListener('click', () => {
+  window.location.href = 'settings.html';
 });
 
 //shadow card code below
@@ -182,10 +155,11 @@ class HabitCard extends HTMLElement {
           <h1 id="card_name">${this.getAttribute('card-name') || 'Untitled Habit'}</h1>
         </div>
         <div class="flip-card-back">
-          <p id="card_description">${this.getAttribute("card-description")|| "None"}</p>
-          <p id="card_frequency">${this.getAttribute("card-frequency")|| "None"}</p>
-          <p id="card_time">${this.getAttribute("card-time")|| "None"}</p>
-          <p id="card_streak">${this.getAttribute("card-streak")|| "None"}</p>
+          <p id="card_description">${this.getAttribute('card-description') || 'None'}</p>
+          <p id="card_frequency">${this.getAttribute('card-frequency') || 'None'}</p>
+          <p id="card_time">${this.getAttribute('card-time') || 'None'}</p>
+          <p id="card_streak">${this.getAttribute('card-streak') || 'None'}</p>
+
         </div>
       </div>
     </div>
@@ -199,18 +173,18 @@ class HabitCard extends HTMLElement {
 
   }
   static get observedAttributes() {
-    return ["card-name"];
+    return ['card-name'];
   }
- 
-  connectedCallback() {
-    const titleEl = this.shadowRoot.getElementById("card_name");
-    const freqEl = this.shadowRoot.getElementById("card_frequency");
-    const descrEl = this.shadowRoot.getElementById("card_description");
-    const timeEl = this.shadowRoot.getElementById("card_time");
-    const streakEl = this.shadowRoot.getElementById("card_streak");
 
-    if (titleEl) {  
-        titleEl.textContent = this.getAttribute("card-name") || "Untitled Habit";
+  connectedCallback() {
+    const titleEl = this.shadowRoot.getElementById('card_name');
+    const freqEl = this.shadowRoot.getElementById('card_frequency');
+    const descrEl = this.shadowRoot.getElementById('card_description');
+    const timeEl = this.shadowRoot.getElementById('card_time');
+    const streakEl = this.shadowRoot.getElementById('card_streak');
+
+    if (titleEl) {
+      titleEl.textContent = this.getAttribute('card-name') || 'Untitled Habit';
     }
 
     if (freqEl) {
@@ -220,13 +194,10 @@ class HabitCard extends HTMLElement {
       descrEl.textContent = `Description: ${this.getAttribute('card-description') || 'None'}`;
     }
     if (timeEl) {
-      timeEl.textContent = `Time: ${this.getAttribute("card-time") || "None"}`;
+      timeEl.textContent = `Description: ${this.getAttribute('card-time') || 'None'}`;
     }
     if (streakEl) {
       streakEl.innerHTML = `Current Streak: <span class="streak_number"> ${this.getAttribute('card-streak') || 'None'} </span>`;
-    }
-    if (idEl) {
-      idEl.innerHTML = `Current ID: ${this.getAttribute('card-id') || 'None'} `;
     }
   }
 }
@@ -248,16 +219,14 @@ document.getElementById('submit-habit').addEventListener('click', () => {
   let streak = 0;
 
   if (name !== '') {
-    // const newCard = document.createElement('habit-card');
-    // newCard.setAttribute('card-name', name);
-    // newCard.setAttribute('card-frequency', frequency);
-    // newCard.setAttribute('card-description', descr);
-    // newCard.setAttribute('card-time', timeStr);
-    // newCard.setAttribute('card-streak', streak);
+    const newCard = document.createElement('habit-card');
+    newCard.setAttribute('card-name', name);
+    newCard.setAttribute('card-frequency', frequency);
+    newCard.setAttribute('card-description', descr);
+    newCard.setAttribute('card-time', timeStr);
+    newCard.setAttribute('card-streak', streak);
 
-    // document.getElementById('card-container').appendChild(newCard);
-    createHabit(name, descr, frequency, timeStr);
-    populateCards();
+    document.getElementById('card-container').appendChild(newCard);
   }
 
   // Reset and hide form
@@ -267,12 +236,4 @@ document.getElementById('submit-habit').addEventListener('click', () => {
   document.getElementById('habit-time').value = '';
 
   document.getElementById('habit-form').style.display = 'none';
-});
-
-window.addEventListener('DOMContentLoaded', () => {
-  const body = document.body;
-  const savedTheme = localStorage.getItem('selectedTheme');
-  if (savedTheme && savedTheme !== 'default') {
-    body.classList.add(`${savedTheme}-theme`);
-  }
 });
