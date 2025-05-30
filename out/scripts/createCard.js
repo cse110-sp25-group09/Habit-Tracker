@@ -20,7 +20,7 @@ function hoursToMS(numHours){
 /**
  * @param habitName string name of habit
  * @param habitDescription string description of the habit
- * @param habitFrequency integer number of hours representing a frequency (ex. Daily = 24, Weekly = 168)
+ * @param habitFrequency integer number of hours representing a frequency (ex. Daily = 1, Weekly = 7)
  * @param startDateTime date string representing the first occurrence of habit
  * @param adapter only possible value right now is localStorageAdapter. This parameter is intended to allow easy switches to a database later on.
  * @type {(habitName : string, habitDescription : string, startDateTime : string, adapter : object) => string}
@@ -55,7 +55,8 @@ export function createCard(habitName, habitDescription, habitFrequency, startDat
         habitDescription: habitDescription,
         habitFrequency: habitFrequency,
         startDateTime: startDateTime,
-        habitStreak: 0
+        habitStreak: 0,
+        logs: []
     };
 
     let cardID = "id" + self.crypto.randomUUID();
