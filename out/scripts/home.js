@@ -206,7 +206,6 @@ class HabitCard extends HTMLElement {
       noBtn.hidden = false;
       deleteDialog.hidden = false;
 
-
       deleteBtn.hidden = true;
     });
 
@@ -216,7 +215,6 @@ class HabitCard extends HTMLElement {
       yesBtn.hidden = true;
       noBtn.hidden = true;
       deleteDialog.hidden = true;
-
     });
 
     // yesBtn.addEventListener('click', () => {
@@ -230,22 +228,21 @@ class HabitCard extends HTMLElement {
       const idElement = this.shadowRoot.querySelector('#card_id');
       if (idElement) {
         const cardId = idElement.textContent.trim();
-        console.log(cardId)
+        console.log(cardId);
         deleteHabit(cardId);
         this.remove(); // This removes the custom element from the DOM
       }
     });
 
-
-    [deleteBtn, yesBtn, noBtn].forEach(btn => {
-      btn?.addEventListener('click', e => e.stopPropagation());
+    [deleteBtn, yesBtn, noBtn].forEach((btn) => {
+      btn?.addEventListener('click', (e) => e.stopPropagation());
     });
 
     flipCard.addEventListener('click', () => {
       flipInner.classList.toggle('flipped');
     });
   }
-  
+
   static get observedAttributes() {
     return ['card-name'];
   }
@@ -278,7 +275,6 @@ class HabitCard extends HTMLElement {
       idEl.innerHTML = `Current ID: ${this.getAttribute('card-id') || 'None'} `;
     }
   }
-  
 }
 
 customElements.define('habit-card', HabitCard);
@@ -308,7 +304,6 @@ document.getElementById('submit-habit').addEventListener('click', () => {
     // document.getElementById('card-container').appendChild(newCard);
     createHabit(name, descr, frequency, timeStr);
     populateCards();
-
   }
 
   // Reset and hide form
