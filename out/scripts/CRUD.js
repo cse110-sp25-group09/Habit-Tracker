@@ -223,7 +223,7 @@ function calculateStreak(habit) {
   }
 }
 
-function logHabitCompleted(id, time = Date().now()) {
+function logHabitCompleted(id, time = Math.floor(Date.now() / DAYINMS)) {
   let habits = getAllHabits();
   let idx = -1;
   for (let i = 0; i < habits.length; i++) {
