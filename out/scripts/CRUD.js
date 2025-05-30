@@ -1,4 +1,3 @@
-
 const DAYINMS = 86400000;
 export const localStorageAdapter = {
   get: (key) => localStorage.getItem(key),
@@ -13,33 +12,30 @@ function typeErrorTemplate(stringParam, type) {
 }
 
 /**
- * @param key of a JSON object 
- * @param value of a JSON object, corresponding to the passed key 
- * @return a valid habit object 
+ * @param key of a JSON object
+ * @param value of a JSON object, corresponding to the passed key
+ * @return a valid habit object
  */
-export function reviveHabit(key, value){
+export function reviveHabit(key, value) {
   const stringFields = new Set('habitName', 'habitDescription');
   const numberFields = new Set('habitFrequency', 'habitStreak');
-  let newValue; 
-  if (key in numberFields){
-    newValue = Number(value); 
-   
+  let newValue;
+  if (key in numberFields) {
+    newValue = Number(value);
   }
-  if (key == "startDateTime"){
-    newValue = Date.parse(key); 
-  } 
-  if (newValue == NaN){
-    throw new Error ("Invalid habit object"); 
+  if (key == 'startDateTime') {
+    newValue = Date.parse(key);
   }
-  if (key == "log"){
-    value.forEach((element)=>{
-      if (Date.parse(element) == NaN){
-        throw new Error ("Invalid datestring in log"); 
+  if (newValue == NaN) {
+    throw new Error('Invalid habit object');
+  }
+  if (key == 'log') {
+    value.forEach((element) => {
+      if (Date.parse(element) == NaN) {
+        throw new Error('Invalid datestring in log');
       }
-    }
-    ); 
+    });
   }
-
 }
 /**
  * @param habitName string name of habit
@@ -258,56 +254,56 @@ function calculateStreak(habit) {
 }
 
 /**
- * 
+ *
  * @param {String} habitID - the string ID of the habit being deleted
  * @param {Object} adapter defaults to localStorageAdapter, allows us to pass in other storage methods
- * @returns {boolean} true if habit completion is logged successfully, false otherwise 
+ * @returns {boolean} true if habit completion is logged successfully, false otherwise
  */
 function logHabitCompleted(habitID, adapter = localStorageAdapter) {
-  let habit = getHabitById(habitID); 
-  if (habit){
-     habit.streak = calculateStreak(habits[idx]);
-    let currentDateTime = new Date(); 
-    habit.log.push(currentDateTime.toDateString()); 
-    return true; 
-  } 
-  return false; // what is the benefit of returning boolean instead of throwing an error in a void function in this context ? 
+  let habit = getHabitById(habitID);
+  if (habit) {
+    habit.streak = calculateStreak(habits[idx]);
+    let currentDateTime = new Date();
+    habit.log.push(currentDateTime.toDateString());
+    return true;
+  }
+  return false; // what is the benefit of returning boolean instead of throwing an error in a void function in this context ?
 }
 
 /**
- * 
+ *
  * @param {Object} habit a JSON object representing a habit(not a habit string !)
- * @returns 
+ * @returns
  */
 function isHabitForToday(habit) {
-  let currentDate = new Date (); 
-  let msStartDate = Date.parse (habit.startDateTime); 
+  let currentDate = new Date();
+  let msStartDate = Date.parse(habit.startDateTime);
   if (habit.logs[-1] == currentDate.toDateString()) {
     return false;
   }
-  
-  if ((currentDate - msStartDate) % (habit.frequency) != 0) {
+
+  if ((currentDate - msStartDate) % habit.frequency != 0) {
     return false;
   }
   return true;
 }
 
 /**
- * @returns list of habit objects representing habits that need to be completed today 
+ * @returns list of habit objects representing habits that need to be completed today
  */
 function getHabitsForToday() {
   let habits = getAllHabits();
   let today_habits = [];
-  let today = new Date() 
-  today.setHours(0, 0, 0, 0); 
-  let curr_date = habit.startDateTime; 
+  let today = new Date();
+  today.setHours(0, 0, 0, 0);
+  let curr_date = habit.startDateTime;
   for (let i = 0; i < habits.length; i++) {
     if (isHabitForToday(habits[i])) {
-      curr_date = Date.parse(curr_date); 
-      if (curr_date == NaN){
-        throw new Error ("Invalid type for habit.startDateTime"); 
+      curr_date = Date.parse(curr_date);
+      if (curr_date == NaN) {
+        throw new Error('Invalid type for habit.startDateTime');
       }
-      curr_date.setHours(0,0,0,0); 
+      curr_date.setHours(0, 0, 0, 0);
       today_habits.push((curr_date == today, habits[i]));
     }
   }
