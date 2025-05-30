@@ -140,11 +140,11 @@ function isHabitForToday(habit) {
 function getHabitsForToday() {
   let habits = getAllHabits();
   let today_habits = [];
-  let today = Math.floor(Date.now()/DAYINMS);
+  let today = Math.floor(Date.now() / DAYINMS);
   for (let i = 0; i < habits.length; i++) {
     if (isHabitForToday(habits[i])) {
-      let curr_date = Math.floor(habits[i].logs[-1]/DAYINMS);
-      today_habits.push((curr_date==today,habits[i]));
+      let curr_date = Math.floor(habits[i].logs[-1] / DAYINMS);
+      today_habits.push((curr_date == today, habits[i]));
     }
   }
   return today_habits;
