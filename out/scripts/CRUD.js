@@ -1,6 +1,9 @@
 export const localStorageAdapter = {
     get: (key) => localStorage.getItem(key),
-    set: (key, value) => localStorage.setItem(key, value )
+    set: (key, value) => localStorage.setItem(key, value ),
+    del: (key) => localStorage.removeItem(key), 
+    len: ()=> localStorage.length,
+    keys: ()=> Object.keys(localStorage), 
 };
 
 
@@ -9,25 +12,16 @@ function typeErrorTemplate (stringParam, type){
 }
 
 /**
- * 
- * @param {number} numHours 
- * @return (number) numMS 
- */
-function hoursToMS(numHours){
-  return 60 * 60 * 1000 * numHours; 
-}
-
-/**
  * @param habitName string name of habit
  * @param habitDescription string description of the habit
- * @param habitFrequency integer number of hours representing a frequency (ex. Daily = 1, Weekly = 7)
+ * @param habitFrequency integer number of days representing a frequency (ex. Daily = 1, Weekly = 7)
  * @param startDateTime date string representing the first occurrence of habit
- * @param adapter only possible value right now is localStorageAdapter. This parameter is intended to allow easy switches to a database later on.
- * @type {(habitName : string, habitDescription : string, startDateTime : string, adapter : object) => string}
- * habitStreak will also be a card field, but is not a parameter of this function because it is always initialized to zero
- * @return cardID, a unique ID string
+ * @param adapter defaults to localStorageAdapter, allows means to use other storage methods 
+ * @type {(habitName : String, habitDescription : String, startDateTime : String, adapter : Object) => String}
+ * habitStreak & logs will also be fields of this object, but are not parameters because they are initialized to default values 
+ * @return habitID, a unique ID string
  */
-export function createCard(habitName, habitDescription, habitFrequency, startDateTime,  adapter){
+export function createHabit(habitName, habitDescription, habitFrequency, startDateTime,  adapter = localStorageAdapter){
    if (typeof habitName != "string"){
      throw new Error (typeErrorTemplate(habitName, typeof(habitName)));
    }
@@ -49,8 +43,7 @@ export function createCard(habitName, habitDescription, habitFrequency, startDat
     Requires regex to do properly: https://stackoverflow.com/questions/7445328/check-if-a-string-is-a-date-value
     */
 
-
-    let card = {
+    let habit = {
         habitName: habitName,
         habitDescription: habitDescription,
         habitFrequency: habitFrequency,
@@ -59,52 +52,87 @@ export function createCard(habitName, habitDescription, habitFrequency, startDat
         logs: []
     };
 
-    let cardID = "id" + self.crypto.randomUUID();
-    adapter.set(cardID, JSON.stringify(card));
-    return cardID;
+    let habitID = "id" + self.crypto.randomUUID();
+    adapter.set(habitID, JSON.stringify(habit));
+    return habitID;
 }
 
 /**
- * @param {string} cardID the string id of the card being read
- * @param {object} adapter an object representing our database (currenly only use localStorageAdapter)
+ * @param {String} habitID the string id of the habit being read
+ * @param {Object} adapter an object representing our database (currenly only use localStorageAdapter)
  */
-export function readCard(cardID, adapter){
-  return adapter.get(cardID);
+export function readHabit(habitID, adapter = localStorageAdapter){
+  return adapter.get(habitID);
 }
 
 /**
- * @param {string} cardID string ID of card (ex
- * @param {list} fields list of fields to update in the given card object
+ * @param {String} habitID string ID of habit (ex
+ * @param {list} fields list of fields to update in the given habit object
  * @param {list} newValues list of new values for fields (passed in the same order).
- * New values should follow the type requirements of createCard()
+ * New values should follow the type requirements of createhabit()
  */
-export function updateCard(cardID, fields, newValues){
+export function updateHabit(habitID, fields, newValues){
   //check that fields and newValues are the same length
   if(fields.length != newValues.length){
     throw new Error ('fields and newValues must have the same length');
   }
   const stringFields = new Set ("habitName", "habitDescription" );
   const numberFields = new Set ("habitFrequency", "habitStreak");
-  let cardToUpdate = adapter.get(cardID);
-  cardToUpdate = JSON.parse(cardToUpdate);
+  let habitToUpdate = adapter.get(habitID);
+  habitToUpdate = JSON.parse(habitToUpdate);
   for (let i = 0; i < fields.length; i++){
-      if (!Object.hasOwn(cardToUpdate, fields[i])) {
-        throw new Error (`${fields[i]} is not a valid card field`);
+      if (!Object.hasOwn(habitToUpdate, fields[i])) {
+        throw new Error (`${fields[i]} is not a valid habit field`);
       }
       if (fields[i] in stringFields){
-        cardToUpdate.fields[i] = newValues[i];
+        habitToUpdate.fields[i] = newValues[i];
       }
       else if (fields[i] in numberFields){
         if (!newValues[i]){ //will reject null, false, 0 but not "0", dependent on all values being parsed as strings
           throw new Error (`${fields[i]} is not a valid number field`);
         }
-        cardToUpdate.fields[i] =  newValues[i];
+        habitToUpdate.fields[i] =  newValues[i];
       }
       //checking for date strings, rejecting everything else (requires regex)
       else{
 
       }
-      cardToUpdate.fields[i] = newValues[i]; 
+      habitToUpdate.fields[i] = newValues[i]; 
     }
 }
+
+/**
+ * 
+ * @param {String} cardID, the string ID of the habit being deleted
+ * @param {Object} adapter defaults to localStorageAdapter, allows means to use other storage methods 
+ */
+export function deleteHabit(cardID, adapter = localStorageAdapter) {
+  return adapter.del(id); 
+} 
+
+/**
+ * @return a list of habit objects 
+ */
+export function getAllHabits(adapter = localStorageAdapter){
+  let habits = []; 
+  let keys = adapter.keys(); 
+  let i = keys.length; 
+  while (i--){
+    habits.push(adapter.get(keys[i])); 
+  }
+  return habits 
+} 
+
+/**
+ * 
+ * @param {String} id 
+ * @param {Object} adapter 
+ * @returns 
+ */
+export function getHabitById(id, adapter = localStroageAdapter){
+  return adapter.get(id); 
+}
+
+
+
 
