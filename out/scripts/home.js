@@ -1,5 +1,9 @@
 //below is the code for the menu bar
 
+import { getHabitsForToday, createHabit } from "./CRUD.js";
+
+
+
 const home_select = document.getElementById('home-selection');
 const calendar_select = document.getElementById('calendar-selection');
 const settings_select = document.getElementById('settings-selection');
@@ -159,6 +163,7 @@ class HabitCard extends HTMLElement {
           <p id="card_frequency">${this.getAttribute('card-frequency') || 'None'}</p>
           <p id="card_time">${this.getAttribute('card-time') || 'None'}</p>
           <p id="card_streak">${this.getAttribute('card-streak') || 'None'}</p>
+          <p id= "card_id">${this.getAttribute('card-streak')||'None'}</p>
 
         </div>
       </div>
@@ -181,6 +186,7 @@ class HabitCard extends HTMLElement {
     const descrEl = this.shadowRoot.getElementById('card_description');
     const timeEl = this.shadowRoot.getElementById('card_time');
     const streakEl = this.shadowRoot.getElementById('card_streak');
+    const idEl = this.shadowRoot.getElementById('card_id');
 
     if (titleEl) {
       titleEl.textContent = this.getAttribute('card-name') || 'Untitled Habit';
@@ -197,6 +203,9 @@ class HabitCard extends HTMLElement {
     }
     if (streakEl) {
       streakEl.innerHTML = `Current Streak: <span class="streak_number"> ${this.getAttribute('card-streak') || 'None'} </span>`;
+    }
+    if (idEl) {
+      idEl.innerHTML = `Current ID: ${this.getAttribute('card-id') || 'None'} `;
     }
   }
 }
@@ -218,14 +227,17 @@ document.getElementById('submit-habit').addEventListener('click', () => {
   let streak = 0;
 
   if (name !== '') {
-    const newCard = document.createElement('habit-card');
-    newCard.setAttribute('card-name', name);
-    newCard.setAttribute('card-frequency', frequency);
-    newCard.setAttribute('card-description', descr);
-    newCard.setAttribute('card-time', timeStr);
-    newCard.setAttribute('card-streak', streak);
+    // const newCard = document.createElement('habit-card');
+    // newCard.setAttribute('card-name', name);
+    // newCard.setAttribute('card-frequency', frequency);
+    // newCard.setAttribute('card-description', descr);
+    // newCard.setAttribute('card-time', timeStr);
+    // newCard.setAttribute('card-streak', streak);
 
-    document.getElementById('card-container').appendChild(newCard);
+    // document.getElementById('card-container').appendChild(newCard);
+    createHabit(name, descr, frequency, timeStr);
+    populateCards();
+
   }
 
   // Reset and hide form
@@ -236,3 +248,25 @@ document.getElementById('submit-habit').addEventListener('click', () => {
 
   document.getElementById('habit-form').style.display = 'none';
 });
+
+function populateCards(){
+  getElementById("card-container").innerHTML="";
+  let habits = getHabitsForToday();
+  for (let i =0; i<habits.length; i++){
+    const newCard = document.createElement('habit-card');
+    newCard.setAttribute('card-name', habits[i].name);
+    newCard.setAttribute('card-frequency', habits[i].frequency);
+    newCard.setAttribute('card-description', habits[i].description);
+    newCard.setAttribute('card-time', habits[i].notif);
+    newCard.setAttribute('card-streak', habits[i].streak);
+    newCard.setAttribute('card-id', habits[i].id);
+    document.getElementById('card-container').appendChild(newCard);
+    //add id
+  }
+}
+
+// create call create
+//add hidden id from create
+// any action (load or submit), clear page, and populate page getHabitsForToday (completed, habitObject) - first function clear and populate
+// mark as complete / change color / add check
+//delete = delete id and populate
