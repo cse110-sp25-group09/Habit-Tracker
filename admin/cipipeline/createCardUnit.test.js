@@ -2,8 +2,9 @@
  * @jest-environment jsdom
  */
 import {
-  createCard,
+  createHabit,
   localStorageAdapter,
+  reviveHabit,
 } from '../../out/scripts/CRUD.js';
 
 import { jest } from '@jest/globals';
