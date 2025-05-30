@@ -42,7 +42,6 @@ describe('Create a card data object in localStorage or a database', () => {
       startDateTime:
         'Sun May 25 2025 13:04:28 GMT-0700 (Pacific Daylight Time)',
       habitStreak: '0',
-      
     };
     expect(JSON.parse(cardData)).toBe(cardDataRef);
   });
