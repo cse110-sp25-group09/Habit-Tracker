@@ -159,6 +159,7 @@ class HabitCard extends HTMLElement {
     const descrEl = this.shadowRoot.getElementById('card_description');
     const timeEl = this.shadowRoot.getElementById('card_time');
     const streakEl = this.shadowRoot.getElementById('card_streak');
+    const idEl = this.shadowRoot.getElementById('card_id');
 
     if (titleEl) {  
         titleEl.textContent = this.getAttribute("card-name") || "Untitled Habit";
@@ -175,6 +176,9 @@ class HabitCard extends HTMLElement {
     }
     if (streakEl) {
       streakEl.innerHTML = `Current Streak: <span class="streak_number"> ${this.getAttribute('card-streak') || 'None'} </span>`;
+    }
+    if (idEl) {
+      idEl.innerHTML = `Current ID: ${this.getAttribute('card-id') || 'None'} `;
     }
   }
 }
@@ -196,14 +200,17 @@ document.getElementById('submit-habit').addEventListener('click', () => {
   let streak = 0;
 
   if (name !== '') {
-    const newCard = document.createElement('habit-card');
-    newCard.setAttribute('card-name', name);
-    newCard.setAttribute('card-frequency', frequency);
-    newCard.setAttribute('card-description', descr);
-    newCard.setAttribute('card-time', timeStr);
-    newCard.setAttribute('card-streak', streak);
+    // const newCard = document.createElement('habit-card');
+    // newCard.setAttribute('card-name', name);
+    // newCard.setAttribute('card-frequency', frequency);
+    // newCard.setAttribute('card-description', descr);
+    // newCard.setAttribute('card-time', timeStr);
+    // newCard.setAttribute('card-streak', streak);
 
-    document.getElementById('card-container').appendChild(newCard);
+    // document.getElementById('card-container').appendChild(newCard);
+    createHabit(name, descr, frequency, timeStr);
+    populateCards();
+
   }
 
   // Reset and hide form
