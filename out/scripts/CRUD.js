@@ -1,5 +1,5 @@
 window.addEventListener('DOMContentLoaded', init);
-
+export { createHabit, getHabitsForToday };
 const DAYINMS = 86400000;
 function init() {
   if (JSON.parse(localStorage.getItem('habits')) === null) {
@@ -12,7 +12,7 @@ function saveHabits(habits) {
 }
 function createHabit(name, description, frequency, notif) {
   let id = crypto.randomUUID();
-  habit = {
+  let habit = {
     id: id,
     name: name,
     description: description,
