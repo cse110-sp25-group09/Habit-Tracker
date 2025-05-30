@@ -1,12 +1,12 @@
 name: Generate JS Docs # this runs JSDocs on all JS files
 
-on: [push] 
+on: [push]
 
 permissions:
-  contents: write # 
+  contents: write #
 
-jobs: 
-  jsdocs: 
+jobs:
+  jsdocs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository

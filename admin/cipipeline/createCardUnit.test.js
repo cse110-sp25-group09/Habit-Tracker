@@ -3,11 +3,12 @@ import {
   localStorageAdapter,
 } from '../../out/scripts/createCard.js';
 
-let page;
+let page, browser;
 let url = '../../localstorage.html';
 
 describe('Create a card data object in localStorage or a database', () => {
   beforeAll(async () => {
+    browser = await puppeteer.launch();
     page = await browser.newPage();
     await page.goto(url);
     localStorage.clear();
