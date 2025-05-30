@@ -13,6 +13,35 @@ function typeErrorTemplate(stringParam, type) {
 }
 
 /**
+ * @param key of a JSON object 
+ * @param value of a JSON object, corresponding to the passed key 
+ * @return a valid habit object 
+ */
+export function reviveHabit(key, value){
+  const stringFields = new Set('habitName', 'habitDescription');
+  const numberFields = new Set('habitFrequency', 'habitStreak');
+  let newValue; 
+  if (key in numberFields){
+    newValue = Number(value); 
+   
+  }
+  if (key == "startDateTime"){
+    newValue = Date.parse(key); 
+  } 
+  if (newValue == NaN){
+    throw new Error ("Invalid habit object"); 
+  }
+  if (key == "log"){
+    value.forEach((element)=>{
+      if (Date.parse(element) == NaN){
+        throw new Error ("Invalid datestring in log"); 
+      }
+    }
+    ); 
+  }
+
+}
+/**
  * @param habitName string name of habit
  * @param habitDescription string description of the habit
  * @param habitFrequency integer number of days representing a frequency (ex. Daily = 1, Weekly = 7)
@@ -127,8 +156,11 @@ export function getAllHabits(adapter = localStorageAdapter) {
   if (i === 0) {
     return null;
   }
+  let curHabitObject; 
   while (i--) {
-    habits.push(adapter.get(keys[i]));
+    curHabitObject = adapter.get(keys[i]); 
+    curHabitObject = JSON.parse (curHabitObject, habitReviver); 
+    habits.push(curHabitObject);
   }
   return habits;
 }
@@ -137,10 +169,11 @@ export function getAllHabits(adapter = localStorageAdapter) {
  *
  * @param {String} habitID
  * @param {Object} adapter
- * @returns
+ * @returns a habit object 
  */
-export function getHabitById(habitID, adapter = localStroageAdapter) {
-  return adapter.get(id);
+export function getHabitById(habitID, adapter = localStorageAdapter) {
+  let habit = adapter.get(id);
+  return JSON.parse(habit, habitReviver); 
 }
 
 /**
@@ -215,6 +248,11 @@ function isHabitForToday(habit) {
   return true;
 }
 
+/**
+ * 
+ * @returns list of 
+ *  
+ */
 function getHabitsForToday() {
   let habits = getAllHabits();
   let today_habits = [];
