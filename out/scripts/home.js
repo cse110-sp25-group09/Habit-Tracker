@@ -1,6 +1,6 @@
 //below is the code for the menu bar
 
-import { getHabitsForToday, createHabit } from "./CRUD.js";
+import { getHabitsForToday, createHabit, deleteHabit } from "./CRUD.js";
 window.addEventListener('DOMContentLoaded', () => {
   populateCards(); 
 });
@@ -164,7 +164,16 @@ class HabitCard extends HTMLElement {
           <p id="card_frequency">${this.getAttribute('card-frequency') || 'None'}</p>
           <p id="card_time">${this.getAttribute('card-time') || 'None'}</p>
           <p id="card_streak">${this.getAttribute('card-streak') || 'None'}</p>
-          <p id= "card_id">${this.getAttribute('card-streak')||'None'}</p>
+          <p id= "card_id" hidden>${this.getAttribute('card-id')||'None'}</p>
+          <div class="delete-container">
+            <button class="delete-btn">🗑️</button>
+            <div class="confirm-dialog" hidden>
+              <p  hidden class="delete-dialog">Delete? </p>
+              <button class="confirm-yes" hidden>Yes</button>
+              <button class="confirm-no" hidden>No</button>
+            </div>
+          </div>
+
 
         </div>
       </div>
@@ -173,10 +182,59 @@ class HabitCard extends HTMLElement {
     const flipCard = shadow.querySelector('.flip-card');
     const flipInner = shadow.querySelector('.flip-card-inner');
 
+    const deleteBtn = this.shadowRoot.querySelector('.delete-btn');
+    const confirmDialog = this.shadowRoot.querySelector('.confirm-dialog');
+    const deleteDialog = this.shadowRoot.querySelector('.delete-dialog');
+
+    const yesBtn = this.shadowRoot.querySelector('.confirm-yes');
+    const noBtn = this.shadowRoot.querySelector('.confirm-no');
+
+    deleteBtn.addEventListener('click', () => {
+      confirmDialog.hidden = false;
+      yesBtn.hidden = false;
+      noBtn.hidden = false;
+      deleteDialog.hidden = false;
+
+
+      deleteBtn.hidden = true;
+    });
+
+    noBtn.addEventListener('click', () => {
+      deleteBtn.hidden = false;
+      confirmDialog.hidden = true;
+      yesBtn.hidden = true;
+      noBtn.hidden = true;
+      deleteDialog.hidden = true;
+
+    });
+
+    // yesBtn.addEventListener('click', () => {
+
+    //   this.remove(); // removes the card from the DOM
+
+    // });
+    yesBtn?.addEventListener('click', (e) => {
+      e.stopPropagation(); // prevent card flip
+
+      const idElement = this.shadowRoot.querySelector('#card_id');
+      if (idElement) {
+        const cardId = idElement.textContent.trim();
+        console.log(cardId)
+        deleteHabit(cardId);
+        this.remove(); // This removes the custom element from the DOM
+      }
+    });
+
+
+    [deleteBtn, yesBtn, noBtn].forEach(btn => {
+      btn?.addEventListener('click', e => e.stopPropagation());
+    });
+
     flipCard.addEventListener('click', () => {
       flipInner.classList.toggle('flipped');
     });
   }
+  
   static get observedAttributes() {
     return ['card-name'];
   }
@@ -209,6 +267,7 @@ class HabitCard extends HTMLElement {
       idEl.innerHTML = `Current ID: ${this.getAttribute('card-id') || 'None'} `;
     }
   }
+  
 }
 
 customElements.define('habit-card', HabitCard);
@@ -254,6 +313,7 @@ function populateCards(){
   document.getElementById("card-container").innerHTML="";
   let habits = getHabitsForToday();
   for (let i =0; i<habits.length; i++){
+    //console.log(habits[i][0]);
     const newCard = document.createElement('habit-card');
     newCard.setAttribute('card-name', habits[i].name);
     newCard.setAttribute('card-frequency', habits[i].frequency);
@@ -262,12 +322,15 @@ function populateCards(){
     newCard.setAttribute('card-streak', habits[i].streak);
     newCard.setAttribute('card-id', habits[i].id);
     document.getElementById('card-container').appendChild(newCard);
-    //add id
   }
 }
 
-// create call create
-//add hidden id from create
-// any action (load or submit), clear page, and populate page getHabitsForToday (completed, habitObject) - first function clear and populate
+
+
+
+
+
+
+
 // mark as complete / change color / add check
 //delete = delete id and populate
