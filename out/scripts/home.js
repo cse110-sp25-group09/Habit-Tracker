@@ -115,13 +115,12 @@ class HabitCard extends HTMLElement {
       </div>
     </div>
   `;
-  const flipCard = shadow.querySelector('.flip-card');
-  const flipInner = shadow.querySelector('.flip-card-inner');
+    const flipCard = shadow.querySelector('.flip-card');
+    const flipInner = shadow.querySelector('.flip-card-inner');
 
-  flipCard.addEventListener('click', () => {
-  flipInner.classList.toggle('flipped');
-});
-
+    flipCard.addEventListener('click', () => {
+      flipInner.classList.toggle('flipped');
+    });
   }
   static get observedAttributes() {
     return ['card-name'];
@@ -145,7 +144,7 @@ class HabitCard extends HTMLElement {
       descrEl.textContent = `Description: ${this.getAttribute('card-description') || 'None'}`;
     }
     if (timeEl) {
-      timeEl.textContent = `Time: ${this.getAttribute("card-time") || "None"}`;
+      timeEl.textContent = `Time: ${this.getAttribute('card-time') || 'None'}`;
     }
     if (streakEl) {
       streakEl.innerHTML = `Current Streak: <span class="streak_number"> ${this.getAttribute('card-streak') || 'None'} </span>`;
