@@ -155,7 +155,7 @@ window.addEventListener('DOMContentLoaded', init);
 
 const DAYINMS = 86400000;
 function init() {
-  if (JSON.parse(localStorage.getItem('habits')).length == 0) {
+  if (JSON.parse(localStorage.getItem('habits')) != null) {
     localStorage.setItem('habits', JSON.stringify([]));
   }
 }
@@ -178,7 +178,6 @@ function createHabit(name, description, frequency, notif) {
   let habits = getAllHabits();
   habits.push(habit);
   saveHabits(habits);
-  return id;
 }
 
 function getAllHabits() {
