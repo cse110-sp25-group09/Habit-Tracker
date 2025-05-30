@@ -203,7 +203,7 @@ document.getElementById('submit-habit').addEventListener('click', () => {
 });
 
 function populateCards(){
-  getElementById("card-container").innerHTML="";
+  document.getElementById("card-container").innerHTML="";
   let habits = getHabitsForToday();
   for (let i =0; i<habits.length; i++){
     const newCard = document.createElement('habit-card');
