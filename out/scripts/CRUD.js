@@ -152,7 +152,7 @@ export function getAllHabits(adapter = localStorageAdapter){
   while (i--){
     habits.push(adapter.get(keys[i])); 
 window.addEventListener('DOMContentLoaded', init);
-export { createHabit, getHabitsForToday };
+export { createHabit, getHabitsForToday, deleteHabit };
 const DAYINMS = 86400000;
 function init() {
   if (JSON.parse(localStorage.getItem('habits')) === null) {

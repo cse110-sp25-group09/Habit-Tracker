@@ -56,6 +56,7 @@ class HabitCard extends HTMLElement {
         height: 150px;
         margin: 1rem;
         position: relative;
+        cursor: pointer;
       }
  
       .flip-card-inner {
@@ -100,6 +101,7 @@ class HabitCard extends HTMLElement {
         background-color: var(--back-card-color);
         color: var(--text-color-back-of-card);
         transform: rotateY(180deg);
+        
        
       }
 
@@ -126,6 +128,52 @@ class HabitCard extends HTMLElement {
         font-weight:bold;
       }
 
+      .delete-container {
+        margin-top: 0.1em;
+        text-align: center;
+      }
+
+      .delete-btn {
+        background: transparent;
+        color: white;
+        border: none;
+        font-size: 0.9em;
+        cursor: pointer;
+      }
+
+      .confirm-dialog {
+        margin-top: 0.5em;
+        display: flex;
+        margin-bottom: 0.5em;
+        font-size: 0.9em;
+
+      }
+
+      .confirm-dialog button {
+        margin: 0 0.25em;
+        padding: 0.25em 0.5em;
+        font-size: 0.8em;
+        cursor: pointer;
+        border-radius: 4px;
+        border: none;
+      }
+
+      .confirm-yes {
+        background-color: red;
+        color: white;
+        font-size: 0.9em;
+
+      }
+
+      .confirm-no {
+        background-color: gray;
+        color: white;
+        font-size: 0.9em;
+
+      }
+    
+
+
     </style>
 
     <div class="flip-card">
@@ -145,10 +193,59 @@ class HabitCard extends HTMLElement {
     const flipCard = shadow.querySelector('.flip-card');
     const flipInner = shadow.querySelector('.flip-card-inner');
 
+    const deleteBtn = this.shadowRoot.querySelector('.delete-btn');
+    const confirmDialog = this.shadowRoot.querySelector('.confirm-dialog');
+    const deleteDialog = this.shadowRoot.querySelector('.delete-dialog');
+
+    const yesBtn = this.shadowRoot.querySelector('.confirm-yes');
+    const noBtn = this.shadowRoot.querySelector('.confirm-no');
+
+    deleteBtn.addEventListener('click', () => {
+      confirmDialog.hidden = false;
+      yesBtn.hidden = false;
+      noBtn.hidden = false;
+      deleteDialog.hidden = false;
+
+
+      deleteBtn.hidden = true;
+    });
+
+    noBtn.addEventListener('click', () => {
+      deleteBtn.hidden = false;
+      confirmDialog.hidden = true;
+      yesBtn.hidden = true;
+      noBtn.hidden = true;
+      deleteDialog.hidden = true;
+
+    });
+
+    // yesBtn.addEventListener('click', () => {
+
+    //   this.remove(); // removes the card from the DOM
+
+    // });
+    yesBtn?.addEventListener('click', (e) => {
+      e.stopPropagation(); // prevent card flip
+
+      const idElement = this.shadowRoot.querySelector('#card_id');
+      if (idElement) {
+        const cardId = idElement.textContent.trim();
+        console.log(cardId)
+        deleteHabit(cardId);
+        this.remove(); // This removes the custom element from the DOM
+      }
+    });
+
+
+    [deleteBtn, yesBtn, noBtn].forEach(btn => {
+      btn?.addEventListener('click', e => e.stopPropagation());
+    });
+
     flipCard.addEventListener('click', () => {
       flipInner.classList.toggle('flipped');
     });
   }
+  
   static get observedAttributes() {
     return ['card-name'];
   }
@@ -181,6 +278,7 @@ class HabitCard extends HTMLElement {
       idEl.innerHTML = `Current ID: ${this.getAttribute('card-id') || 'None'} `;
     }
   }
+  
 }
 
 customElements.define('habit-card', HabitCard);
