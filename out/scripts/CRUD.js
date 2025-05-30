@@ -1,8 +1,8 @@
 window.addEventListener('DOMContentLoaded', init);
-
+export { createHabit, getHabitsForToday, deleteHabit };
 const DAYINMS = 86400000;
 function init() {
-  if (JSON.parse(localStorage.getItem('habits')).length == 0) {
+  if (JSON.parse(localStorage.getItem('habits')) === null) {
     localStorage.setItem('habits', JSON.stringify([]));
   }
 }
@@ -12,11 +12,11 @@ function saveHabits(habits) {
 }
 function createHabit(name, description, frequency, notif) {
   let id = crypto.randomUUID();
-  habit = {
+  let habit = {
     id: id,
     name: name,
     description: description,
-    frequency: frequency,
+    frequency: frequency.toLowerCase(),
     notif: notif,
     creat_date: Math.floor(Date.now() / DAYINMS),
     streak: 0,
@@ -25,7 +25,6 @@ function createHabit(name, description, frequency, notif) {
   let habits = getAllHabits();
   habits.push(habit);
   saveHabits(habits);
-  return id;
 }
 
 function getAllHabits() {
