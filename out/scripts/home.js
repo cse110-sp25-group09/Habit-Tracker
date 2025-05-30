@@ -1,8 +1,9 @@
 //below is the code for the menu bar
 
 import { getHabitsForToday, createHabit } from "./CRUD.js";
-
-
+window.addEventListener('DOMContentLoaded', () => {
+  populateCards(); 
+});
 
 const home_select = document.getElementById('home-selection');
 const calendar_select = document.getElementById('calendar-selection');

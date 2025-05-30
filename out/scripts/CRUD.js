@@ -2,7 +2,7 @@ window.addEventListener('DOMContentLoaded', init);
 
 const DAYINMS = 86400000;
 function init() {
-  if (JSON.parse(localStorage.getItem('habits')) != null) {
+  if (JSON.parse(localStorage.getItem('habits')) === null) {
     localStorage.setItem('habits', JSON.stringify([]));
   }
 }
@@ -16,7 +16,7 @@ function createHabit(name, description, frequency, notif) {
     id: id,
     name: name,
     description: description,
-    frequency: frequency,
+    frequency: frequency.toLowerCase(),
     notif: notif,
     creat_date: Math.floor(Date.now() / DAYINMS),
     streak: 0,
