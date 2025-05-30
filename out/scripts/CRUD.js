@@ -249,28 +249,37 @@ function isHabitForToday(habit) {
 }
 
 /**
- * 
- * @returns list of 
- *  
+ * @returns list of habit objects representing habits that need to be completed today 
  */
 function getHabitsForToday() {
   let habits = getAllHabits();
   let today_habits = [];
-  let today = Math.floor(Date.now() / DAYINMS);
+  let today = new Date() 
+  today.setHours(0, 0, 0, 0); 
+  let curr_date = habit.startDateTime; 
   for (let i = 0; i < habits.length; i++) {
     if (isHabitForToday(habits[i])) {
-      let curr_date = Math.floor(habits[i].logs[-1] / DAYINMS);
+      curr_date = Date.parse(curr_date); 
+      if (curr_date == NaN){
+        throw new Error ("Invalid type for habit.startDateTime"); 
+      }
+      curr_date.setHours(0,0,0,0); 
       today_habits.push((curr_date == today, habits[i]));
     }
   }
   return today_habits;
 }
 
-function habitsCompletedOnDay(date) {
+/**
+ * 
+ * @param {string} dateStr datestring representing the day being checked 
+ * @returns list of habit objects 
+ */
+function habitsCompletedOnDay(dateStr) {
   let habits = getAllHabits();
   let daysHabits = [];
   for (let i = 0; i < habits.length; i++) {
-    if (habits[i].logs.includes(date)) {
+    if (habits[i].logs.includes(dateStr)) {
       daysHabits.push(habits[i]);
     }
   }
