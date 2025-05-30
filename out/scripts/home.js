@@ -1,8 +1,8 @@
 //below is the code for the menu bar
 
-import { getHabitsForToday, createHabit, deleteHabit } from "./CRUD.js";
+import { getHabitsForToday, createHabit, deleteHabit } from './CRUD.js';
 window.addEventListener('DOMContentLoaded', () => {
-  populateCards(); 
+  populateCards();
 });
 
 const home_select = document.getElementById('home-selection');
@@ -165,7 +165,7 @@ class HabitCard extends HTMLElement {
           <p id="card_frequency">${this.getAttribute('card-frequency') || 'None'}</p>
           <p id="card_time">${this.getAttribute('card-time') || 'None'}</p>
           <p id="card_streak">${this.getAttribute('card-streak') || 'None'}</p>
-          <p id= "card_id" hidden>${this.getAttribute('card-id')||'None'}</p>
+          <p id= "card_id" hidden>${this.getAttribute('card-id') || 'None'}</p>
           <div class="delete-container">
             <button class="delete-btn">🗑️</button>
             <div class="confirm-dialog" hidden>
@@ -196,7 +196,6 @@ class HabitCard extends HTMLElement {
       noBtn.hidden = false;
       deleteDialog.hidden = false;
 
-
       deleteBtn.hidden = true;
     });
 
@@ -206,7 +205,6 @@ class HabitCard extends HTMLElement {
       yesBtn.hidden = true;
       noBtn.hidden = true;
       deleteDialog.hidden = true;
-
     });
 
     // yesBtn.addEventListener('click', () => {
@@ -220,22 +218,21 @@ class HabitCard extends HTMLElement {
       const idElement = this.shadowRoot.querySelector('#card_id');
       if (idElement) {
         const cardId = idElement.textContent.trim();
-        console.log(cardId)
+        console.log(cardId);
         deleteHabit(cardId);
         this.remove(); // This removes the custom element from the DOM
       }
     });
 
-
-    [deleteBtn, yesBtn, noBtn].forEach(btn => {
-      btn?.addEventListener('click', e => e.stopPropagation());
+    [deleteBtn, yesBtn, noBtn].forEach((btn) => {
+      btn?.addEventListener('click', (e) => e.stopPropagation());
     });
 
     flipCard.addEventListener('click', () => {
       flipInner.classList.toggle('flipped');
     });
   }
-  
+
   static get observedAttributes() {
     return ['card-name'];
   }
@@ -268,7 +265,6 @@ class HabitCard extends HTMLElement {
       idEl.innerHTML = `Current ID: ${this.getAttribute('card-id') || 'None'} `;
     }
   }
-  
 }
 
 customElements.define('habit-card', HabitCard);
@@ -298,7 +294,6 @@ document.getElementById('submit-habit').addEventListener('click', () => {
     // document.getElementById('card-container').appendChild(newCard);
     createHabit(name, descr, frequency, timeStr);
     populateCards();
-
   }
 
   // Reset and hide form
@@ -310,10 +305,10 @@ document.getElementById('submit-habit').addEventListener('click', () => {
   document.getElementById('habit-form').style.display = 'none';
 });
 
-function populateCards(){
-  document.getElementById("card-container").innerHTML="";
+function populateCards() {
+  document.getElementById('card-container').innerHTML = '';
   let habits = getHabitsForToday();
-  for (let i =0; i<habits.length; i++){
+  for (let i = 0; i < habits.length; i++) {
     //console.log(habits[i][0]);
     const newCard = document.createElement('habit-card');
     newCard.setAttribute('card-name', habits[i].name);
@@ -325,13 +320,6 @@ function populateCards(){
     document.getElementById('card-container').appendChild(newCard);
   }
 }
-
-
-
-
-
-
-
 
 // mark as complete / change color / add check
 //delete = delete id and populate
