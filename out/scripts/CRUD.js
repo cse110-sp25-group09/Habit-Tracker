@@ -1,161 +1,110 @@
-window.addEventListener('DOMContentLoaded', init);
-export { createHabit, getHabitsForToday, deleteHabit };
-const DAYINMS = 86400000;
-function init() {
-  if (JSON.parse(localStorage.getItem('habits')) === null) {
-    localStorage.setItem('habits', JSON.stringify([]));
+export const localStorageAdapter = {
+    get: (key) => localStorage.getItem(key),
+    set: (key, value) => localStorage.setItem(key, value )
+};
+
+
+function typeErrorTemplate (stringParam, type){
+  return `${type} is the incorrect type for ${stringParam})`
+}
+
+/**
+ * 
+ * @param {number} numHours 
+ * @return (number) numMS 
+ */
+function hoursToMS(numHours){
+  return 60 * 60 * 1000 * numHours; 
+}
+
+/**
+ * @param habitName string name of habit
+ * @param habitDescription string description of the habit
+ * @param habitFrequency integer number of hours representing a frequency (ex. Daily = 1, Weekly = 7)
+ * @param startDateTime date string representing the first occurrence of habit
+ * @param adapter only possible value right now is localStorageAdapter. This parameter is intended to allow easy switches to a database later on.
+ * @type {(habitName : string, habitDescription : string, startDateTime : string, adapter : object) => string}
+ * habitStreak will also be a card field, but is not a parameter of this function because it is always initialized to zero
+ * @return cardID, a unique ID string
+ */
+export function createCard(habitName, habitDescription, habitFrequency, startDateTime,  adapter){
+   if (typeof habitName != "string"){
+     throw new Error (typeErrorTemplate(habitName, typeof(habitName)));
+   }
+
+  if (typeof habitDescription != "string"){
+    throw new Error (typeErrorTemplate(habitDescription, typeof(habitDescription)));
   }
+   /*
+   Choosing to represent frequencies as integer hour values to compromise between
+   * readability & compatibility with JS Date() objects, which operate in ms
+   * ex: Daily = 24, Weekly = 168, 30 days = 720
+   * make names in local storage match parameters
+   * */
+   if(typeof habitFrequency != "number"){
+     throw new Error (typeErrorTemplate(habitFrequency, typeof(habitFrequency)));
+   }
+   /*check that startDateTime is a valid dateString (could be in standard or UTC string format, just need to be acceptable to Date.parse())
+   https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/parse
+    Requires regex to do properly: https://stackoverflow.com/questions/7445328/check-if-a-string-is-a-date-value
+    */
+
+
+    let card = {
+        habitName: habitName,
+        habitDescription: habitDescription,
+        habitFrequency: habitFrequency,
+        startDateTime: startDateTime,
+        habitStreak: 0,
+        logs: []
+    };
+
+    let cardID = "id" + self.crypto.randomUUID();
+    adapter.set(cardID, JSON.stringify(card));
+    return cardID;
 }
 
-function saveHabits(habits) {
-  localStorage.setItem('habits', JSON.stringify(habits));
-}
-function createHabit(name, description, frequency, notif) {
-  let id = crypto.randomUUID();
-  let habit = {
-    id: id,
-    name: name,
-    description: description,
-    frequency: frequency.toLowerCase(),
-    notif: notif,
-    creat_date: Math.floor(Date.now() / DAYINMS),
-    streak: 0,
-    logs: [],
-  };
-  let habits = getAllHabits();
-  habits.push(habit);
-  saveHabits(habits);
+/**
+ * @param {string} cardID the string id of the card being read
+ * @param {object} adapter an object representing our database (currenly only use localStorageAdapter)
+ */
+export function readCard(cardID, adapter){
+  return adapter.get(cardID);
 }
 
-function getAllHabits() {
-  return JSON.parse(localStorage.getItem('habits'));
-}
-
-function getHabitbyID(id) {
-  let habits = getAllHabits();
-  for (let i = 0; i < habits.length; i++) {
-    if (habits[i].id == id) {
-      return habits[i];
-    }
+/**
+ * @param {string} cardID string ID of card (ex
+ * @param {list} fields list of fields to update in the given card object
+ * @param {list} newValues list of new values for fields (passed in the same order).
+ * New values should follow the type requirements of createCard()
+ */
+export function updateCard(cardID, fields, newValues){
+  //check that fields and newValues are the same length
+  if(fields.length != newValues.length){
+    throw new Error ('fields and newValues must have the same length');
   }
-  return null;
-}
-
-function updateHabit(id, new_habit) {
-  let habits = getAllHabits();
-  for (let i = 0; i < habits.length; i++) {
-    if (habits[i].id == id) {
-      habits[i] = new_habit;
-      break;
-    }
-  }
-  saveHabits(habits);
-}
-
-function deleteHabit(id) {
-  let habits = getAllHabits();
-  for (let i = 0; i < habits.length; i++) {
-    if (habits[i].id == id) {
-      habits.splice(i, 1);
-    }
-  }
-  saveHabits(habits);
-}
-
-function calculateStreak(habit) {
-  let logs = habit.logs.sort();
-  if (logs.length < 2) {
-    return logs.length;
-  }
-  let streak = 0;
-  if (habit.frequency == 'daily') {
-    let exp = Math.floor(Date.now() / DAYINMS);
-    for (let i = -2; i >= -1 * logs.length; i--) {
-      if (Math.floor(logs[i]) != exp) {
-        return streak;
-      } else {
-        streak++;
-        exp--;
+  const stringFields = new Set ("habitName", "habitDescription" );
+  const numberFields = new Set ("habitFrequency", "habitStreak");
+  let cardToUpdate = adapter.get(cardID);
+  cardToUpdate = JSON.parse(cardToUpdate);
+  for (let i = 0; i < fields.length; i++){
+      if (!Object.hasOwn(cardToUpdate, fields[i])) {
+        throw new Error (`${fields[i]} is not a valid card field`);
       }
-    }
-  } else if (habit.frequency == 'weekly') {
-    let exp = Math.floor(Date.now() / DAYINMS);
-    for (let i = -2; i >= -1 * logs.length; i--) {
-      if (Math.floor(logs[i]) > exp) {
-        return streak;
-      } else {
-        streak++;
-        exp -= 7;
+      if (fields[i] in stringFields){
+        cardToUpdate.fields[i] = newValues[i];
       }
-    }
-  } else {
-    let exp = Math.floor(Date.now() / DAYINMS);
-    for (let i = -2; i >= -1 * logs.length; i--) {
-      if (Math.floor(logs[i] / DAYINMS) > exp) {
-        return streak;
-      } else {
-        streak++;
-        exp -= 30;
+      else if (fields[i] in numberFields){
+        if (!newValues[i]){ //will reject null, false, 0 but not "0", dependent on all values being parsed as strings
+          throw new Error (`${fields[i]} is not a valid number field`);
+        }
+        cardToUpdate.fields[i] =  newValues[i];
       }
+      //checking for date strings, rejecting everything else (requires regex)
+      else{
+
+      }
+      cardToUpdate.fields[i] = newValues[i]; 
     }
-  }
 }
 
-function logHabitCompleted(id, time = Math.floor(Date.now() / DAYINMS)) {
-  let habits = getAllHabits();
-  let idx = -1;
-  for (let i = 0; i < habits.length; i++) {
-    if (habits[i].id == id) {
-      idx = i;
-    }
-  }
-  if (idx < 0) {
-    return false;
-  }
-  habits[idx].logs.push(time);
-  habits[idx].streak = calculateStreak(habits[idx]);
-  saveHabits(habits);
-  return true;
-}
-
-function isHabitForToday(habit) {
-  let date = Math.floor(Date.now() / DAYINMS);
-  if (habit.logs[-1] == date) {
-    return false;
-  }
-  if (habit.frequency == 'weekly') {
-    if ((date - habit.creat_date) % 7 != 0) {
-      return false;
-    }
-  }
-  if (habit.frequency == 'monthly') {
-    if ((date - habit.creat_date) % 30 != 0) {
-      return false;
-    }
-  }
-  return true;
-}
-
-function getHabitsForToday() {
-  let habits = getAllHabits();
-  let today_habits = [];
-  let today = Math.floor(Date.now() / DAYINMS);
-  for (let i = 0; i < habits.length; i++) {
-    if (isHabitForToday(habits[i])) {
-      let curr_date = Math.floor(habits[i].logs[-1] / DAYINMS);
-      today_habits.push((curr_date == today, habits[i]));
-    }
-  }
-  return today_habits;
-}
-
-function habitsCompletedOnDay(date) {
-  let habits = getAllHabits();
-  let daysHabits = [];
-  for (let i = 0; i < habits.length; i++) {
-    if (habits[i].logs.includes(date)) {
-      daysHabits.push(habits[i]);
-    }
-  }
-  return daysHabits;
-}
