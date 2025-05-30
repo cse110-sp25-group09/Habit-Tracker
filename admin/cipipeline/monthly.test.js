@@ -6,7 +6,7 @@ import {
   generateCalendar,
   setupEventListeners,
   monthNames,
-} from '../../out/scripts/monthly-calendar.js';
+} from '../monthly-calendar';
 
 describe('generateCalendar', () => {
   beforeEach(() => {
