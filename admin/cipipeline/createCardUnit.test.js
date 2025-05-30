@@ -1,20 +1,31 @@
+/**
+ * @jest-environment jsdom
+ */
 import {
   createCard,
   localStorageAdapter,
-} from '../../out/scripts/createCard.js';
+} from '../../out/scripts/CRUD.js';
+
+import { jest } from '@jest/globals';
+import { fileURLToPath } from 'url';
+import { dirname, resolve } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 let page, browser;
 let url = '../../localstorage.html';
 
 describe('Create a card data object in localStorage or a database', () => {
   beforeAll(async () => {
-    browser = await puppeteer.launch();
-    page = await browser.newPage();
-    await page.goto(url);
+    // Dynamically import the script so it works with ESM
+    // await import('../../out/scripts/home.js');
     localStorage.clear();
   });
 
   it('Check for card data in localStorage', async () => {
+    const mockCrypto = jest.fn();
+    mockCrypto.mockImplementation(() => 'mocked-uuid');
     let testCall1 = createCard(
       'Drink Water',
       'Fill glass, lift to mouth and swallow',
