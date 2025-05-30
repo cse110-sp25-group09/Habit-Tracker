@@ -1,5 +1,5 @@
-const DAYINMS = 86400000;
 
+const DAYINMS = 86400000;
 export const localStorageAdapter = {
   get: (key) => localStorage.getItem(key),
   set: (key, value) => localStorage.setItem(key, value),
@@ -39,10 +39,8 @@ export function createHabit(
     );
   }
   /*
-   Choosing to represent frequencies as integer hour values to compromise between
+   Choosing to represent frequencies as integer day values to compromise between
    * readability & compatibility with JS Date() objects, which operate in ms
-   * ex: Daily = 24, Weekly = 168, 30 days = 720
-   * make names in local storage match parameters
    * */
   if (typeof habitFrequency != 'number') {
     throw new Error(typeErrorTemplate(habitFrequency, typeof habitFrequency));
@@ -111,7 +109,7 @@ export function updateHabit(habitID, fields, newValues) {
 
 /**
  *
- * @param {String} cardID, the string ID of the habit being deleted
+ * @param {String} habitID - the string ID of the habit being deleted
  * @param {Object} adapter defaults to localStorageAdapter, allows us to pass in other storage methods
  */
 export function deleteHabit(cardID, adapter = localStorageAdapter) {
@@ -137,35 +135,35 @@ export function getAllHabits(adapter = localStorageAdapter) {
 
 /**
  *
- * @param {String} id
+ * @param {String} habitID
  * @param {Object} adapter
  * @returns
  */
-export function getHabitById(id, adapter = localStroageAdapter) {
+export function getHabitById(habitID, adapter = localStroageAdapter) {
   return adapter.get(id);
 }
 
 /**
  *
- * @param {Object} habit a JSON object representing a habit(not a habit string !) 
+ * @param {Object} habit a JSON object representing a habit(not a habit string !)
  * @returns
  */
 function calculateStreak(habit) {
   let logs = habit.logs;
-  
+
   if (logs.length < 2) {
     return logs.length;
   }
   let ms = 0;
-  let msLogs = []; 
+  let msLogs = [];
 
   //Date.parse() is very format permissive, this needs to be tested thoroughly
   logs.forEach((element) => {
     ms = Date.parse(element);
-    if (ms == NaN){
-      throw new Error(typeErrorTemplate(logs,  typeof ms));
+    if (ms == NaN) {
+      throw new Error(typeErrorTemplate(logs, typeof ms));
     }
-    msLogs.push(ms); 
+    msLogs.push(ms);
   });
 
   msLogs = msLogs.sort();
@@ -182,37 +180,37 @@ function calculateStreak(habit) {
   }
 }
 
-function logHabitCompleted(id, time = Math.floor(Date.now() / DAYINMS)) {
-  let habits = getAllHabits();
-  let idx = -1;
-  for (let i = 0; i < habits.length; i++) {
-    if (habits[i].id == id) {
-      idx = i;
-    }
-  }
-  if (idx < 0) {
-    return false;
-  }
-  habits[idx].logs.push(time);
-  habits[idx].streak = calculateStreak(habits[idx]);
-  saveHabits(habits);
-  return true;
+/**
+ * 
+ * @param {String} habitID - the string ID of the habit being deleted
+ * @param {Object} adapter defaults to localStorageAdapter, allows us to pass in other storage methods
+ * @returns {boolean} true if habit completion is logged successfully, false otherwise 
+ */
+function logHabitCompleted(habitID, adapter = localStorageAdapter) {
+  let habit = getHabitById(habitID); 
+  if (habit){
+     habit.streak = calculateStreak(habits[idx]);
+    let currentDateTime = new Date(); 
+    habit.log.push(currentDateTime.toDateString()); 
+    return true; 
+  } 
+  return false; // what is the benefit of returning boolean instead of throwing an error in a void function in this context ? 
 }
 
+/**
+ * 
+ * @param {Object} habit a JSON object representing a habit(not a habit string !)
+ * @returns 
+ */
 function isHabitForToday(habit) {
-  let date = Math.floor(Date.now() / DAYINMS);
-  if (habit.logs[-1] == date) {
+  let currentDate = new Date (); 
+  let msStartDate = Date.parse (habit.startDateTime); 
+  if (habit.logs[-1] == currentDate.toDateString()) {
     return false;
   }
-  if (habit.frequency == 'weekly') {
-    if ((date - habit.creat_date) % 7 != 0) {
-      return false;
-    }
-  }
-  if (habit.frequency == 'monthly') {
-    if ((date - habit.creat_date) % 30 != 0) {
-      return false;
-    }
+  
+  if ((currentDate - msStartDate) % (habit.frequency) != 0) {
+    return false;
   }
   return true;
 }
