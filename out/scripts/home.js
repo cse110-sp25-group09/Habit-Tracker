@@ -13,9 +13,13 @@ window.addEventListener('DOMContentLoaded', () => {
 const home_select = document.getElementById('home-selection');
 const calendar_select = document.getElementById('calendar-selection');
 const settings_select = document.getElementById('settings-selection');
+const daily_calendar_select = document.getElementById('daily-calendar-selection');
 
 home_select.addEventListener('click', () => {
   window.location.href = 'home-page.html';
+});
+daily_calendar_select.addEventListener('click', () => {
+  window.location.href = 'daily-calendar.html';
 });
 calendar_select.addEventListener('click', () => {
   window.location.href = 'monthly-calendar.html';
