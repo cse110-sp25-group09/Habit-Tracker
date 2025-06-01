@@ -1,8 +1,8 @@
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: "Commissioner", sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Commissioner', sans-serif;
 }
 .header {
   justify-content: space-around;
@@ -31,7 +31,6 @@
   bottom: 0;
   margin: auto;
   max-width: auto;
- 
 }
 .nav-item {
   font-size: 1.5rem;
@@ -53,15 +52,15 @@
   padding-top: 100px; /* Adjust based on header height */
   font-size: 1.2rem;
 }
-.theme-selection{
-    margin-bottom: 20px
+.theme-selection {
+  margin-bottom: 20px;
 }
-#reset-cards{
-    background-color: darkred;
-    color: white;
-    width: auto;
-    padding: 15px;
-    font-size: 1.2rem;
-    cursor: pointer;
-    margin-top: 20px;
+#reset-cards {
+  background-color: darkred;
+  color: white;
+  width: auto;
+  padding: 15px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  margin-top: 20px;
 }
