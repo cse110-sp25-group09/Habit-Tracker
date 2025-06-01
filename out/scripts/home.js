@@ -1,6 +1,6 @@
 //below is the code for the menu bar
 
-import { getHabitsForToday, createHabit, deleteHabit } from './CRUD.js';
+import { getAllHabits, createHabit, deleteHabit, getHabitsForToday } from './CRUD.js';
 window.addEventListener('DOMContentLoaded', () => {
   populateCards();
 });
@@ -309,14 +309,14 @@ function populateCards() {
   let habits = getHabitsForToday();
   for (let i = 0; i < habits.length; i++) {
     //console.log(habits[i][0]);
-    const newCard = document.createElement('habit-card');
-    newCard.setAttribute('card-name', habits[i].name);
-    newCard.setAttribute('card-frequency', habits[i].frequency);
-    newCard.setAttribute('card-description', habits[i].description);
-    newCard.setAttribute('card-time', habits[i].notif);
-    newCard.setAttribute('card-streak', habits[i].streak);
-    newCard.setAttribute('card-id', habits[i].id);
-    document.getElementById('card-container').appendChild(newCard);
+      const newCard = document.createElement('habit-card');
+      newCard.setAttribute('card-name', habits[i].name);
+      newCard.setAttribute('card-frequency', habits[i].frequency);
+      newCard.setAttribute('card-description', habits[i].description);
+      newCard.setAttribute('card-time', habits[i].notif);
+      newCard.setAttribute('card-streak', habits[i].streak);
+      newCard.setAttribute('card-id', habits[i].id);
+      document.getElementById('card-container').appendChild(newCard);
   }
 }
 
