@@ -3,59 +3,237 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Daily Calendar - Habit Tracker</title>
-    <link rel="stylesheet" href="../out/styles/daily_style.css" />
+    <title>Habit Tracker</title>
+    <link rel="stylesheet" href="/out/styles/home_style.css" />
   </head>
   <body>
-    <h1 class="app-header">Habit Tracker</h1>
+    <div class="app">
+      <!-- App Header -->
+      <h1 class="app-header">Habit Tracker</h1>
 
-    <div class="main-content">
-      <div class="calendar-container">
-        <div class="day-card inactive" id="prev-day">
-          <div class="day-name">Sunday</div>
-          <div class="day-date">Dec 31</div>
-          <div class="habits-indicator" id="prev-habits">
-            <div class="habit-dot completed"></div>
-            <div class="habit-dot pending"></div>
-            <div class="habit-dot"></div>
-          </div>
-        </div>
+      <!-- Card Container: insert daily calendar content here -->
+      <div id="card-container">
+        <!-- ==================== Monday Habits Section ==================== -->
+        <section class="admin-section">
+          <header class="admin-section__header">
+            <h1 class="admin-section__title">Monday Habits</h1>
+            <time class="admin-section__date" datetime="2025-06-02">June 2, 2025</time>
+            <p class="admin-section__description">
+              Review and manage individual habit progress for today
+            </p>
+          </header>
 
-        <div class="day-card active" id="current-day">
-          <div class="day-name">Monday</div>
-          <div class="day-date">Jan 1</div>
-          <div class="habits-indicator" id="current-habits">
-            <div class="habit-dot completed"></div>
-            <div class="habit-dot completed"></div>
-            <div class="habit-dot pending"></div>
-            <div class="habit-dot"></div>
-          </div>
-        </div>
+          <div class="daily-card-stack" data-stack-container="true" data-day="monday">
+            
+            <!-- Habit 1: Morning Exercise -->
+            <article class="habit-card" data-habit-id="exercise" data-status="completed">
+              <header class="habit-card__header">
+                <h2 class="habit-card__title">Morning Exercise</h2>
+                <span class="habit-card__status habit-card__status--completed">✓</span>
+              </header>
+              <div class="habit-card__content">
+                <p class="habit-card__description">
+                  30-minute morning workout routine including cardio and strength training
+                </p>
+                <div class="habit-card__meta">
+                  <span class="habit-card__time">
+                    <strong>Time:</strong> 6:00 AM - 6:30 AM
+                  </span>
+                  <span class="habit-card__streak">
+                    <strong>Streak:</strong> 12 days
+                  </span>
+                </div>
+              </div>
+              <footer class="habit-card__footer">
+                <button class="habit-card__toggle-btn" data-action="toggle-status">
+                  Mark Incomplete
+                </button>
+                <a href="edit-habit.html?id=exercise&date=2025-06-02" class="habit-card__edit-link">
+                  Edit
+                </a>
+              </footer>
+            </article>
 
-        <div class="day-card inactive" id="next-day">
-          <div class="day-name">Tuesday</div>
-          <div class="day-date">Jan 2</div>
-          <div class="habits-indicator" id="next-habits">
-            <div class="habit-dot"></div>
-            <div class="habit-dot"></div>
-            <div class="habit-dot"></div>
+            <!-- Habit 2: Meditation -->
+            <article class="habit-card" data-habit-id="meditation" data-status="completed">
+              <header class="habit-card__header">
+                <h2 class="habit-card__title">Daily Meditation</h2>
+                <span class="habit-card__status habit-card__status--completed">✓</span>
+              </header>
+              <div class="habit-card__content">
+                <p class="habit-card__description">
+                  10-minute mindfulness meditation session to start the day centered
+                </p>
+                <div class="habit-card__meta">
+                  <span class="habit-card__time">
+                    <strong>Time:</strong> 7:00 AM - 7:10 AM
+                  </span>
+                  <span class="habit-card__streak">
+                    <strong>Streak:</strong> 8 days
+                  </span>
+                </div>
+              </div>
+              <footer class="habit-card__footer">
+                <button class="habit-card__toggle-btn" data-action="toggle-status">
+                  Mark Incomplete
+                </button>
+                <a href="edit-habit.html?id=meditation&date=2025-06-02" class="habit-card__edit-link">
+                  Edit
+                </a>
+              </footer>
+            </article>
+
+            <!-- Habit 3: Reading -->
+            <article class="habit-card" data-habit-id="reading" data-status="incomplete">
+              <header class="habit-card__header">
+                <h2 class="habit-card__title">Daily Reading</h2>
+                <span class="habit-card__status habit-card__status--incomplete">○</span>
+              </header>
+              <div class="habit-card__content">
+                <p class="habit-card__description">
+                  Read for 20 minutes from personal development or fiction books
+                </p>
+                <div class="habit-card__meta">
+                  <span class="habit-card__time">
+                    <strong>Target:</strong> 8:00 PM - 8:20 PM
+                  </span>
+                  <span class="habit-card__streak">
+                    <strong>Streak:</strong> 0 days
+                  </span>
+                </div>
+              </div>
+              <footer class="habit-card__footer">
+                <button class="habit-card__toggle-btn" data-action="toggle-status">
+                  Mark Complete
+                </button>
+                <a href="edit-habit.html?id=reading&date=2025-06-02" class="habit-card__edit-link">
+                  Edit
+                </a>
+              </footer>
+            </article>
+
+            <!-- Habit 4: Water Intake -->
+            <article class="habit-card" data-habit-id="water" data-status="completed">
+              <header class="habit-card__header">
+                <h2 class="habit-card__title">Water Intake</h2>
+                <span class="habit-card__status habit-card__status--completed">✓</span>
+              </header>
+              <div class="habit-card__content">
+                <p class="habit-card__description">
+                  Drink 8 glasses (64oz) of water throughout the day
+                </p>
+                <div class="habit-card__meta">
+                  <span class="habit-card__progress">
+                    <strong>Progress:</strong> 6/8 glasses
+                  </span>
+                  <span class="habit-card__streak">
+                    <strong>Streak:</strong> 15 days
+                  </span>
+                </div>
+              </div>
+              <footer class="habit-card__footer">
+                <button class="habit-card__toggle-btn" data-action="toggle-status">
+                  Mark Incomplete
+                </button>
+                <a href="edit-habit.html?id=water&date=2025-06-02" class="habit-card__edit-link">
+                  Edit
+                </a>
+              </footer>
+            </article>
+
+            <!-- Habit 5: Journal Writing -->
+            <article class="habit-card" data-habit-id="journaling" data-status="incomplete">
+              <header class="habit-card__header">
+                <h2 class="habit-card__title">Evening Journal</h2>
+                <span class="habit-card__status habit-card__status--incomplete">○</span>
+              </header>
+              <div class="habit-card__content">
+                <p class="habit-card__description">
+                  Write 3 things I'm grateful for and reflect on the day's experiences
+                </p>
+                <div class="habit-card__meta">
+                  <span class="habit-card__time">
+                    <strong>Target:</strong> 9:00 PM - 9:15 PM
+                  </span>
+                  <span class="habit-card__streak">
+                    <strong>Streak:</strong> 2 days
+                  </span>
+                </div>
+              </div>
+              <footer class="habit-card__footer">
+                <button class="habit-card__toggle-btn" data-action="toggle-status">
+                  Mark Complete
+                </button>
+                <a href="edit-habit.html?id=journaling&date=2025-06-02" class="habit-card__edit-link">
+                  Edit
+                </a>
+              </footer>
+            </article>
+
           </div>
-        </div>
+
+          <!-- Day Summary -->
+          <aside class="day-summary">
+            <h3 class="day-summary__title">Monday Progress</h3>
+            <div class="day-summary__stats">
+              <div class="day-summary__stat">
+                <span class="day-summary__stat-value">3/5</span>
+                <span class="day-summary__stat-label">Completed</span>
+              </div>
+              <div class="day-summary__stat">
+                <span class="day-summary__stat-value">60%</span>
+                <span class="day-summary__stat-label">Success Rate</span>
+              </div>
+            </div>
+          </aside>
+        </section>
       </div>
+
+      <!-- Habit-creation Form (unchanged from template) -->
+      <div id="habit-form" class="form-row">
+        <div id="create-card">
+          <h3>Create Card</h3>
+        </div>
+
+        <label for="habit-name">Habit Name:</label>
+        <input type="text" id="habit-name" name="habit-name" maxlength="37" />
+        <label for="habitDescription">Description:</label>
+        <input
+          type="textarea"
+          id="habitDescription"
+          name="habitDescription"
+          maxlength="80"
+        />
+
+        <label for="habit-frequency">Frequency:</label>
+        <select id="habit-frequency" name="habit-frequency">
+          <option value="Daily">Daily</option>
+          <option value="Weekly">Weekly</option>
+          <option value="Monthly">Monthly</option>
+        </select>
+        <label for="habit-time">Notification time:</label>
+        <input type="time" id="habit-time" name="habit-time" />
+        <button id="submit-habit">Create Habit</button>
+      </div>
+
+      <!-- Floating “Create” Button (unchanged from template) -->
+      <button class="create-button" id="create-button">+</button>
+
+      <!-- App Footer / Nav Bar (unchanged from template) -->
+      <footer class="nav-bar">
+        <div id="home-selection" class="nav-item">
+          <img src="/out/icons/house-solid.svg" alt="home" />
+        </div>
+        <div id="calendar-selection" class="nav-item">
+          <img src="/out/icons/calendar-days-solid.svg" alt="calendar" />
+        </div>
+        <div id="settings-selection" class="nav-item">
+          <img src="/out/icons/gear-solid.svg" alt="settings" />
+        </div>
+      </footer>
     </div>
 
-    <footer class="nav-bar">
-      <div id="home-selection" class="nav-item">
-        <img src="/out/icons/house-solid.svg" alt="home" />
-      </div>
-      <div id="calendar-selection" class="nav-item">
-        <img src="/out/icons/calendar-days-solid.svg" alt="calendar" />
-      </div>
-      <div id="settings-selection" class="nav-item">
-        <img src="/out/icons/gear-solid.svg" alt="settings" />
-      </div>
-    </footer>
-
-    <script src="../out/scripts/daily-calander.js"></script>
+    <!-- Retain the template’s main script only -->
+    <script src="/out/scripts/home.js"></script>
   </body>
 </html>
