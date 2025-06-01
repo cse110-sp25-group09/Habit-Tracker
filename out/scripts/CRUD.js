@@ -292,7 +292,7 @@ function isHabitForToday(habit) {
 /**
  * @returns list of habit objects representing habits that need to be completed today
  */
-function getHabitsForToday() {
+export function getHabitsForToday() {
   let habits = getAllHabits();
   let today_habits = [];
   let today = new Date();
