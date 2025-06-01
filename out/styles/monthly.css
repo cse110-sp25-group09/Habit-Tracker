@@ -4,6 +4,49 @@
   box-sizing: border-box;
   font-family: sans-serif;
 }
+:root{
+  --primary-bg: #7c8efc;
+  --secondary-bg: #f0f4f8;
+  --button-bg: #7d8bff;
+  --button-hover-bg: #5f6fd6;
+  --today-bg: #7d8bff;
+  --text-color: white;
+  --header-text-color: white;
+  --day-header-color: #425b72;
+}
+
+.theme-default {
+  --primary-bg: #7c8efc;
+  --secondary-bg: #f0f4f8;
+  --button-bg: #7d8bff;
+  --button-hover-bg: #5f6fd6;
+  --today-bg: #7d8bff;
+  --text-color: white;
+  --header-text-color: white;
+  --day-header-color: #425b72;
+}
+
+.theme-pink {
+  --primary-bg: #f98ca1;
+  --secondary-bg: #fddde6;
+  --button-bg: #e66b8b;
+  --button-hover-bg: #c44d6b;
+  --today-bg: #e66b8b;
+  --text-color: white;
+  --header-text-color: white;
+  --day-header-color: #5e2c40;
+}
+
+.theme-triton {
+  --primary-bg: #0145ac;
+  --secondary-bg: #eff3fc;
+  --button-bg: #ffc300;
+  --button-hover-bg: #d4a300;
+  --today-bg: #ffc300;
+  --text-color: #000;
+  --header-text-color: white;
+  --day-header-color: #012e78;
+}
 
 body {
   font-family: sans-serif;
@@ -34,12 +77,12 @@ body {
   width: 100%;
   max-width: 400px;
 
-  background-color: #7c8efc;
+  background-color: var(--primary-bg);
   padding: 0.75rem;
   display: flex;
   justify-content: space-around;
   align-items: center;
-  color: white;
+  color: var(--header-text-color);
   z-index: 1000;
 }
 
@@ -101,7 +144,8 @@ body {
 
 .day-header {
   font-weight: bold;
-  color: #425b72;
+  color: var(--day-header-color);
+  background-color: var(--secondary-bg);
 }
 
 .inactive {
@@ -109,7 +153,7 @@ body {
 }
 
 button {
-  background-color: #7d8bff;
+  background-color: var(--button-bg);
   color: white;
   border: none;
   padding: 0.5rem 1rem;
@@ -119,7 +163,7 @@ button {
 }
 
 button:hover {
-  background-color: #5f6fd6;
+  background-color: var(--button-hover-bg);
 }
 
 button:active {
@@ -127,7 +171,7 @@ button:active {
 }
 
 .today {
-  background-color: #7d8bff;
+  background-color: var(--today-bg);
   color: white;
   font-weight: bold;
 }
@@ -167,7 +211,7 @@ button:active {
   align-items: center;
   width: 100%;
   max-width: 400px;
-  background-color: #7c8efc;
+  background-color: var(--primary-bg);
   padding: 0.75rem 0;
   z-index: 999;
   box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
