@@ -2,12 +2,10 @@
 
 
 const home_select = document.getElementById('home-selection');
-const daily_calendar_select = document.getElementById(
-  'daily-calendar-selection',
-);
+const daily_calendar_select = document.getElementById('daily-calendar-selection');
 const calendar_select = document.getElementById('calendar-selection');
 const settings_select = document.getElementById('settings-selection');
-const daily_calendar_select = document.getElementById('daily-calendar-selection');
+
 
 home_select.addEventListener('click', () => {
   window.location.href = 'home-page.html';
