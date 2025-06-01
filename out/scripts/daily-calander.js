@@ -209,10 +209,6 @@ function setupEventListeners() {
     document.getElementById('prev-day').addEventListener('click', () => handleDayClick(-1));
     document.getElementById('next-day').addEventListener('click', () => handleDayClick(1));
 
-    // Navigation button handlers
-    document.querySelector('.prev-btn').addEventListener('click', () => navigateCalendar(-1));
-    document.querySelector('.next-btn').addEventListener('click', () => navigateCalendar(1));
-
     // Keyboard navigation
     document.addEventListener('keydown', handleKeyDown);
 
@@ -234,11 +230,9 @@ window.DailyCalendar = {
     getCurrentDate: () => new Date(currentDate),
     initCalendar
 };
-document.addEventListener("DOMContentLoaded", () => {
-    const prevBtn = document.querySelector(".prev-btn");
-    const nextBtn = document.querySelector(".next-btn");
-    const cards = document.querySelectorAll(".day-card");
 
+document.addEventListener("DOMContentLoaded", () => {
+    const cards = document.querySelectorAll(".day-card");
     let activeIndex = 1;
 
     function updateCards(newIndex) {
@@ -253,7 +247,4 @@ document.addEventListener("DOMContentLoaded", () => {
         });
         activeIndex = newIndex;
     }
-
-    prevBtn.addEventListener("click", () => updateCards(activeIndex - 1));
-    nextBtn.addEventListener("click", () => updateCards(activeIndex + 1));
 });
