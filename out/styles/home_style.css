@@ -62,8 +62,7 @@ body {
   bottom: 0;
   margin: auto;
   max-width: 400px;
-  z-index:500;
-
+  z-index: 200;
 }
 
 .nav-item {
@@ -240,27 +239,25 @@ label[for="habit-time"] {
   /* Move the left edge to the middle of parent */
   transform: translateX(-50%);
   /* Shift back half of menu's width */
-  background-color: #AEB8FE;
+  background-color: #aeb8fe;
   padding: 5px;
   z-index: 101; /* Very high priority */
   display: none;
-    border: 4px solid #758BFD; /* Border around entire menu */
+  border: 4px solid #758bfd; /* Border around entire menu */
   border-radius: 16px; /* Optional rounded corners */
-
 }
 
 #calendar-menu.show {
   display: block;
   font-size: 28px;
   z-index: 101; /* Very high priority */
-  border-radius:2px solid white;
+  border-radius: 2px solid white;
 }
 
 #calendar-menu li {
   padding: 5px 0;
   cursor: pointer;
-  border-bottom: 2px solid #758BFD; /* Add border */
-
+  border-bottom: 2px solid #758bfd; /* Add border */
 }
 
 #calendar-menu li:last-child {
