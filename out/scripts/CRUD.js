@@ -26,7 +26,7 @@ export function reviveHabit(key, value) {
   }
   if (key == 'startDateTime') {
     newValue = Date.parse(value);
-    newValue = Date.toLocaleString(newValue) //Gets rid of nonstandard date formatting
+    newValue = Date.toLocaleString(newValue); //Gets rid of nonstandard date formatting
   }
   if (isNaN(newValue)) {
     throw new Error('Invalid habit object');
