@@ -3,14 +3,15 @@
   padding: 0;
   box-sizing: border-box;
   font-family: sans-serif;
- 
+
 }
 
 
 .app-header {
   justify-content: space-around;
   align-items: center;
-  width: 100%; /* temp fix */
+  width: 100%;
+  /* temp fix */
   background-color: #7c8efc;
   padding: 0.75rem;
   position: fixed;
@@ -24,6 +25,7 @@
 body {
   background-color: #f5f5f5;
 }
+
 .app {
   max-width: 400px;
   margin: auto;
@@ -35,6 +37,7 @@ body {
   position: relative;
   padding-bottom: 4rem
 }
+
 .create-button {
   background-color: orange;
   color: white;
@@ -43,12 +46,13 @@ body {
   border-radius: 50%;
   width: 60px;
   height: 60px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   position: fixed;
   bottom: 80px;
   z-index: 10;
   cursor: pointer;
 }
+
 /* below is the code for the menu bar */
 .nav-bar {
   display: flex;
@@ -61,18 +65,22 @@ body {
   bottom: 0;
   margin: auto;
   max-width: 400px;
- 
+  z-index:500;
+
 }
+
 .nav-item {
   font-size: 1.5rem;
   color: white;
   cursor: pointer;
 }
+
 .nav-item img {
   width: 28px;
   height: 28px;
   filter: brightness(0) invert(1);
 }
+
 #habit-form {
   display: none;
   position: fixed;
@@ -91,28 +99,33 @@ body {
 
 
 }
+
 #card-container {
   display: flex;
-  flex-direction: column; /* or row if you want cards side-by-side */
+  flex-direction: column;
+  /* or row if you want cards side-by-side */
   align-items: center;
-  justify-content: center; /* use only if you want vertical centering too */
+  justify-content: center;
+  /* use only if you want vertical centering too */
   min-height: 100vh;
   padding: 3.5rem;
 }
 
 
-#submit-habit{
+#submit-habit {
   display: block;
   margin: auto;
   background: #FF8600;
   text-align: center;
   font-size: 20px;
-  max-width:250px;
+  max-width: 250px;
   width: 90%;
-  padding: 10px 0;      /* vertical padding, no horizontal padding to keep text centered */
-  border-radius: 16px;   /* rounded corners */
-  border-color:white;
-  color:white;
+  padding: 10px 0;
+  /* vertical padding, no horizontal padding to keep text centered */
+  border-radius: 16px;
+  /* rounded corners */
+  border-color: white;
+  color: white;
 }
 
 
@@ -125,8 +138,10 @@ body {
 #create-card {
   background-color: #b8bcfc;
   color: white;
-  padding-top: 30px;  /* space within the header is spaced 10px  */
-  padding-bottom: 30px;/* space within the header is spaced 20px  */
+  padding-top: 30px;
+  /* space within the header is spaced 10px  */
+  padding-bottom: 30px;
+  /* space within the header is spaced 20px  */
   border-radius: 0 0 0 0;
   text-align: center;
   font-weight: bold;
@@ -136,7 +151,7 @@ body {
 
 label[for="habit-name"] {
   font-size: 1.25rem;
-  font-weight:bold;
+  font-weight: bold;
 }
 
 
@@ -149,9 +164,10 @@ label[for="habit-name"] {
   padding: 4px 0;
   outline: none;
 }
+
 label[for="habitDescription"] {
   font-size: 1rem;
-  font-weight:bold;
+  font-weight: bold;
 }
 
 #habitDescription {
@@ -169,36 +185,47 @@ label[for="habitDescription"] {
 
 label[for="habit-frequency"] {
   font-size: 1rem;
-  font-weight:bold;
+  font-weight: bold;
 
 
 }
+
 #habit-frequency {
   background: #AEB8FE;
   border-radius: 4px;
-  width: 170px;       /* Increase width */
-  height: 35px;       /* Increase height */
-  font-size: 1rem;    /* Make text a bit larger */
-  text-align:center;
-  color:white;
+  width: 170px;
+  /* Increase width */
+  height: 35px;
+  /* Increase height */
+  font-size: 1rem;
+  /* Make text a bit larger */
+  text-align: center;
+  color: white;
   margin-top: 1rem;
-  border: 2px solid white; /* This defines width, style, and color */
+  border: 2px solid white;
+  /* This defines width, style, and color */
   font-family: sans-serif;
 
 
 }
+
 label[for="habit-time"] {
   font-size: 1rem;
-  font-weight:bold;
+  font-weight: bold;
 }
+
 #habit-time {
-  width: 120px;       /* Increase width */
-  height: 32px;       /* Increase height */
-  font-size: 1rem;    /* Make text a bit larger */
-  text-align:center;
+  width: 120px;
+  /* Increase width */
+  height: 32px;
+  /* Increase height */
+  font-size: 1rem;
+  /* Make text a bit larger */
+  text-align: center;
   background: #AEB8FE;
-  color:white;
-  border: 2px solid white; /* This defines width, style, and color */
+  color: white;
+  border: 2px solid white;
+  /* This defines width, style, and color */
   margin-top: 1rem;
   margin-bottom: 1rem;
   display: inline-block;
@@ -208,15 +235,49 @@ label[for="habit-time"] {
 
 .form-row {
   display: flex;
-  align-items: center; /* vertically centers them */
-  gap: 1rem;           /* spacing between label and input */
+  align-items: center;
+  /* vertically centers them */
+  gap: 1rem;
+  /* spacing between label and input */
   margin-top: 1rem;
 }
 
 .form-row label {
   margin: 0;
-  white-space: nowrap; /* prevent label wrapping */
+  white-space: nowrap;
+  /* prevent label wrapping */
 }
 
+#calendar-menu {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  /* Move the left edge to the middle of parent */
+  transform: translateX(-50%);
+  /* Shift back half of menu's width */
+  background-color: #AEB8FE;
+  padding: 5px;
+  z-index: 101; /* Very high priority */
+  display: none;
+    border: 4px solid #758BFD; /* Border around entire menu */
+  border-radius: 16px; /* Optional rounded corners */
 
+}
 
+#calendar-menu.show {
+  display: block;
+  font-size: 28px;
+  z-index: 101; /* Very high priority */
+  border-radius:2px solid white;
+}
+
+#calendar-menu li {
+  padding: 5px 0;
+  cursor: pointer;
+  border-bottom: 2px solid #758BFD; /* Add border */
+
+}
+
+#calendar-menu li:last-child {
+  border-bottom: none; /* Remove border from last item */
+}

@@ -2,20 +2,42 @@
 
 //below is the code for the menu bar
 
+// Wait for the DOM to load before referencing elements
+document.addEventListener('DOMContentLoaded', function() {
+  const home_select = document.getElementById("home-selection");
+  const settings_select = document.getElementById("settings-selection");
+  const calendarSelection = document.getElementById("calendar-selection");
+  const calendarMenu = document.getElementById('calendar-menu');
 
-const home_select = document.getElementById("home-selection");
-const calendar_select = document.getElementById("calendar-selection");
-const settings_select = document.getElementById("settings-selection");
+  // Home button navigation
+  home_select.addEventListener("click", () => {
+    window.location.href = "home-page.html";
+  });
 
+  // Calendar menu toggle
+  calendarSelection.addEventListener('click', function(event) {
+    event.stopPropagation();
+    calendarMenu.classList.toggle('show');
+  });
 
-home_select.addEventListener("click",() =>{
-    window.location.href = "home-page.html"
+  // Close the menu if clicking outside
+  document.addEventListener('click', function() {
+    calendarMenu.classList.remove('show');
+  });
+
+  document.getElementById('daily-option').addEventListener('click', function(event) {
+  window.location.href = 'daily-calendar.html';
 });
-calendar_select.addEventListener("click",() =>{
-    window.location.href = "monthly-calendar.html"
+
+document.getElementById('monthly-option').addEventListener('click', function(event) {
+  window.location.href = 'monthly-calendar.html';
 });
-settings_select.addEventListener("click",() =>{
-    window.location.href = "settings.html"
+
+
+  // Settings button navigation
+  settings_select.addEventListener("click", () => {
+    window.location.href = "settings.html";
+  });
 });
 
 
@@ -160,6 +182,8 @@ class HabitCard extends HTMLElement {
     
 
     }
+
+
 }
 
 
@@ -184,8 +208,6 @@ document.getElementById("submit-habit").addEventListener("click", () => {
 
 
 
-
-
   if (name !== "") {
     const newCard = document.createElement("habit-card");
     newCard.setAttribute("card-name", name);
@@ -206,3 +228,5 @@ document.getElementById("submit-habit").addEventListener("click", () => {
 
   document.getElementById("habit-form").style.display = "none";
 });
+
+
