@@ -331,22 +331,10 @@ document.getElementById('submit-habit').addEventListener('click', () => {
   document.getElementById('habit-form').style.display = 'none';
 });
 
-function populateCards() {
-  document.getElementById('card-container').innerHTML = '';
-  let habits = getHabitsForToday();
-  for (let i = 0; i < habits.length; i++) {
-    //console.log(habits[i][0]);
-    //console.log(habits[i]);
-    const newCard = document.createElement('habit-card');
-    newCard.setAttribute('card-name', habits[i][1].habitName);
-    newCard.setAttribute('card-frequency', habits[i][1].habitFrequency);
-    newCard.setAttribute('card-description', habits[i][1].habitDescription);
-    newCard.setAttribute('card-time', habits[i][1].startDateTime);
-    newCard.setAttribute('card-streak', habits[i][1].habitStreak);
-    newCard.setAttribute('card-id', habits[i][0]);
-    document.getElementById('card-container').appendChild(newCard);
+window.addEventListener('DOMContentLoaded', () => {
+  const body = document.body;
+  const savedTheme = localStorage.getItem('selectedTheme');
+  if (savedTheme && savedTheme !== 'default') {
+    body.classList.add(`${savedTheme}-theme`);
   }
-}
-
-// mark as complete / change color / add check
-//delete = delete id and populate
+});

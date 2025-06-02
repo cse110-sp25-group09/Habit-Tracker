@@ -9,8 +9,7 @@
   justify-content: space-around;
   align-items: center;
   width: 100%;
-  /* temp fix */
-  background-color: #7c8efc;
+  background-color: var(--primary-color);
   padding: 0.75rem;
   position: fixed;
   margin: auto;
@@ -50,7 +49,6 @@ body {
   cursor: pointer;
 }
 
-/* below is the code for the menu bar */
 .nav-bar {
   display: flex;
   justify-content: space-around;
@@ -90,17 +88,14 @@ body {
   z-index: 100;
   width: 90%;
   max-width: 350px;
-  background: #758bfd;
-  color: white;
+  color: var(--text-color);
 }
 
 #card-container {
   display: flex;
   flex-direction: column;
-  /* or row if you want cards side-by-side */
   align-items: center;
   justify-content: center;
-  /* use only if you want vertical centering too */
   min-height: 100vh;
   padding: 3.5rem;
 }
@@ -108,17 +103,15 @@ body {
 #submit-habit {
   display: block;
   margin: auto;
-  background: #ff8600;
+  background: var(--accent-color);
   text-align: center;
   font-size: 20px;
   max-width: 250px;
   width: 90%;
   padding: 10px 0;
-  /* vertical padding, no horizontal padding to keep text centered */
   border-radius: 16px;
-  /* rounded corners */
-  border-color: white;
-  color: white;
+  border-color: var(--text-color);
+  color: var(--text-color);
 }
 
 #habit-form {
@@ -127,35 +120,21 @@ body {
 }
 
 #create-card {
-  background-color: #b8bcfc;
-  color: white;
+  background-color: var(--card-color);
+  color: var(--text-color);
   padding-top: 30px;
-  /* space within the header is spaced 10px  */
   padding-bottom: 30px;
-  /* space within the header is spaced 20px  */
   border-radius: 0 0 0 0;
   text-align: center;
   font-weight: bold;
   font-size: 1.2rem;
 }
 
-label[for='habit-name'] {
+label[for='habit-name'],
+label[for='habitDescription'],
+label[for='habit-frequency'],
+label[for='habit-time'] {
   font-size: 1.25rem;
-  font-weight: bold;
-}
-
-#habit-name {
-  background: transparent;
-  border: none;
-  border-bottom: 2px solid white;
-  width: 150px;
-  font-size: 1rem;
-  padding: 4px 0;
-  outline: none;
-}
-
-label[for="habitDescription"] {
-  font-size: 1rem;
   font-weight: bold;
 }
 
@@ -170,47 +149,27 @@ label[for="habitDescription"] {
   outline: none;
 }
 
-label[for='habit-frequency'] {
-  font-size: 1rem;
-  font-weight: bold;
-
-
-}
-
 #habit-frequency {
-  background: #aeb8fe;
+  background: var(--input-bg-color);
   border-radius: 4px;
   width: 170px;
-  /* Increase width */
   height: 35px;
-  /* Increase height */
   font-size: 1rem;
-  /* Make text a bit larger */
   text-align: center;
-  color: white;
+  color: var(--text-color);
   margin-top: 1rem;
-  border: 2px solid white;
-  /* This defines width, style, and color */
+  border: 2px solid var(--input-border-color);
   font-family: sans-serif;
-}
-
-label[for="habit-time"] {
-  font-size: 1rem;
-  font-weight: bold;
 }
 
 #habit-time {
   width: 120px;
-  /* Increase width */
   height: 32px;
-  /* Increase height */
   font-size: 1rem;
-  /* Make text a bit larger */
   text-align: center;
-  background: #AEB8FE;
-  color: white;
-  border: 2px solid white;
-  /* This defines width, style, and color */
+  background: var(--input-bg-color);
+  color: var(--text-color);
+  border: 2px solid var(--input-border-color);
   margin-top: 1rem;
   margin-bottom: 1rem;
   display: inline-block;
@@ -220,46 +179,47 @@ label[for="habit-time"] {
 .form-row {
   display: flex;
   align-items: center;
-  /* vertically centers them */
   gap: 1rem;
-  /* spacing between label and input */
   margin-top: 1rem;
 }
 
 .form-row label {
   margin: 0;
   white-space: nowrap;
-  /* prevent label wrapping */
 }
 
 #calendar-menu {
   position: absolute;
   bottom: 100%;
   left: 50%;
-  /* Move the left edge to the middle of parent */
   transform: translateX(-50%);
-  /* Shift back half of menu's width */
-  background-color: #aeb8fe;
+  background-color: var(--input-bg-color);
   padding: 5px;
-  z-index: 101; /* Very high priority */
+  z-index: 101;
   display: none;
-  border: 4px solid #758bfd; /* Border around entire menu */
-  border-radius: 16px; /* Optional rounded corners */
+  border: 4px solid var(--form-color);
+  border-radius: 16px;
 }
 
 #calendar-menu.show {
   display: block;
   font-size: 28px;
-  z-index: 101; /* Very high priority */
-  border-radius: 2px solid white;
+  z-index: 101;
+  border-radius: 2px solid var(--input-border-color);
 }
 
 #calendar-menu li {
   padding: 5px 0;
   cursor: pointer;
-  border-bottom: 2px solid #758bfd; /* Add border */
+  border-bottom: 2px solid var(--form-color);
 }
 
 #calendar-menu li:last-child {
-  border-bottom: none; /* Remove border from last item */
+  border-bottom: none;
+}
+
+ul {
+  list-style: none;
+  padding-left: 0; /* optional, removes indentation */
+  margin: 0; /* optional */
 }
