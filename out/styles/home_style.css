@@ -8,7 +8,8 @@
 .app-header {
   justify-content: space-around;
   align-items: center;
-  width: 100%; /* temp fix */
+  width: 100%;
+  /* temp fix */
   background-color: #7c8efc;
   padding: 0.75rem;
   position: fixed;
@@ -21,6 +22,7 @@
 body {
   background-color: #f5f5f5;
 }
+
 .app {
   max-width: 400px;
   margin: auto;
@@ -32,6 +34,7 @@ body {
   position: relative;
   padding-bottom: 4rem;
 }
+
 .create-button {
   background-color: orange;
   color: white;
@@ -46,6 +49,7 @@ body {
   z-index: 10;
   cursor: pointer;
 }
+
 /* below is the code for the menu bar */
 .nav-bar {
   display: flex;
@@ -58,17 +62,21 @@ body {
   bottom: 0;
   margin: auto;
   max-width: 400px;
+  z-index: 200;
 }
+
 .nav-item {
   font-size: 1.5rem;
   color: white;
   cursor: pointer;
 }
+
 .nav-item img {
   width: 28px;
   height: 28px;
   filter: brightness(0) invert(1);
 }
+
 #habit-form {
   display: none;
   position: fixed;
@@ -85,11 +93,14 @@ body {
   background: #758bfd;
   color: white;
 }
+
 #card-container {
   display: flex;
-  flex-direction: column; /* or row if you want cards side-by-side */
+  flex-direction: column;
+  /* or row if you want cards side-by-side */
   align-items: center;
-  justify-content: center; /* use only if you want vertical centering too */
+  justify-content: center;
+  /* use only if you want vertical centering too */
   min-height: 100vh;
   padding: 3.5rem;
 }
@@ -157,6 +168,7 @@ label[for='habit-frequency'] {
   font-size: 1rem;
   font-weight: bold;
 }
+
 #habit-frequency {
   background: #aeb8fe;
   border-radius: 4px;
@@ -166,13 +178,15 @@ label[for='habit-frequency'] {
   text-align: center;
   color: white;
   margin-top: 1rem;
-  border: 2px solid white; /* This defines width, style, and color */
+  border: 2px solid white;
+  /* This defines width, style, and color */
   font-family: sans-serif;
 }
 label[for='habit-time'] {
   font-size: 1rem;
   font-weight: bold;
 }
+
 #habit-time {
   width: 120px; /* Increase width */
   height: 32px; /* Increase height */
@@ -196,5 +210,38 @@ label[for='habit-time'] {
 
 .form-row label {
   margin: 0;
-  white-space: nowrap; /* prevent label wrapping */
+  white-space: nowrap;
+  /* prevent label wrapping */
+}
+
+#calendar-menu {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  /* Move the left edge to the middle of parent */
+  transform: translateX(-50%);
+  /* Shift back half of menu's width */
+  background-color: #aeb8fe;
+  padding: 5px;
+  z-index: 101; /* Very high priority */
+  display: none;
+  border: 4px solid #758bfd; /* Border around entire menu */
+  border-radius: 16px; /* Optional rounded corners */
+}
+
+#calendar-menu.show {
+  display: block;
+  font-size: 28px;
+  z-index: 101; /* Very high priority */
+  border-radius: 2px solid white;
+}
+
+#calendar-menu li {
+  padding: 5px 0;
+  cursor: pointer;
+  border-bottom: 2px solid #758bfd; /* Add border */
+}
+
+#calendar-menu li:last-child {
+  border-bottom: none; /* Remove border from last item */
 }
