@@ -19,7 +19,6 @@
     "format": "npm run format:css-js && prettier --write '**/*.html'",
     "lint": "npm run lint:css-js && npm run lint:html"
   },
-
   "repository": {
     "type": "git",
     "url": "git+https://github.com/cse110-sp25-group09/Habit-Tracker.git"
