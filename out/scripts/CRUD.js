@@ -26,7 +26,7 @@ export function reviveHabit(key, value) {
   }
   if (key == 'startDateTime') {
     newValue = Date.parse(value);
-    newValue = Date.toLocaleString(newValue); //Gets rid of nonstandard date formatting
+    newValue = Date.toLocaleString(newValue) //Gets rid of nonstandard date formatting
   }
   if (isNaN(newValue)) {
     // console.log(key);
@@ -36,11 +36,12 @@ export function reviveHabit(key, value) {
   }
   if (key == 'log') {
     value.forEach((element) => {
-      newValue = Date.parse(element);
-      if (isNaN(newValue)) {
+      newValue = Date.parse(value);
+      if (newValue == NaN) {
         throw new Error('Invalid datestring in log');
       }
-      newValue = Date.toLocaleString(newValue); //Gets rid of nonstandard date formatting
+      newValue = Date.parse(value);
+      newValue = Date.toLocaleString(newValue) //Gets rid of nonstandard date formatting
     });
   }
   return newValue;
@@ -163,11 +164,8 @@ export function getAllHabits(adapter = localStorageAdapter) {
   let curHabitObject;
   while (i--) {
     curHabitObject = adapter.get(keys[i]);
-    //console.log(curHabitObject);
     curHabitObject = JSON.parse(curHabitObject, reviveHabit);
-    // console.log(curHabitObject);
-
-    habits.push([keys[i], curHabitObject]);
+    habits.push(curHabitObject);
   }
   return habits;
 }
