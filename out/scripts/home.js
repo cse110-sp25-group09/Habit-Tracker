@@ -195,3 +195,5 @@ document.getElementById('submit-habit').addEventListener('click', () => {
 
   document.getElementById('habit-form').style.display = 'none';
 });
+
+
