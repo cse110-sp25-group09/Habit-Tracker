@@ -1,13 +1,41 @@
 //below is the code for the menu bar
 
-import {
-  getAllHabits,
-  createHabit,
-  deleteHabit,
-  getHabitsForToday,
-} from './CRUD.js';
-window.addEventListener('DOMContentLoaded', () => {
-  populateCards();
+// Wait for the DOM to load before referencing elements
+document.addEventListener('DOMContentLoaded', function() {
+  const home_select = document.getElementById("home-selection");
+  const settings_select = document.getElementById("settings-selection");
+  const calendarSelection = document.getElementById("calendar-selection");
+  const calendarMenu = document.getElementById('calendar-menu');
+
+  // Home button navigation
+  home_select.addEventListener("click", () => {
+    window.location.href = "home-page.html";
+  });
+
+  // Calendar menu toggle
+  calendarSelection.addEventListener('click', function(event) {
+    event.stopPropagation();
+    calendarMenu.classList.toggle('show');
+  });
+
+  // Close the menu if clicking outside
+  document.addEventListener('click', function() {
+    calendarMenu.classList.remove('show');
+  });
+
+  document.getElementById('daily-option').addEventListener('click', function(event) {
+  window.location.href = 'daily-calendar.html';
+});
+
+document.getElementById('monthly-option').addEventListener('click', function(event) {
+  window.location.href = 'monthly-calendar.html';
+});
+
+
+  // Settings button navigation
+  settings_select.addEventListener("click", () => {
+    window.location.href = "settings.html";
+  });
 });
 
 const home_select = document.getElementById('home-selection');
@@ -274,7 +302,8 @@ class HabitCard extends HTMLElement {
     if (idEl) {
       idEl.innerHTML = `Current ID: ${this.getAttribute('card-id') || 'None'} `;
     }
-  }
+
+
 }
 
 customElements.define('habit-card', HabitCard);
@@ -301,9 +330,16 @@ document.getElementById('submit-habit').addEventListener('click', () => {
     // newCard.setAttribute('card-time', timeStr);
     // newCard.setAttribute('card-streak', streak);
 
-    // document.getElementById('card-container').appendChild(newCard);
-    createHabit(name, descr, frequency, timeStr);
-    populateCards();
+
+  if (name !== "") {
+    const newCard = document.createElement("habit-card");
+    newCard.setAttribute("card-name", name);
+    newCard.setAttribute("card-frequency", frequency);
+    newCard.setAttribute("card-description", descr);
+    newCard.setAttribute("card-time", timeStr);
+    newCard.setAttribute("card-streak", streak);
+
+    document.getElementById("card-container").appendChild(newCard);
   }
 
   // Reset and hide form
@@ -315,21 +351,3 @@ document.getElementById('submit-habit').addEventListener('click', () => {
   document.getElementById('habit-form').style.display = 'none';
 });
 
-function populateCards() {
-  document.getElementById('card-container').innerHTML = '';
-  let habits = getHabitsForToday();
-  for (let i = 0; i < habits.length; i++) {
-    //console.log(habits[i][0]);
-    const newCard = document.createElement('habit-card');
-    newCard.setAttribute('card-name', habits[i].name);
-    newCard.setAttribute('card-frequency', habits[i].frequency);
-    newCard.setAttribute('card-description', habits[i].description);
-    newCard.setAttribute('card-time', habits[i].notif);
-    newCard.setAttribute('card-streak', habits[i].streak);
-    newCard.setAttribute('card-id', habits[i].id);
-    document.getElementById('card-container').appendChild(newCard);
-  }
-}
-
-// mark as complete / change color / add check
-//delete = delete id and populate
