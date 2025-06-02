@@ -91,14 +91,14 @@ class HabitCard extends HTMLElement {
       }
  
       .flip-card-front {
-        background: #b8bcfc;
+        background: var(--card-color);
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
-        color: white;
+        color: var(--text-color-front-of-card);
       }
  
       .flip-card-back {
-        background-color: rgb(34, 12, 95);
-        color: white;
+        background-color: var(--back-card-color);
+        color: var(--text-color-back-of-card);
         transform: rotateY(180deg);
        
       }
@@ -122,7 +122,7 @@ class HabitCard extends HTMLElement {
         word-break: break-word;
       }
       .streak_number{
-        color: orange;
+        color: var(--streak-color);
         font-weight:bold;
       }
 
@@ -213,4 +213,12 @@ document.getElementById('submit-habit').addEventListener('click', () => {
   document.getElementById('habit-time').value = '';
 
   document.getElementById('habit-form').style.display = 'none';
+});
+
+window.addEventListener('DOMContentLoaded', () => {
+  const body = document.body;
+  const savedTheme = localStorage.getItem('selectedTheme');
+  if (savedTheme && savedTheme !== 'default') {
+    body.classList.add(`${savedTheme}-theme`);
+  }
 });
