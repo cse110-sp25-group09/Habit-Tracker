@@ -39,15 +39,19 @@ export const monthNames = [
 
 function updateDayCompletion(dayElement, tasksCompleted, totalTasks) {
   // Clear old completion classes
-  dayElement.classList.remove("completed-day", "completed-one", "completed-half");
+  dayElement.classList.remove(
+    'completed-day',
+    'completed-one',
+    'completed-half',
+  );
 
   // Assign new class based on number of tasks
   if (tasksCompleted >= totalTasks) {
-    dayElement.classList.add("completed-day");
+    dayElement.classList.add('completed-day');
   } else if (tasksCompleted >= totalTasks / 2) {
-    dayElement.classList.add("completed-half");
+    dayElement.classList.add('completed-half');
   } else if (tasksCompleted >= 1) {
-    dayElement.classList.add("completed-one");
+    dayElement.classList.add('completed-one');
   }
 }
 
@@ -103,17 +107,12 @@ export function generateCalendar(year) {
       if (day === todayDate && month === todayMonth && year === todayYear) {
         dayDiv.classList.add('today');
       }
-      
-      
+
       //console.log(`${day} ${monthNames[month]} ${year}`);
       let date = new Date(year, month, day);
       let ratio = ratioOfCompleted(date);
-      
+
       updateDayCompletion(dayDiv, ratio[0], ratio[1]); // Assuming 0 tasks completed for now
-
-
-
-
 
       grid.appendChild(dayDiv);
     }

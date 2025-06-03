@@ -15,14 +15,13 @@ body {
   align-items: center;
 }
 
-
 #app-layout {
   position: relative;
   width: 100%;
-  max-width: 400px; 
+  max-width: 400px;
   margin: 0 auto;
   background-color: white;
-  padding-top: 4rem; 
+  padding-top: 4rem;
   padding-bottom: 13rem; /* So footer doesn't overlap */
 }
 
@@ -55,7 +54,7 @@ body {
   margin: 0.5rem 0;
   padding-top: 10rem;
   padding: 0;
-  gap: 0.5rem; 
+  gap: 0.5rem;
 }
 
 #calendar {
@@ -184,14 +183,13 @@ button:active {
   color: white;
   font-weight: bold;
 }
-.completed-one{
+.completed-one {
   background-color: var(--completed-one-color);
   color: white;
   font-weight: bold;
 }
-.completed-half{
+.completed-half {
   background-color: var(--completed-half-color);
   color: white;
   font-weight: bold;
 }
-
