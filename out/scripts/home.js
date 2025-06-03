@@ -285,7 +285,7 @@ class HabitCard extends HTMLElement {
       streakEl.innerHTML = `Current Streak: <span class="streak_number"> ${this.getAttribute('card-streak') || 'None'} </span>`;
     }
     if (idEl) {
-      idEl.innerHTML = `Current ID: ${this.getAttribute('card-id') || 'None'} `;
+      idEl.innerHTML = `${this.getAttribute('card-id') || 'None'} `;
     }
 
 
