@@ -251,10 +251,9 @@ function isHabitForToday(habit) {
 /**
  * @returns list of habit objects representing habits that need to be completed today
  */
-export function getHabitsForToday() {
+export function getHabitsForDay(today = new Date()) {
   let habits = getAllHabits();
   let today_habits = [];
-  let today = new Date();
   today.setHours(0, 0, 0, 0);
   let curr_date = habit.startDateTime;
   for (let i = 0; i < habits.length; i++) {
@@ -286,3 +285,7 @@ function habitsCompletedOnDay(dateStr) {
   }
   return daysHabits;
 }
+
+isHabit
+logHabitIncomplete()
+
