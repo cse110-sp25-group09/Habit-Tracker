@@ -29,8 +29,8 @@ export function reviveHabit(key, value) {
     newValue = Date.toLocaleString(newValue); //Gets rid of nonstandard date formatting
   }
   if (isNaN(newValue)) {
-    console.log(key);
-    console.log(value);
+    // console.log(key);
+    // console.log(value);
     //throw new Error('Invalid habit object');
     return value;
   }
@@ -145,7 +145,8 @@ export function updateHabit(habitID, fields, newValues) {
  * @param {Object} adapter defaults to localStorageAdapter, allows us to pass in other storage methods
  */
 export function deleteHabit(cardID, adapter = localStorageAdapter) {
-  return adapter.del(id);
+  console.log(cardID);
+  adapter.del(cardID);
 }
 
 /**
@@ -162,11 +163,11 @@ export function getAllHabits(adapter = localStorageAdapter) {
   let curHabitObject;
   while (i--) {
     curHabitObject = adapter.get(keys[i]);
-    console.log(curHabitObject);
+    //console.log(curHabitObject);
     curHabitObject = JSON.parse(curHabitObject, reviveHabit);
-    console.log(curHabitObject);
+    // console.log(curHabitObject);
 
-    habits.push(curHabitObject);
+    habits.push([keys[i], curHabitObject]);
   }
   return habits;
 }
@@ -178,7 +179,7 @@ export function getAllHabits(adapter = localStorageAdapter) {
  * @returns a habit object
  */
 export function getHabitById(habitID, adapter = localStorageAdapter) {
-  let habit = adapter.get(id);
+  let habit = adapter.get(habitID);
   return JSON.parse(habit, reviveHabit);
 }
 
@@ -214,7 +215,7 @@ function calculateStreak(habit) {
       return streak;
     } else {
       streak++;
-      exp -= habit.frequency;
+      exp -= habit.habitFrequency;
     }
   }
 }
@@ -247,8 +248,11 @@ function isHabitForToday(habit) {
   if (habit.logs[-1] == currentDate.toDateString()) {
     return false;
   }
-
-  if ((currentDate - msStartDate) % habit.frequency != 0) {
+  
+  let daysDiff = Math.floor((currentDate - msStartDate)/DAYINMS);
+  // console.log(daysDiff);
+  // console.log(habit.habitFrequency);
+  if (daysDiff % habit.habitFrequency != 0) {
     return false;
   }
   return true;
@@ -259,21 +263,24 @@ function isHabitForToday(habit) {
  */
 export function getHabitsForToday() {
   let habits = getAllHabits();
-  console.log(habits);
+  //console.log(habits);
+  if (!habits){
+    return [];
+  }
   let today_habits = [];
   let today = new Date();
   today.setHours(0, 0, 0, 0);
   //let curr_date = habit.startDateTime;
   let curr_date;
-  for (const i in habits) {
-    if (isHabitForToday(habits[i])) {
-      curr_date = habits[i].startDateTime;
-      curr_date = Date.parse(curr_date);
+  for (let i = 0; i < habits.length; i++) {
+    if (isHabitForToday(habits[i][1])) {
+      curr_date = habits[i][1].startDateTime;
+      curr_date = new Date(Date.parse(curr_date));
       if (curr_date == NaN) {
         throw new Error('Invalid type for habit.startDateTime');
       }
       curr_date.setHours(0, 0, 0, 0);
-      today_habits.push((curr_date == today, habits[i]));
+      today_habits.push(habits[i]);
     }
   }
   return today_habits;
