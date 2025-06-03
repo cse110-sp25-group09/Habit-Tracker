@@ -19,25 +19,28 @@ function typeErrorTemplate(stringParam, type) {
  * @return a valid habit object
  */
 export function reviveHabit(key, value) {
-  const stringFields = new Set('habitName', 'habitDescription');
   const numberFields = new Set('habitFrequency', 'habitStreak');
   let newValue;
   if (key in numberFields) {
     newValue = Number(value);
   }
   if (key == 'startDateTime') {
-    newValue = Date.parse(key);
+    newValue = Date.parse(value);
+    newValue = Date.toLocaleString(newValue); //Gets rid of nonstandard date formatting
   }
-  if (newValue == NaN) {
+  if (isNaN(newValue)) {
     throw new Error('Invalid habit object');
   }
   if (key == 'log') {
     value.forEach((element) => {
-      if (Date.parse(element) == NaN) {
+      newValue = Date.parse(element);
+      if (isNaN(newValue)) {
         throw new Error('Invalid datestring in log');
       }
+      newValue = Date.toLocaleString(newValue); //Gets rid of nonstandard date formatting
     });
   }
+  return newValue;
 }
 /**
  * @param habitName string name of habit
