@@ -1,61 +1,61 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Daily Calendar - Habit Tracker</title>
-    <link rel="stylesheet" href="../out/styles/daily_style.css">
-</head>
-<body>
+    <link rel="stylesheet" href="../out/styles/daily_style.css" />
+  </head>
+  <body>
     <h1 class="app-header">Habit Tracker</h1>
 
     <div class="main-content">
-        <div class="calendar-container">
-            <div class="day-card inactive" id="prev-day">
-                <div class="day-name">Sunday</div>
-                <div class="day-date">Dec 31</div>
-                <div class="habits-indicator" id="prev-habits">
-                    <div class="habit-dot completed"></div>
-                    <div class="habit-dot pending"></div>
-                    <div class="habit-dot"></div>
-                </div>
-            </div>
-
-            <div class="day-card active" id="current-day">
-                <div class="day-name">Monday</div>
-                <div class="day-date">Jan 1</div>
-                <div class="habits-indicator" id="current-habits">
-                    <div class="habit-dot completed"></div>
-                    <div class="habit-dot completed"></div>
-                    <div class="habit-dot pending"></div>
-                    <div class="habit-dot"></div>
-                </div>
-            </div>
-
-            <div class="day-card inactive" id="next-day">
-                <div class="day-name">Tuesday</div>
-                <div class="day-date">Jan 2</div>
-                <div class="habits-indicator" id="next-habits">
-                    <div class="habit-dot"></div>
-                    <div class="habit-dot"></div>
-                    <div class="habit-dot"></div>
-                </div>
-            </div>
+      <div class="calendar-container">
+        <div class="day-card inactive" id="prev-day">
+          <div class="day-name">Sunday</div>
+          <div class="day-date">Dec 31</div>
+          <div class="habits-indicator" id="prev-habits">
+            <div class="habit-dot completed"></div>
+            <div class="habit-dot pending"></div>
+            <div class="habit-dot"></div>
+          </div>
         </div>
+
+        <div class="day-card active" id="current-day">
+          <div class="day-name">Monday</div>
+          <div class="day-date">Jan 1</div>
+          <div class="habits-indicator" id="current-habits">
+            <div class="habit-dot completed"></div>
+            <div class="habit-dot completed"></div>
+            <div class="habit-dot pending"></div>
+            <div class="habit-dot"></div>
+          </div>
+        </div>
+
+        <div class="day-card inactive" id="next-day">
+          <div class="day-name">Tuesday</div>
+          <div class="day-date">Jan 2</div>
+          <div class="habits-indicator" id="next-habits">
+            <div class="habit-dot"></div>
+            <div class="habit-dot"></div>
+            <div class="habit-dot"></div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <footer class="nav-bar">
-        <div id="home-selection" class="nav-item">
-            <img src="/out/icons/house-solid.svg" alt="home">
-        </div>
-        <div id="calendar-selection" class="nav-item">
-            <img src="/out/icons/calendar-days-solid.svg" alt="calendar">
-        </div>
-        <div id="settings-selection" class="nav-item">
-            <img src="/out/icons/gear-solid.svg" alt="settings">
-        </div>
+      <div id="home-selection" class="nav-item">
+        <img src="/out/icons/house-solid.svg" alt="home" />
+      </div>
+      <div id="calendar-selection" class="nav-item">
+        <img src="/out/icons/calendar-days-solid.svg" alt="calendar" />
+      </div>
+      <div id="settings-selection" class="nav-item">
+        <img src="/out/icons/gear-solid.svg" alt="settings" />
+      </div>
     </footer>
 
     <script src="../out/scripts/daily-calander.js"></script>
-</body>
+  </body>
 </html>
