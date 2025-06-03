@@ -161,7 +161,12 @@ export function getAllHabits(adapter = localStorageAdapter) {
   }
   let curHabitObject;
   while (i--) {
+    if (keys[i] == 'selectedTheme') {
+      continue;
+    }
     curHabitObject = adapter.get(keys[i]);
+
+    //console.log(curHabitObject);
     curHabitObject = JSON.parse(curHabitObject, reviveHabit);
     // console.log(curHabitObject);
 

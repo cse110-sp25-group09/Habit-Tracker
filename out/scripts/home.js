@@ -1,5 +1,4 @@
 //below is the code for the menu bar
-
 // Wait for the DOM to load before referencing elements
 import { getHabitsForToday, createHabit, deleteHabit } from './CRUD.js';
 
@@ -184,6 +183,7 @@ class HabitCard extends HTMLElement {
           <h1 id="card_name">${this.getAttribute('card-name') || 'Untitled Habit'}</h1>
         </div>
         <div class="flip-card-back">
+
           <p id="card_description">${this.getAttribute('card-description') || 'None'}</p>
           <p id="card_frequency">${this.getAttribute('card-frequency') || 'None'}</p>
           <p id="card_time">${this.getAttribute('card-time') || 'None'}</p>
@@ -287,8 +287,7 @@ class HabitCard extends HTMLElement {
     if (idEl) {
       idEl.innerHTML = `${this.getAttribute('card-id') || 'None'} `;
     }
-
-
+  }
 }
 
 customElements.define('habit-card', HabitCard);
