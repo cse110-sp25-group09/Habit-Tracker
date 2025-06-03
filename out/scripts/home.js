@@ -1,5 +1,4 @@
 //below is the code for the menu bar
-
 // Wait for the DOM to load before referencing elements
 document.addEventListener('DOMContentLoaded', function () {
   const home_select = document.getElementById('home-selection');
@@ -29,6 +28,7 @@ document.addEventListener('DOMContentLoaded', function () {
       window.location.href = 'daily-calendar.html';
     });
 
+
   document
     .getElementById('monthly-option')
     .addEventListener('click', function (event) {
@@ -56,6 +56,7 @@ class HabitCard extends HTMLElement {
         height: 150px;
         margin: 1rem;
         position: relative;
+        cursor: pointer;
       }
  
       .flip-card-inner {
@@ -100,6 +101,7 @@ class HabitCard extends HTMLElement {
         background-color: var(--back-card-color);
         color: var(--text-color-back-of-card);
         transform: rotateY(180deg);
+        
        
       }
 
@@ -126,6 +128,52 @@ class HabitCard extends HTMLElement {
         font-weight:bold;
       }
 
+      .delete-container {
+        margin-top: 0.1em;
+        text-align: center;
+      }
+
+      .delete-btn {
+        background: transparent;
+        color: white;
+        border: none;
+        font-size: 0.9em;
+        cursor: pointer;
+      }
+
+      .confirm-dialog {
+        margin-top: 0.5em;
+        display: flex;
+        margin-bottom: 0.5em;
+        font-size: 0.9em;
+
+      }
+
+      .confirm-dialog button {
+        margin: 0 0.25em;
+        padding: 0.25em 0.5em;
+        font-size: 0.8em;
+        cursor: pointer;
+        border-radius: 4px;
+        border: none;
+      }
+
+      .confirm-yes {
+        background-color: red;
+        color: white;
+        font-size: 0.9em;
+
+      }
+
+      .confirm-no {
+        background-color: gray;
+        color: white;
+        font-size: 0.9em;
+
+      }
+    
+
+
     </style>
 
     <div class="flip-card">
@@ -139,6 +187,16 @@ class HabitCard extends HTMLElement {
           <p id="card_frequency">${this.getAttribute('card-frequency') || 'None'}</p>
           <p id="card_time">${this.getAttribute('card-time') || 'None'}</p>
           <p id="card_streak">${this.getAttribute('card-streak') || 'None'}</p>
+          <p id= "card_id" hidden>${this.getAttribute('card-id') || 'None'}</p>
+          <div class="delete-container">
+            <button class="delete-btn">🗑️</button>
+            <div class="confirm-dialog" hidden>
+              <p  hidden class="delete-dialog">Delete? </p>
+              <button class="confirm-yes" hidden>Yes</button>
+              <button class="confirm-no" hidden>No</button>
+            </div>
+          </div>
+
 
         </div>
       </div>
@@ -147,10 +205,56 @@ class HabitCard extends HTMLElement {
     const flipCard = shadow.querySelector('.flip-card');
     const flipInner = shadow.querySelector('.flip-card-inner');
 
+    const deleteBtn = this.shadowRoot.querySelector('.delete-btn');
+    const confirmDialog = this.shadowRoot.querySelector('.confirm-dialog');
+    const deleteDialog = this.shadowRoot.querySelector('.delete-dialog');
+
+    const yesBtn = this.shadowRoot.querySelector('.confirm-yes');
+    const noBtn = this.shadowRoot.querySelector('.confirm-no');
+
+    deleteBtn.addEventListener('click', () => {
+      confirmDialog.hidden = false;
+      yesBtn.hidden = false;
+      noBtn.hidden = false;
+      deleteDialog.hidden = false;
+
+      deleteBtn.hidden = true;
+    });
+
+    noBtn.addEventListener('click', () => {
+      deleteBtn.hidden = false;
+      confirmDialog.hidden = true;
+      yesBtn.hidden = true;
+      noBtn.hidden = true;
+      deleteDialog.hidden = true;
+    });
+
+    // yesBtn.addEventListener('click', () => {
+
+    //   this.remove(); // removes the card from the DOM
+
+    // });
+    yesBtn?.addEventListener('click', (e) => {
+      e.stopPropagation(); // prevent card flip
+
+      const idElement = this.shadowRoot.querySelector('#card_id');
+      if (idElement) {
+        const cardId = idElement.textContent.trim();
+        console.log(cardId);
+        deleteHabit(cardId);
+        this.remove(); // This removes the custom element from the DOM
+      }
+    });
+
+    [deleteBtn, yesBtn, noBtn].forEach((btn) => {
+      btn?.addEventListener('click', (e) => e.stopPropagation());
+    });
+
     flipCard.addEventListener('click', () => {
       flipInner.classList.toggle('flipped');
     });
   }
+
   static get observedAttributes() {
     return ['card-name'];
   }
@@ -161,6 +265,7 @@ class HabitCard extends HTMLElement {
     const descrEl = this.shadowRoot.getElementById('card_description');
     const timeEl = this.shadowRoot.getElementById('card_time');
     const streakEl = this.shadowRoot.getElementById('card_streak');
+    const idEl = this.shadowRoot.getElementById('card_id');
 
     if (titleEl) {
       titleEl.textContent = this.getAttribute('card-name') || 'Untitled Habit';
@@ -177,6 +282,9 @@ class HabitCard extends HTMLElement {
     }
     if (streakEl) {
       streakEl.innerHTML = `Current Streak: <span class="streak_number"> ${this.getAttribute('card-streak') || 'None'} </span>`;
+    }
+    if (idEl) {
+      idEl.innerHTML = `Current ID: ${this.getAttribute('card-id') || 'None'} `;
     }
   }
 }
@@ -198,14 +306,16 @@ document.getElementById('submit-habit').addEventListener('click', () => {
   let streak = 0;
 
   if (name !== '') {
-    const newCard = document.createElement('habit-card');
-    newCard.setAttribute('card-name', name);
-    newCard.setAttribute('card-frequency', frequency);
-    newCard.setAttribute('card-description', descr);
-    newCard.setAttribute('card-time', timeStr);
-    newCard.setAttribute('card-streak', streak);
+    // const newCard = document.createElement('habit-card');
+    // newCard.setAttribute('card-name', name);
+    // newCard.setAttribute('card-frequency', frequency);
+    // newCard.setAttribute('card-description', descr);
+    // newCard.setAttribute('card-time', timeStr);
+    // newCard.setAttribute('card-streak', streak);
 
-    document.getElementById('card-container').appendChild(newCard);
+    // document.getElementById('card-container').appendChild(newCard);
+    createHabit(name, descr, frequency, timeStr);
+    populateCards();
   }
 
   // Reset and hide form
@@ -217,6 +327,7 @@ document.getElementById('submit-habit').addEventListener('click', () => {
   document.getElementById('habit-form').style.display = 'none';
 });
 
+
 window.addEventListener('DOMContentLoaded', () => {
   const body = document.body;
   const savedTheme = localStorage.getItem('selectedTheme');
@@ -224,3 +335,23 @@ window.addEventListener('DOMContentLoaded', () => {
     body.classList.add(`${savedTheme}-theme`);
   }
 });
+
+function populateCards() {
+  document.getElementById('card-container').innerHTML = '';
+  let habits = getHabitsForToday();
+  for (let i = 0; i < habits.length; i++) {
+    //console.log(habits[i][0]);
+    const newCard = document.createElement('habit-card');
+    newCard.setAttribute('card-name', habits[i].name);
+    newCard.setAttribute('card-frequency', habits[i].frequency);
+    newCard.setAttribute('card-description', habits[i].description);
+    newCard.setAttribute('card-time', habits[i].notif);
+    newCard.setAttribute('card-streak', habits[i].streak);
+    newCard.setAttribute('card-id', habits[i].id);
+    document.getElementById('card-container').appendChild(newCard);
+  }
+}
+
+// mark as complete / change color / add check
+//delete = delete id and populate
+
