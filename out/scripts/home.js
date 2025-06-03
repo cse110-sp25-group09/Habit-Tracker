@@ -318,7 +318,7 @@ document.getElementById('submit-habit').addEventListener('click', () => {
     let timeNum = time_dict[frequency];
 
     // document.getElementById('card-container').appendChild(newCard);
-    createHabit(name, descr, timeNum, timeStr);
+    createHabit(name, descr, timeNum);
     populateCards();
   }
 

@@ -29,7 +29,10 @@ export function reviveHabit(key, value) {
     newValue = Date.toLocaleString(newValue); //Gets rid of nonstandard date formatting
   }
   if (isNaN(newValue)) {
-    throw new Error('Invalid habit object');
+    console.log(key);
+    console.log(value);
+    //throw new Error('Invalid habit object');
+    return value;
   }
   if (key == 'log') {
     value.forEach((element) => {
@@ -56,7 +59,7 @@ export function createHabit(
   habitName,
   habitDescription,
   habitFrequency,
-  startDateTime,
+  startDateTime= new Date().toLocaleString(),
   adapter = localStorageAdapter,
 ) {
   if (typeof habitName != 'string') {
@@ -79,7 +82,6 @@ export function createHabit(
    https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/parse
     Requires regex to do properly: https://stackoverflow.com/questions/7445328/check-if-a-string-is-a-date-value
     */
-
   let habit = {
     habitName: habitName,
     habitDescription: habitDescription,
