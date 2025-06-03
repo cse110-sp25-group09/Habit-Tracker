@@ -145,9 +145,9 @@ export function updateHabit(habitID, fields, newValues) {
  * @param {Object} adapter defaults to localStorageAdapter, allows us to pass in other storage methods
  */
 export function deleteHabit(cardID, adapter = localStorageAdapter) {
-  console.log(cardID);
   adapter.del(cardID);
 }
+
 
 /**
  * @param adapter {Object} defaults to localStorageAdapter, allows us to pass in other storage methods
