@@ -1,5 +1,5 @@
 const DAYINMS = 86400000;
-//export { getAllHabits, createHabit, deleteHabit } from './CRUD.js';
+//export { getHabitsForToday, createHabit, deleteHabit } from './CRUD.js';
 
 export const localStorageAdapter = {
   get: (key) => localStorage.getItem(key),
@@ -29,7 +29,12 @@ export function reviveHabit(key, value) {
     newValue = Date.toLocaleString(newValue); //Gets rid of nonstandard date formatting
   }
   if (isNaN(newValue)) {
-    throw new Error('Invalid habit object');
+
+    // console.log(key);
+    // console.log(value);
+    //throw new Error('Invalid habit object');
+    return value;
+
   }
   if (key == 'log') {
     value.forEach((element) => {
@@ -56,7 +61,7 @@ export function createHabit(
   habitName,
   habitDescription,
   habitFrequency,
-  startDateTime,
+  startDateTime= new Date().toLocaleString(),
   adapter = localStorageAdapter,
 ) {
   if (typeof habitName != 'string') {
@@ -79,7 +84,6 @@ export function createHabit(
    https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/parse
     Requires regex to do properly: https://stackoverflow.com/questions/7445328/check-if-a-string-is-a-date-value
     */
-
   let habit = {
     habitName: habitName,
     habitDescription: habitDescription,
@@ -142,9 +146,11 @@ export function updateHabit(habitID, fields, newValues) {
  * @param {String} habitID - the string ID of the habit being deleted
  * @param {Object} adapter defaults to localStorageAdapter, allows us to pass in other storage methods
  */
-export function deleteHabit(habitID, adapter = localStorageAdapter) {
-  return adapter.del(id);
+export function deleteHabit(cardID, adapter = localStorageAdapter) {
+  adapter.del(cardID);
+
 }
+
 
 /**
  * @param adapter {Object} defaults to localStorageAdapter, allows us to pass in other storage methods
@@ -160,8 +166,13 @@ export function getAllHabits(adapter = localStorageAdapter) {
   let curHabitObject;
   while (i--) {
     curHabitObject = adapter.get(keys[i]);
+
+    //console.log(curHabitObject);
     curHabitObject = JSON.parse(curHabitObject, reviveHabit);
-    habits.push(curHabitObject);
+    // console.log(curHabitObject);
+
+    habits.push([keys[i], curHabitObject]);
+
   }
   return habits;
 }
@@ -173,7 +184,9 @@ export function getAllHabits(adapter = localStorageAdapter) {
  * @returns a habit object
  */
 export function getHabitById(habitID, adapter = localStorageAdapter) {
-  let habit = adapter.get(id);
+
+  let habit = adapter.get(habitID);
+
   return JSON.parse(habit, reviveHabit);
 }
 
@@ -209,7 +222,7 @@ function calculateStreak(habit) {
       return streak;
     } else {
       streak++;
-      exp -= habit.frequency;
+      exp -= habit.habitFrequency;
     }
   }
 }
@@ -242,7 +255,12 @@ function isHabitForToday(habit) {
     return false;
   }
 
-  if ((currentDate - msStartDate) % habit.frequency !== 0) {
+  
+  let daysDiff = Math.floor((currentDate - msStartDate)/DAYINMS);
+  // console.log(daysDiff);
+  // console.log(habit.habitFrequency);
+  if (daysDiff % habit.habitFrequency != 0) {
+
     return false;
   }
   return true;
@@ -253,19 +271,27 @@ function isHabitForToday(habit) {
  */
 export function getHabitsForToday() {
   let habits = getAllHabits();
+  //console.log(habits);
+  if (!habits){
+    return [];
+  }
   let today_habits = [];
   let today = new Date();
   today.setHours(0, 0, 0, 0);
-  let curr_date = habit.startDateTime;
+  //let curr_date = habit.startDateTime;
+  let curr_date;
   for (let i = 0; i < habits.length; i++) {
-    if (isHabitForToday(habits[i])) {
-      curr_date = Date.parse(curr_date);
-      if (isNaN(curr_date)) {
+
+    if (isHabitForToday(habits[i][1])) {
+      curr_date = habits[i][1].startDateTime;
+      curr_date = new Date(Date.parse(curr_date));
+      if (curr_date == NaN) {
+
         throw new Error('Invalid type for habit.startDateTime');
       }
       curr_date = new Date(curr_date);
       curr_date.setHours(0, 0, 0, 0);
-      today_habits.push((curr_date == today, habits[i]));
+      today_habits.push(habits[i]);
     }
   }
   return today_habits;
