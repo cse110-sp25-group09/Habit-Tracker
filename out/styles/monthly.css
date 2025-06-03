@@ -9,7 +9,9 @@
   --secondary-bg: #f0f4f8;
   --button-bg: #7d8bff;
   --button-hover-bg: #5f6fd6;
-  --today-bg: #7d8bff;
+  --completed-day: #394dff;
+  --completed-one: #7d8bff;
+  --completed-half: #c1c7ff;
   --text-color: white;
   --header-text-color: white;
   --day-header-color: #425b72;
@@ -20,7 +22,9 @@
   --secondary-bg: #f0f4f8;
   --button-bg: #7d8bff;
   --button-hover-bg: #5f6fd6;
-  --today-bg: #7d8bff;
+  --completed-day: #394dff;
+  --completed-one: #7d8bff;
+  --completed-half: #c1c7ff;
   --text-color: white;
   --header-text-color: white;
   --day-header-color: #425b72;
@@ -31,7 +35,9 @@
   --secondary-bg: #fddde6;
   --button-bg: #e66b8b;
   --button-hover-bg: #c44d6b;
-  --today-bg: #e66b8b;
+  --completed-day: #e81e54;
+  --completed-one: #f98ca1;
+  --completed-half: #eec1ce;
   --text-color: white;
   --header-text-color: white;
   --day-header-color: #5e2c40;
@@ -42,7 +48,9 @@
   --secondary-bg: #eff3fc;
   --button-bg: #ffc300;
   --button-hover-bg: #d4a300;
-  --today-bg: #ffc300;
+  --completed-day: #ffc300;
+  --completed-one: #ffdc68;
+  --completed-half: #ffeaa6;
   --text-color: #000;
   --header-text-color: white;
   --day-header-color: #012e78;
@@ -170,12 +178,6 @@ button:active {
   transform: scale(0.98);
 }
 
-.today {
-  background-color: var(--today-bg);
-  color: white;
-  font-weight: bold;
-}
-
 /* viewport */
 @media (max-width: 600px) {
   .calendar-grid {
@@ -227,3 +229,20 @@ button:active {
   height: 28px;
   filter: brightness(0) invert(1);
 }
+
+.completed-day {
+  background-color: var(--completed-day);
+  color: white;
+  font-weight: bold;
+}
+.completed-one{
+  background-color: var(--completed-one);
+  color: white;
+  font-weight: bold;
+}
+.completed-half{
+  background-color: var(--completed-half);
+  color: white;
+  font-weight: bold;
+}
+
