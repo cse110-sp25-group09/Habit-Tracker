@@ -180,7 +180,7 @@ body {
 /* Habit completion styles */
 .habit-completed {
   opacity: 0.7;
-  border: 3px solid #4CAF50 !important;
+  border: 3px solid #4caf50 !important;
 }
 
 .completion-overlay {
@@ -205,7 +205,7 @@ body {
   position: absolute;
   top: 10px;
   right: 10px;
-  background: #4CAF50;
+  background: #4caf50;
   color: white;
   border-radius: 50%;
   width: 30px;

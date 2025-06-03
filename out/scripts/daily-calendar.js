@@ -52,15 +52,23 @@ const prevDayButton = document.getElementById('prev-day');
 const nextDayButton = document.getElementById('next-day');
 
 // Days of the week
-const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+const daysOfWeek = [
+  'Sunday',
+  'Monday',
+  'Tuesday',
+  'Wednesday',
+  'Thursday',
+  'Friday',
+  'Saturday',
+];
 
 // Function to format date
 function formatDate(date) {
-  const options = { 
-    weekday: 'long', 
-    year: 'numeric', 
-    month: 'long', 
-    day: 'numeric' 
+  const options = {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
   };
   return date.toLocaleDateString('en-US', options);
 }
@@ -72,11 +80,15 @@ function getDayName(date) {
 
 // Function to convert frequency string to days
 function getFrequencyInDays(frequency) {
-  switch(frequency.toLowerCase()) {
-    case 'daily': return 1;
-    case 'weekly': return 7;
-    case 'monthly': return 30; // approximation
-    default: return 1;
+  switch (frequency.toLowerCase()) {
+    case 'daily':
+      return 1;
+    case 'weekly':
+      return 7;
+    case 'monthly':
+      return 30; // approximation
+    default:
+      return 1;
   }
 }
 
@@ -89,7 +101,7 @@ function isSameDay(date1, date2) {
 function updateDateDisplay() {
   const today = new Date();
   const isToday = currentDate.toDateString() === today.toDateString();
-  
+
   if (isToday) {
     currentDateElement.textContent = 'Today';
   } else {
@@ -102,7 +114,7 @@ function updateDateDisplay() {
       currentDateElement.textContent = formatDate(currentDate);
     }
   }
-  
+
   currentDayElement.textContent = getDayName(currentDate);
   displayHabitsForDay(currentDate);
 }
