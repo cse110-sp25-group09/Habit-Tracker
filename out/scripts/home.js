@@ -1,7 +1,7 @@
 //below is the code for the menu bar
 
 // Wait for the DOM to load before referencing elements
-import { getHabitsForToday, createHabit, deleteHabit } from "./CRUD.js";
+import { getHabitsForToday, createHabit, deleteHabit } from './CRUD.js';
 
 document.addEventListener('DOMContentLoaded', function () {
   const home_select = document.getElementById('home-selection');
@@ -304,7 +304,7 @@ document.getElementById('submit-habit').addEventListener('click', () => {
   const frequency = document.getElementById('habit-frequency').value;
   const descr = document.getElementById('habitDescription').value;
   const timeStr = document.getElementById('habit-time').value;
-  let time_dict = {"Daily":1, "Weekly":7, "Monthly":30};
+  let time_dict = { Daily: 1, Weekly: 7, Monthly: 30 };
 
   let streak = 0;
 
@@ -338,3 +338,23 @@ window.addEventListener('DOMContentLoaded', () => {
     body.classList.add(`${savedTheme}-theme`);
   }
 });
+
+function populateCards() {
+  document.getElementById('card-container').innerHTML = '';
+  let habits = getHabitsForToday();
+  for (let i = 0; i < habits.length; i++) {
+    //console.log(habits[i][0]);
+    //console.log(habits[i]);
+    const newCard = document.createElement('habit-card');
+    newCard.setAttribute('card-name', habits[i][1].habitName);
+    newCard.setAttribute('card-frequency', habits[i][1].habitFrequency);
+    newCard.setAttribute('card-description', habits[i][1].habitDescription);
+    newCard.setAttribute('card-time', habits[i][1].startDateTime);
+    newCard.setAttribute('card-streak', habits[i][1].habitStreak);
+    newCard.setAttribute('card-id', habits[i][0]);
+    document.getElementById('card-container').appendChild(newCard);
+  }
+}
+
+// mark as complete / change color / add check
+//delete = delete id and populate
