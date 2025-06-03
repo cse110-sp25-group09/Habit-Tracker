@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const settings_select = document.getElementById('settings-selection');
   const calendarSelection = document.getElementById('calendar-selection');
   const calendarMenu = document.getElementById('calendar-menu');
-
+  populateCards();
   // Home button navigation
   home_select.addEventListener('click', () => {
     window.location.href = 'home-page.html';
@@ -241,7 +241,7 @@ class HabitCard extends HTMLElement {
       const idElement = this.shadowRoot.querySelector('#card_id');
       if (idElement) {
         const cardId = idElement.textContent.trim();
-        console.log(cardId);
+        //console.log(cardId);
         deleteHabit(cardId);
         this.remove(); // This removes the custom element from the DOM
       }
@@ -330,3 +330,23 @@ document.getElementById('submit-habit').addEventListener('click', () => {
 
   document.getElementById('habit-form').style.display = 'none';
 });
+
+function populateCards() {
+  document.getElementById('card-container').innerHTML = '';
+  let habits = getHabitsForToday();
+  for (let i = 0; i < habits.length; i++) {
+    //console.log(habits[i][0]);
+    //console.log(habits[i]);
+    const newCard = document.createElement('habit-card');
+    newCard.setAttribute('card-name', habits[i][1].habitName);
+    newCard.setAttribute('card-frequency', habits[i][1].habitFrequency);
+    newCard.setAttribute('card-description', habits[i][1].habitDescription);
+    newCard.setAttribute('card-time', habits[i][1].startDateTime);
+    newCard.setAttribute('card-streak', habits[i][1].habitStreak);
+    newCard.setAttribute('card-id', habits[i][0]);
+    document.getElementById('card-container').appendChild(newCard);
+  }
+}
+
+// mark as complete / change color / add check
+//delete = delete id and populate
