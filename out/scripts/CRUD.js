@@ -1,5 +1,5 @@
 const DAYINMS = 86400000;
-//export { getAllHabits, createHabit, deleteHabit } from './CRUD.js';
+//export { getHabitsForToday, createHabit, deleteHabit } from './CRUD.js';
 
 export const localStorageAdapter = {
   get: (key) => localStorage.getItem(key),
@@ -157,7 +157,10 @@ export function getAllHabits(adapter = localStorageAdapter) {
   let curHabitObject;
   while (i--) {
     curHabitObject = adapter.get(keys[i]);
-    curHabitObject = JSON.parse(curHabitObject, habitReviver);
+    console.log(curHabitObject);
+    curHabitObject = JSON.parse(curHabitObject, reviveHabit);
+    console.log(curHabitObject);
+
     habits.push(curHabitObject);
   }
   return habits;
@@ -171,7 +174,7 @@ export function getAllHabits(adapter = localStorageAdapter) {
  */
 export function getHabitById(habitID, adapter = localStorageAdapter) {
   let habit = adapter.get(id);
-  return JSON.parse(habit, habitReviver);
+  return JSON.parse(habit, reviveHabit);
 }
 
 /**
@@ -251,12 +254,15 @@ function isHabitForToday(habit) {
  */
 export function getHabitsForToday() {
   let habits = getAllHabits();
+  console.log(habits);
   let today_habits = [];
   let today = new Date();
   today.setHours(0, 0, 0, 0);
-  let curr_date = habit.startDateTime;
-  for (let i = 0; i < habits.length; i++) {
+  //let curr_date = habit.startDateTime;
+  let curr_date;
+  for (const i in habits) {
     if (isHabitForToday(habits[i])) {
+      curr_date = habits[i].startDateTime;
       curr_date = Date.parse(curr_date);
       if (curr_date == NaN) {
         throw new Error('Invalid type for habit.startDateTime');

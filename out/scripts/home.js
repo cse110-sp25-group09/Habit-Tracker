@@ -1,6 +1,8 @@
 //below is the code for the menu bar
 
 // Wait for the DOM to load before referencing elements
+import { getHabitsForToday, createHabit, deleteHabit } from "./CRUD.js";
+
 document.addEventListener('DOMContentLoaded', function () {
   const home_select = document.getElementById('home-selection');
   const settings_select = document.getElementById('settings-selection');
@@ -302,6 +304,7 @@ document.getElementById('submit-habit').addEventListener('click', () => {
   const frequency = document.getElementById('habit-frequency').value;
   const descr = document.getElementById('habitDescription').value;
   const timeStr = document.getElementById('habit-time').value;
+  let time_dict = {"Daily":1, "Weekly":7, "Monthly":30};
 
   let streak = 0;
 
@@ -312,17 +315,11 @@ document.getElementById('submit-habit').addEventListener('click', () => {
     // newCard.setAttribute('card-description', descr);
     // newCard.setAttribute('card-time', timeStr);
     // newCard.setAttribute('card-streak', streak);
+    let timeNum = time_dict[frequency];
 
-
-  if (name !== "") {
-    const newCard = document.createElement("habit-card");
-    newCard.setAttribute("card-name", name);
-    newCard.setAttribute("card-frequency", frequency);
-    newCard.setAttribute("card-description", descr);
-    newCard.setAttribute("card-time", timeStr);
-    newCard.setAttribute("card-streak", streak);
-
-    document.getElementById("card-container").appendChild(newCard);
+    // document.getElementById('card-container').appendChild(newCard);
+    createHabit(name, descr, timeNum, timeStr);
+    populateCards();
   }
 
   // Reset and hide form
