@@ -34,12 +34,12 @@ body {
   width: 100%;
   max-width: 400px;
 
-  background-color: var(--primary-bg);
+  background-color: var(--primary-color);
   padding: 0.75rem;
   display: flex;
   justify-content: space-around;
   align-items: center;
-  color: var(--header-text-color);
+  color: var(--text-color);
   z-index: 1000;
 }
 
@@ -110,8 +110,8 @@ body {
 }
 
 button {
-  background-color: var(--button-bg);
-  color: white;
+  background-color: var(--accent-color);
+  color: var(black);
   border: none;
   padding: 0.5rem 1rem;
   border-radius: 6px;
@@ -180,17 +180,17 @@ button:active {
 }
 
 .completed-day {
-  background-color: var(--back-card-color);
+  background-color: var(--completed-day-color);
   color: white;
   font-weight: bold;
 }
 .completed-one{
-  background-color: var(--input-bg-color);
+  background-color: var(--completed-one-color);
   color: white;
   font-weight: bold;
 }
 .completed-half{
-  background-color: var();
+  background-color: var(--completed-half-color);
   color: white;
   font-weight: bold;
 }

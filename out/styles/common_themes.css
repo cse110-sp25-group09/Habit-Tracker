@@ -10,6 +10,9 @@
   --button-color: #f1f2f6; /* Color of the button text (+) */
   --app-background-color: #f1f2f6; /*Background color of the app itself */
   --input-border-color: white; /* */
+  --completed-day-color: #27187e; /* Color of the completed day */
+  --completed-half-color: #aeb8fe; /* Color of the completed half */
+  --completed-one-color: #758bfd; /* Color of the completed one */
   --streak-color: orange; /* text color of streak */
   --setting-text-color: red(0, 0, 0); /* Color of the text in settings*/
   --text-color-front-of-card: white; /* Text color of the front of the card*/
@@ -30,6 +33,9 @@
   --button-color: white;
   --app-background-color: #f1f2f6;
   --input-border-color: #fff;
+  --completed-day-color: #89023e;
+  --completed-half-color: #ea638c;
+  --completed-one-color: #ffc1e0;
   --streak-color: #89023e;
   --setting-text-color: #30343f;
   --text-color-front-of-card: white;
@@ -50,6 +56,9 @@
   --button-color: white;
   --app-background-color: #f1f2f6;
   --input-border-color: #fff;
+  --completed-day-color: #00296b;
+  --completed-half-color: #1461a9;
+  --completed-one-color: #b0d4fe;
   --streak-color: orange;
   --setting-text-color: black;
   --text-color-front-of-card: white;
