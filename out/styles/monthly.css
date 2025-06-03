@@ -4,57 +4,6 @@
   box-sizing: border-box;
   font-family: sans-serif;
 }
-:root{
-  --primary-bg: #7c8efc;
-  --secondary-bg: #f0f4f8;
-  --button-bg: #7d8bff;
-  --button-hover-bg: #5f6fd6;
-  --completed-day: #394dff;
-  --completed-one: #7d8bff;
-  --completed-half: #c1c7ff;
-  --text-color: white;
-  --header-text-color: white;
-  --day-header-color: #425b72;
-}
-
-.theme-default {
-  --primary-bg: #7c8efc;
-  --secondary-bg: #f0f4f8;
-  --button-bg: #7d8bff;
-  --button-hover-bg: #5f6fd6;
-  --completed-day: #394dff;
-  --completed-one: #7d8bff;
-  --completed-half: #c1c7ff;
-  --text-color: white;
-  --header-text-color: white;
-  --day-header-color: #425b72;
-}
-
-.theme-pink {
-  --primary-bg: #f98ca1;
-  --secondary-bg: #fddde6;
-  --button-bg: #e66b8b;
-  --button-hover-bg: #c44d6b;
-  --completed-day: #e81e54;
-  --completed-one: #f98ca1;
-  --completed-half: #eec1ce;
-  --text-color: white;
-  --header-text-color: white;
-  --day-header-color: #5e2c40;
-}
-
-.theme-triton {
-  --primary-bg: #0145ac;
-  --secondary-bg: #eff3fc;
-  --button-bg: #ffc300;
-  --button-hover-bg: #d4a300;
-  --completed-day: #ffc300;
-  --completed-one: #ffdc68;
-  --completed-half: #ffeaa6;
-  --text-color: #000;
-  --header-text-color: white;
-  --day-header-color: #012e78;
-}
 
 body {
   font-family: sans-serif;
@@ -213,7 +162,7 @@ button:active {
   align-items: center;
   width: 100%;
   max-width: 400px;
-  background-color: var(--primary-bg);
+  background-color: var(--primary-color);
   padding: 0.75rem 0;
   z-index: 999;
   box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
@@ -231,17 +180,17 @@ button:active {
 }
 
 .completed-day {
-  background-color: var(--completed-day);
+  background-color: var(--back-card-color);
   color: white;
   font-weight: bold;
 }
 .completed-one{
-  background-color: var(--completed-one);
+  background-color: var(--input-bg-color);
   color: white;
   font-weight: bold;
 }
 .completed-half{
-  background-color: var(--completed-half);
+  background-color: var();
   color: white;
   font-weight: bold;
 }
