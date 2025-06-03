@@ -3,9 +3,54 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Daily Calendar</title>
+    <title>Daily Calendar - Habit Tracker</title>
+    <link rel="stylesheet" href="/out/styles/daily_style.css" />
   </head>
   <body>
-    <h1>Daily Calendar</h1>
+    <div class="app">
+      <h1 class="app-header">Daily Calendar</h1>
+      
+      <section class="date-display">
+        <h2 id="current-date">Nothing</h2>
+        <p id="current-day">Monday</p>
+      </section>
+
+      <div id="card-container">
+        <!-- Habit cards for the selected day will be displayed here -->
+      </div>
+      
+      <p id="no-habits-message" style="display: none;">No habits scheduled for this day</p>
+
+      <!-- Navigation arrows -->
+      <nav class="day-navigation">
+        <button id="prev-day" class="nav-arrow">
+          <span aria-hidden="true">‹</span>
+        </button>
+        <button id="next-day" class="nav-arrow">
+          <span aria-hidden="true">›</span>
+        </button>
+      </nav>
+
+      <footer class="nav-bar">
+        <div id="home-selection" class="nav-item">
+          <img src="/out/icons/house-solid.svg" alt="home" />
+        </div>
+
+        <div id="calendar-selection" class="nav-item">
+          <img src="/out/icons/calendar-days-solid.svg" alt="calendar" />
+          <div id="calendar-menu">
+            <ul>
+              <li id="daily-option">Daily</li>
+              <li id="monthly-option">Monthly</li>
+            </ul>
+          </div>
+        </div>
+
+        <div id="settings-selection" class="nav-item">
+          <img src="/out/icons/gear-solid.svg" alt="settings" />
+        </div>
+      </footer>
+    </div>
+    <script src="/out/scripts/daily-calendar.js"></script>
   </body>
 </html>
