@@ -19,25 +19,28 @@ function typeErrorTemplate(stringParam, type) {
  * @return a valid habit object
  */
 export function reviveHabit(key, value) {
-  const stringFields = new Set('habitName', 'habitDescription');
   const numberFields = new Set('habitFrequency', 'habitStreak');
   let newValue;
   if (key in numberFields) {
     newValue = Number(value);
   }
   if (key == 'startDateTime') {
-    newValue = Date.parse(key);
+    newValue = Date.parse(value);
+    newValue = Date.toLocaleString(newValue); //Gets rid of nonstandard date formatting
   }
-  if (newValue == NaN) {
+  if (isNaN(newValue)) {
     throw new Error('Invalid habit object');
   }
   if (key == 'log') {
     value.forEach((element) => {
-      if (Date.parse(element) == NaN) {
+      newValue = Date.parse(element);
+      if (isNaN(newValue)) {
         throw new Error('Invalid datestring in log');
       }
+      newValue = Date.toLocaleString(newValue); //Gets rid of nonstandard date formatting
     });
   }
+  return newValue;
 }
 /**
  * @param habitName string name of habit
@@ -107,7 +110,7 @@ export function readHabit(habitID, adapter = localStorageAdapter) {
  */
 export function updateHabit(habitID, fields, newValues) {
   //check that fields and newValues are the same length
-  if (fields.length != newValues.length) {
+  if (fields.length !== newValues.length) {
     throw new Error('fields and newValues must have the same length');
   }
   const stringFields = new Set('habitName', 'habitDescription');
@@ -139,7 +142,7 @@ export function updateHabit(habitID, fields, newValues) {
  * @param {String} habitID - the string ID of the habit being deleted
  * @param {Object} adapter defaults to localStorageAdapter, allows us to pass in other storage methods
  */
-export function deleteHabit(cardID, adapter = localStorageAdapter) {
+export function deleteHabit(habitID, adapter = localStorageAdapter) {
   return adapter.del(id);
 }
 
@@ -157,7 +160,7 @@ export function getAllHabits(adapter = localStorageAdapter) {
   let curHabitObject;
   while (i--) {
     curHabitObject = adapter.get(keys[i]);
-    curHabitObject = JSON.parse(curHabitObject, habitReviver);
+    curHabitObject = JSON.parse(curHabitObject, reviveHabit);
     habits.push(curHabitObject);
   }
   return habits;
@@ -171,7 +174,7 @@ export function getAllHabits(adapter = localStorageAdapter) {
  */
 export function getHabitById(habitID, adapter = localStorageAdapter) {
   let habit = adapter.get(id);
-  return JSON.parse(habit, habitReviver);
+  return JSON.parse(habit, reviveHabit);
 }
 
 /**
@@ -191,7 +194,7 @@ function calculateStreak(habit) {
   //Date.parse() is very format permissive, this needs to be tested thoroughly
   logs.forEach((element) => {
     ms = Date.parse(element);
-    if (ms == NaN) {
+    if (isNaN(ms)) {
       throw new Error(typeErrorTemplate(logs, typeof ms));
     }
     msLogs.push(ms);
@@ -202,7 +205,7 @@ function calculateStreak(habit) {
   let exp = Math.floor(Date.now() / DAYINMS);
 
   for (let i = -2; i >= -1 * logs.length; i--) {
-    if (Math.floor(logs[i]) != exp) {
+    if (Math.floor(logs[i]) !== exp) {
       return streak;
     } else {
       streak++;
@@ -214,10 +217,9 @@ function calculateStreak(habit) {
 /**
  *
  * @param {String} habitID - the string ID of the habit being deleted
- * @param {Object} adapter defaults to localStorageAdapter, allows us to pass in other storage methods
  * @returns {boolean} true if habit completion is logged successfully, false otherwise
  */
-function logHabitCompleted(habitID, adapter = localStorageAdapter) {
+function logHabitCompleted(habitID) {
   let habit = getHabitById(habitID);
   if (habit) {
     habit.streak = calculateStreak(habits[idx]);
@@ -236,11 +238,11 @@ function logHabitCompleted(habitID, adapter = localStorageAdapter) {
 function isHabitForToday(habit) {
   let currentDate = new Date();
   let msStartDate = Date.parse(habit.startDateTime);
-  if (habit.logs[-1] == currentDate.toDateString()) {
+  if (habit.logs[-1] === currentDate.toDateString()) {
     return false;
   }
 
-  if ((currentDate - msStartDate) % habit.frequency != 0) {
+  if ((currentDate - msStartDate) % habit.frequency !== 0) {
     return false;
   }
   return true;
@@ -258,9 +260,10 @@ export function getHabitsForToday() {
   for (let i = 0; i < habits.length; i++) {
     if (isHabitForToday(habits[i])) {
       curr_date = Date.parse(curr_date);
-      if (curr_date == NaN) {
+      if (isNaN(curr_date)) {
         throw new Error('Invalid type for habit.startDateTime');
       }
+      curr_date = new Date(curr_date);
       curr_date.setHours(0, 0, 0, 0);
       today_habits.push((curr_date == today, habits[i]));
     }
