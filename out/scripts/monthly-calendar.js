@@ -1,4 +1,6 @@
 //Menu Navigation Bar
+
+
 const home_select = document.getElementById('home-selection');
 const daily_calendar_select = document.getElementById(
   'daily-calendar-selection',
@@ -34,6 +36,20 @@ export const monthNames = [
   'November',
   'December',
 ];
+
+function updateDayCompletion(dayElement, tasksCompleted, totalTasks = 10) {
+  // Clear old completion classes
+  dayElement.classList.remove("completed-day", "completed-one", "completed-half");
+
+  // Assign new class based on number of tasks
+  if (tasksCompleted >= totalTasks) {
+    dayElement.classList.add("completed-day");
+  } else if (tasksCompleted >= totalTasks / 2) {
+    dayElement.classList.add("completed-half");
+  } else if (tasksCompleted >= 1) {
+    dayElement.classList.add("completed-one");
+  }
+}
 
 export function generateCalendar(year) {
   const calendarContainer = document.getElementById('calendar');
@@ -87,6 +103,13 @@ export function generateCalendar(year) {
       if (day === todayDate && month === todayMonth && year === todayYear) {
         dayDiv.classList.add('today');
       }
+
+      
+      updateDayCompletion(dayDiv, 1, 5); // Assuming 0 tasks completed for now
+
+
+
+
 
       grid.appendChild(dayDiv);
     }
