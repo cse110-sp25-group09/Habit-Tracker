@@ -1,4 +1,6 @@
 const DAYINMS = 86400000;
+//export { getAllHabits, createHabit, deleteHabit } from './CRUD.js';
+
 export const localStorageAdapter = {
   get: (key) => localStorage.getItem(key),
   set: (key, value) => localStorage.setItem(key, value),
@@ -247,7 +249,7 @@ function isHabitForToday(habit) {
 /**
  * @returns list of habit objects representing habits that need to be completed today
  */
-function getHabitsForToday() {
+export function getHabitsForToday() {
   let habits = getAllHabits();
   let today_habits = [];
   let today = new Date();
