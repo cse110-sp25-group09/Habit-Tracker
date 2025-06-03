@@ -29,10 +29,12 @@ export function reviveHabit(key, value) {
     newValue = Date.toLocaleString(newValue); //Gets rid of nonstandard date formatting
   }
   if (isNaN(newValue)) {
+
     // console.log(key);
     // console.log(value);
     //throw new Error('Invalid habit object');
     return value;
+
   }
   if (key == 'log') {
     value.forEach((element) => {
@@ -112,7 +114,7 @@ export function readHabit(habitID, adapter = localStorageAdapter) {
  */
 export function updateHabit(habitID, fields, newValues) {
   //check that fields and newValues are the same length
-  if (fields.length != newValues.length) {
+  if (fields.length !== newValues.length) {
     throw new Error('fields and newValues must have the same length');
   }
   const stringFields = new Set('habitName', 'habitDescription');
@@ -146,6 +148,7 @@ export function updateHabit(habitID, fields, newValues) {
  */
 export function deleteHabit(cardID, adapter = localStorageAdapter) {
   adapter.del(cardID);
+
 }
 
 
@@ -163,11 +166,13 @@ export function getAllHabits(adapter = localStorageAdapter) {
   let curHabitObject;
   while (i--) {
     curHabitObject = adapter.get(keys[i]);
+
     //console.log(curHabitObject);
     curHabitObject = JSON.parse(curHabitObject, reviveHabit);
     // console.log(curHabitObject);
 
     habits.push([keys[i], curHabitObject]);
+
   }
   return habits;
 }
@@ -179,7 +184,9 @@ export function getAllHabits(adapter = localStorageAdapter) {
  * @returns a habit object
  */
 export function getHabitById(habitID, adapter = localStorageAdapter) {
+
   let habit = adapter.get(habitID);
+
   return JSON.parse(habit, reviveHabit);
 }
 
@@ -200,7 +207,7 @@ function calculateStreak(habit) {
   //Date.parse() is very format permissive, this needs to be tested thoroughly
   logs.forEach((element) => {
     ms = Date.parse(element);
-    if (ms == NaN) {
+    if (isNaN(ms)) {
       throw new Error(typeErrorTemplate(logs, typeof ms));
     }
     msLogs.push(ms);
@@ -211,7 +218,7 @@ function calculateStreak(habit) {
   let exp = Math.floor(Date.now() / DAYINMS);
 
   for (let i = -2; i >= -1 * logs.length; i--) {
-    if (Math.floor(logs[i]) != exp) {
+    if (Math.floor(logs[i]) !== exp) {
       return streak;
     } else {
       streak++;
@@ -223,10 +230,9 @@ function calculateStreak(habit) {
 /**
  *
  * @param {String} habitID - the string ID of the habit being deleted
- * @param {Object} adapter defaults to localStorageAdapter, allows us to pass in other storage methods
  * @returns {boolean} true if habit completion is logged successfully, false otherwise
  */
-function logHabitCompleted(habitID, adapter = localStorageAdapter) {
+function logHabitCompleted(habitID) {
   let habit = getHabitById(habitID);
   if (habit) {
     habit.streak = calculateStreak(habits[idx]);
@@ -245,14 +251,16 @@ function logHabitCompleted(habitID, adapter = localStorageAdapter) {
 function isHabitForToday(habit) {
   let currentDate = new Date();
   let msStartDate = Date.parse(habit.startDateTime);
-  if (habit.logs[-1] == currentDate.toDateString()) {
+  if (habit.logs[-1] === currentDate.toDateString()) {
     return false;
   }
+
   
   let daysDiff = Math.floor((currentDate - msStartDate)/DAYINMS);
   // console.log(daysDiff);
   // console.log(habit.habitFrequency);
   if (daysDiff % habit.habitFrequency != 0) {
+
     return false;
   }
   return true;
@@ -273,12 +281,15 @@ export function getHabitsForToday() {
   //let curr_date = habit.startDateTime;
   let curr_date;
   for (let i = 0; i < habits.length; i++) {
+
     if (isHabitForToday(habits[i][1])) {
       curr_date = habits[i][1].startDateTime;
       curr_date = new Date(Date.parse(curr_date));
       if (curr_date == NaN) {
+
         throw new Error('Invalid type for habit.startDateTime');
       }
+      curr_date = new Date(curr_date);
       curr_date.setHours(0, 0, 0, 0);
       today_habits.push(habits[i]);
     }
