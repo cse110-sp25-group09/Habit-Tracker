@@ -29,12 +29,10 @@ export function reviveHabit(key, value) {
     newValue = Date.toLocaleString(newValue); //Gets rid of nonstandard date formatting
   }
   if (isNaN(newValue)) {
-
     // console.log(key);
     // console.log(value);
     //throw new Error('Invalid habit object');
     return value;
-
   }
   if (key == 'log') {
     value.forEach((element) => {
@@ -61,7 +59,7 @@ export function createHabit(
   habitName,
   habitDescription,
   habitFrequency,
-  startDateTime= new Date().toLocaleString(),
+  startDateTime = new Date().toLocaleString(),
   adapter = localStorageAdapter,
 ) {
   if (typeof habitName != 'string') {
@@ -148,9 +146,7 @@ export function updateHabit(habitID, fields, newValues) {
  */
 export function deleteHabit(cardID, adapter = localStorageAdapter) {
   adapter.del(cardID);
-
 }
-
 
 /**
  * @param adapter {Object} defaults to localStorageAdapter, allows us to pass in other storage methods
@@ -172,7 +168,6 @@ export function getAllHabits(adapter = localStorageAdapter) {
     // console.log(curHabitObject);
 
     habits.push([keys[i], curHabitObject]);
-
   }
   return habits;
 }
@@ -184,7 +179,6 @@ export function getAllHabits(adapter = localStorageAdapter) {
  * @returns a habit object
  */
 export function getHabitById(habitID, adapter = localStorageAdapter) {
-
   let habit = adapter.get(habitID);
 
   return JSON.parse(habit, reviveHabit);
@@ -255,12 +249,10 @@ function isHabitForToday(habit) {
     return false;
   }
 
-  
-  let daysDiff = Math.floor((currentDate - msStartDate)/DAYINMS);
+  let daysDiff = Math.floor((currentDate - msStartDate) / DAYINMS);
   // console.log(daysDiff);
   // console.log(habit.habitFrequency);
   if (daysDiff % habit.habitFrequency != 0) {
-
     return false;
   }
   return true;
@@ -272,7 +264,7 @@ function isHabitForToday(habit) {
 export function getHabitsForToday() {
   let habits = getAllHabits();
   //console.log(habits);
-  if (!habits){
+  if (!habits) {
     return [];
   }
   let today_habits = [];
@@ -281,12 +273,10 @@ export function getHabitsForToday() {
   //let curr_date = habit.startDateTime;
   let curr_date;
   for (let i = 0; i < habits.length; i++) {
-
     if (isHabitForToday(habits[i][1])) {
       curr_date = habits[i][1].startDateTime;
       curr_date = new Date(Date.parse(curr_date));
       if (curr_date == NaN) {
-
         throw new Error('Invalid type for habit.startDateTime');
       }
       curr_date = new Date(curr_date);

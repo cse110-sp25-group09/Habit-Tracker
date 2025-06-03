@@ -1,6 +1,6 @@
 //below is the code for the menu bar
 // Wait for the DOM to load before referencing elements
-import { getHabitsForToday, createHabit, deleteHabit } from "./CRUD.js";
+import { getHabitsForToday, createHabit, deleteHabit } from './CRUD.js';
 
 document.addEventListener('DOMContentLoaded', function () {
   const home_select = document.getElementById('home-selection');
@@ -29,7 +29,6 @@ document.addEventListener('DOMContentLoaded', function () {
     .addEventListener('click', function (event) {
       window.location.href = 'daily-calendar.html';
     });
-
 
   document
     .getElementById('monthly-option')
@@ -304,7 +303,7 @@ document.getElementById('submit-habit').addEventListener('click', () => {
   const frequency = document.getElementById('habit-frequency').value;
   const descr = document.getElementById('habitDescription').value;
   const timeStr = document.getElementById('habit-time').value;
-  let time_dict = {"Daily":1, "Weekly":7, "Monthly":30};
+  let time_dict = { Daily: 1, Weekly: 7, Monthly: 30 };
 
   let streak = 0;
 
@@ -330,7 +329,6 @@ document.getElementById('submit-habit').addEventListener('click', () => {
 
   document.getElementById('habit-form').style.display = 'none';
 });
-
 
 window.addEventListener('DOMContentLoaded', () => {
   const body = document.body;
@@ -359,4 +357,3 @@ function populateCards() {
 
 // mark as complete / change color / add check
 //delete = delete id and populate
-
