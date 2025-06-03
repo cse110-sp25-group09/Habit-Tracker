@@ -59,7 +59,8 @@ Status(Planned):
 - Dependency Vulnerability Scan
 
 Status(In-Progress Items)
-- Updating function testing 
+
+- Updating function testing
 - Creating proper tags for the Pull Request Review Enforcement
 - Improving Documentation Generation with JSDoc
 
