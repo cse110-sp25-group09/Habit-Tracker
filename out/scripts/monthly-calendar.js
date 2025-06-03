@@ -1,5 +1,5 @@
 //Menu Navigation Bar
-
+import { ratioOfCompleted } from './CRUD.js';
 
 const home_select = document.getElementById('home-selection');
 const daily_calendar_select = document.getElementById(
@@ -37,7 +37,7 @@ export const monthNames = [
   'December',
 ];
 
-function updateDayCompletion(dayElement, tasksCompleted, totalTasks = 10) {
+function updateDayCompletion(dayElement, tasksCompleted, totalTasks) {
   // Clear old completion classes
   dayElement.classList.remove("completed-day", "completed-one", "completed-half");
 
@@ -103,9 +103,13 @@ export function generateCalendar(year) {
       if (day === todayDate && month === todayMonth && year === todayYear) {
         dayDiv.classList.add('today');
       }
-
       
-      updateDayCompletion(dayDiv, 1, 5); // Assuming 0 tasks completed for now
+      
+      //console.log(`${day} ${monthNames[month]} ${year}`);
+      let date = new Date(year, month, day);
+      let ratio = ratioOfCompleted(date);
+      
+      updateDayCompletion(dayDiv, ratio[0], ratio[1]); // Assuming 0 tasks completed for now
 
 
 
