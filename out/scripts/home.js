@@ -1,6 +1,6 @@
 //below is the code for the menu bar
 // Wait for the DOM to load before referencing elements
-import { getHabitsForDay, createHabit, deleteHabit } from './CRUD.js';
+import { getHabitsForDay, createHabit, deleteHabit, logHabitCompleted, removeHabitCompletion, isHabitComplete } from './CRUD.js';
 
 document.addEventListener('DOMContentLoaded', function () {
   const home_select = document.getElementById('home-selection');
@@ -181,6 +181,10 @@ class HabitCard extends HTMLElement {
       <div class="flip-card-inner">
         <div class="flip-card-front">
           <h1 id="card_name">${this.getAttribute('card-name') || 'Untitled Habit'}</h1>
+          <label style="margin-top: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+            Complete:
+            <input type="checkbox" class="habit-checkbox" />
+          </label>
         </div>
         <div class="flip-card-back">
 
@@ -254,10 +258,43 @@ class HabitCard extends HTMLElement {
     flipCard.addEventListener('click', () => {
       flipInner.classList.toggle('flipped');
     });
+
+     //listeners for our complete functionality
+    const checkbox = shadow.querySelector('.habit-checkbox');
+    checkbox.addEventListener('change', (e) => {
+      e.stopPropagation();
+      const isChecked = checkbox.checked;
+      const idElement = this.shadowRoot.querySelector('#card_id');
+
+      if(isChecked){
+          if (idElement) {
+            const cardId = idElement.textContent.trim();
+            logHabitCompleted(cardId);
+            // console.log("i got complete");
+            // console.log(cardId);
+            console.log(cardId + "after complete is " + isHabitComplete(cardId));
+
+          }
+      }
+      else{
+          if (idElement) {
+            const cardId = idElement.textContent.trim();
+
+            removeHabitCompletion(cardId);
+            // console.log("i got uncomplete");
+            // console.log(cardId);
+
+          }
+        }
+      });
+
+
   }
 
+   
+
   static get observedAttributes() {
-    return ['card-name'];
+    return ['card-name', '.habit-checkbox'];
   }
 
   connectedCallback() {
@@ -267,6 +304,8 @@ class HabitCard extends HTMLElement {
     const timeEl = this.shadowRoot.getElementById('card_time');
     const streakEl = this.shadowRoot.getElementById('card_streak');
     const idEl = this.shadowRoot.getElementById('card_id');
+    const checkbox = this.shadowRoot.querySelector('.habit-checkbox');
+
 
     if (titleEl) {
       titleEl.textContent = this.getAttribute('card-name') || 'Untitled Habit';
@@ -286,6 +325,9 @@ class HabitCard extends HTMLElement {
     }
     if (idEl) {
       idEl.innerHTML = `${this.getAttribute('card-id') || 'None'} `;
+    }
+    if(checkbox){
+      checkbox.checked = this.getAttribute('card-completed') === 'true';
     }
   }
 }
@@ -345,15 +387,28 @@ function populateCards() {
     //console.log(habits[i][0]);
     //console.log(habits[i]);
     const newCard = document.createElement('habit-card');
+    let freqNum = habits[i][1].habitFrequency;
+    let freqStr = "";
+    if(freqNum==1){
+      freqStr = "Daily";
+    }
+    else if (freqNum==7){
+      freqStr = "Weekly";
+    }
+    else{
+      freqStr = "Monthly";
+    }
     newCard.setAttribute('card-name', habits[i][1].habitName);
-    newCard.setAttribute('card-frequency', habits[i][1].habitFrequency);
+    newCard.setAttribute('card-frequency', freqStr);
     newCard.setAttribute('card-description', habits[i][1].habitDescription);
     newCard.setAttribute('card-time', habits[i][1].startDateTime);
     newCard.setAttribute('card-streak', habits[i][1].habitStreak);
     newCard.setAttribute('card-id', habits[i][0]);
+    newCard.setAttribute('card-completed', isHabitComplete(habits[i][0]) ? 'true' : 'false');
+    console.log(habits[i][0] + "is" + isHabitComplete(habits[i][0]));
     document.getElementById('card-container').appendChild(newCard);
   }
 }
 
-// mark as complete / change color / add check
-//delete = delete id and populate
+
+

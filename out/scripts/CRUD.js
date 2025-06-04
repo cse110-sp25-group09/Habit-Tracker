@@ -226,7 +226,7 @@ function calculateStreak(habit) {
   }
 }
 
-function isHabitComplete(habitID, day = new Date()) {
+export function isHabitComplete(habitID, day = new Date()) {
   let habit = getHabitById(habitID);
 
   if (habit.logs.length === 0) {
@@ -253,22 +253,23 @@ function isHabitComplete(habitID, day = new Date()) {
  * @param {String} habitID - the string ID of the habit being deleted
  * @returns {boolean} true if habit completion is logged successfully, false otherwise
  */
-function logHabitCompleted(habitID) {
+export function logHabitCompleted(habitID) {
   let habit = getHabitById(habitID);
   if (habit) {
     habit.logs.push(new Date().toLocaleString());
     habit.streak = calculateStreak(habit);
-    //return true;
+    return true;
   }
   throw new Error('Invalid habit passed');
   //return false; // what is the benefit of returning boolean instead of throwing an error in a void function in this context ?
 }
 
-function removeHabitCompletion(habitID) {
+export function removeHabitCompletion(habitID) {
   let habit = getHabitById(habitID);
   if (habit) {
     habit.logs.pop();
     habit.streak = calculateStreak(habit);
+    return true;
   }
   throw new Error('Invalid habit passed');
 }
