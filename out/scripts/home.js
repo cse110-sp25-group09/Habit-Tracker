@@ -340,7 +340,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
 function populateCards() {
   document.getElementById('card-container').innerHTML = '';
-  let habits = getHabitsForToday();
+  let habits = getHabitsForDay();
   for (let i = 0; i < habits.length; i++) {
     //console.log(habits[i][0]);
     //console.log(habits[i]);
