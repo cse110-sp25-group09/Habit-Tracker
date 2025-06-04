@@ -1,6 +1,6 @@
 //below is the code for the menu bar
 // Wait for the DOM to load before referencing elements
-import { getHabitsForToday, createHabit, deleteHabit } from './CRUD.js';
+import { getHabitsForDay, createHabit, deleteHabit } from './CRUD.js';
 
 document.addEventListener('DOMContentLoaded', function () {
   const home_select = document.getElementById('home-selection');
@@ -340,7 +340,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
 function populateCards() {
   document.getElementById('card-container').innerHTML = '';
-  let habits = getHabitsForToday();
+  let habits = getHabitsForDay();
   for (let i = 0; i < habits.length; i++) {
     //console.log(habits[i][0]);
     //console.log(habits[i]);

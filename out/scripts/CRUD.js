@@ -1,4 +1,6 @@
 const DAYINMS = 86400000;
+const uuidRegex =
+  /^id[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 //export { getHabitsForToday, createHabit, deleteHabit } from './CRUD.js';
 
 export const localStorageAdapter = {
@@ -161,7 +163,7 @@ export function getAllHabits(adapter = localStorageAdapter) {
   }
   let curHabitObject;
   while (i--) {
-    if (keys[i] == 'selectedTheme') {
+    if (!uuidRegex.test(keys[i])) {
       continue;
     }
     curHabitObject = adapter.get(keys[i]);
@@ -224,6 +226,28 @@ function calculateStreak(habit) {
   }
 }
 
+function isHabitComplete(habitID, day = new Date()) {
+  let habit = getHabitById(habitID);
+
+  if (habit.logs.length === 0) {
+    return false;
+  }
+  day.setHours(0, 0, 0, 0);
+  for (let completedDay in habit.logs) {
+    completedDay = new Date(completedDay);
+
+    if (completedDay == NaN) {
+      throw new Error('Invalid last completion');
+    }
+    completedDay.setHours(0, 0, 0, 0);
+
+    if (day.getTime() == completedDay.getTime()) {
+      return true;
+    }
+  }
+  return false;
+}
+
 /**
  *
  * @param {String} habitID - the string ID of the habit being deleted
@@ -232,12 +256,21 @@ function calculateStreak(habit) {
 function logHabitCompleted(habitID) {
   let habit = getHabitById(habitID);
   if (habit) {
-    habit.streak = calculateStreak(habits[idx]);
-    let currentDateTime = new Date();
-    habit.log.push(currentDateTime.toDateString());
-    return true;
+    habit.logs.push(new Date().toLocaleString());
+    habit.streak = calculateStreak(habit);
+    //return true;
   }
-  return false; // what is the benefit of returning boolean instead of throwing an error in a void function in this context ?
+  throw new Error('Invalid habit passed');
+  //return false; // what is the benefit of returning boolean instead of throwing an error in a void function in this context ?
+}
+
+function removeHabitCompletion(habitID) {
+  let habit = getHabitById(habitID);
+  if (habit) {
+    habit.logs.pop();
+    habit.streak = calculateStreak(habit);
+  }
+  throw new Error('Invalid habit passed');
 }
 
 /**
@@ -245,7 +278,7 @@ function logHabitCompleted(habitID) {
  * @param {Object} habit a JSON object representing a habit(not a habit string !)
  * @returns
  */
-function isHabitForToday(habit) {
+function isHabitForDay(habit, day) {
   let currentDate = new Date();
   let msStartDate = Date.parse(habit.startDateTime);
   if (habit.logs[-1] === currentDate.toDateString()) {
@@ -264,30 +297,32 @@ function isHabitForToday(habit) {
 /**
  * @returns list of habit objects representing habits that need to be completed today
  */
-export function getHabitsForToday() {
+export function getHabitsForDay(day = new Date()) {
   let habits = getAllHabits();
   //console.log(habits);
   if (!habits) {
     return [];
   }
-  let today_habits = [];
-  let today = new Date();
-  today.setHours(0, 0, 0, 0);
-  //let curr_date = habit.startDateTime;
-  let curr_date;
+  let day_habits = [];
+  day.setHours(0, 0, 0, 0);
   for (let i = 0; i < habits.length; i++) {
-    if (isHabitForToday(habits[i][1])) {
-      curr_date = habits[i][1].startDateTime;
-      curr_date = new Date(Date.parse(curr_date));
-      if (curr_date == NaN) {
-        throw new Error('Invalid type for habit.startDateTime');
-      }
-      curr_date = new Date(curr_date);
-      curr_date.setHours(0, 0, 0, 0);
-      today_habits.push(habits[i]);
+    if (isHabitForDay(habits[i][1], day)) {
+      day_habits.push(habits[i]);
     }
   }
-  return today_habits;
+  return day_habits;
+}
+
+export function ratioOfCompleted(date = new Date()) {
+  let habits_id_pairs = getHabitsForDay(date);
+  let total_count = habits_id_pairs.length;
+  let comp_count = 0;
+  for (let i = 0; i < habits_id_pairs.length; i++) {
+    if (isHabitComplete(habits_id_pairs[i][0], date)) {
+      comp_count += 1;
+    }
+  }
+  return [comp_count, total_count];
 }
 
 /**

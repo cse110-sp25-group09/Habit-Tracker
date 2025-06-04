@@ -1,3 +1,10 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: sans-serif;
+}
+
 body {
   font-family: sans-serif;
   margin: 0;
@@ -8,34 +15,61 @@ body {
   align-items: center;
 }
 
-.header {
+#app-layout {
+  position: relative;
   width: 100%;
-  background-color: #7d8bff;
-  color: white;
-  text-align: center;
-  padding: 2rem;
-  font-size: clamp(1.5rem, 2vw, 2.5rem);
+  max-width: 400px;
+  margin: 0 auto;
+  background-color: white;
+  padding-top: 4rem;
+  padding-bottom: 13rem; /* So footer doesn't overlap */
+}
+
+.header {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 400px;
+
+  background-color: var(--primary-color);
+  padding: 0.75rem;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  color: var(--text-color);
+  z-index: 1000;
 }
 
 .controls {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  justify-content: center;
-  gap: 1rem;
-  margin: 1rem 0;
+  width: 100%;
+  max-width: 400px;
+  padding: 0.5rem;
+  background-color: #f0f4f8;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin: 0.5rem 0;
+  padding-top: 10rem;
+  padding: 0;
+  gap: 0.5rem;
 }
 
 #calendar {
   display: flex;
+  scale: 0.9;
   overflow-x: auto;
   width: 100%;
-  padding: 1rem;
+  padding: 0.5rem 0;
   gap: 2rem;
   scroll-behavior: smooth;
+  box-sizing: border-box;
 }
 
 .month {
-  min-width: min(90vw, 530px);
+  min-width: 100%;
   padding: 1rem;
   box-sizing: border-box;
   scroll-snap-align: start;
@@ -59,14 +93,15 @@ body {
 
 .calendar-grid {
   display: grid;
-  grid-template-columns: repeat(7, 70px);
+  grid-template-columns: repeat(7, 50px);
   grid-auto-rows: 40px;
-  gap: 6px;
+  gap: 7px;
 }
 
 .day-header {
   font-weight: bold;
-  color: #425b72;
+  color: var(--day-header-color);
+  background-color: var(--secondary-bg);
 }
 
 .inactive {
@@ -74,8 +109,8 @@ body {
 }
 
 button {
-  background-color: #7d8bff;
-  color: white;
+  background-color: var(--accent-color);
+  color: var(black);
   border: none;
   padding: 0.5rem 1rem;
   border-radius: 6px;
@@ -84,17 +119,11 @@ button {
 }
 
 button:hover {
-  background-color: #5f6fd6;
+  background-color: var(--button-hover-bg);
 }
 
 button:active {
   transform: scale(0.98);
-}
-
-.today {
-  background-color: #7d8bff;
-  color: white;
-  font-weight: bold;
 }
 
 /* viewport */
@@ -132,12 +161,10 @@ button:active {
   align-items: center;
   width: 100%;
   max-width: 400px;
-  background-color: #7c8efc;
+  background-color: var(--primary-color);
   padding: 0.75rem 0;
   z-index: 999;
   box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
-  border-top-left-radius: 12px;
-  border-top-right-radius: 12px;
 }
 
 .nav-item {
@@ -149,4 +176,20 @@ button:active {
   width: 28px;
   height: 28px;
   filter: brightness(0) invert(1);
+}
+
+.completed-day {
+  background-color: var(--completed-day-color);
+  color: white;
+  font-weight: bold;
+}
+.completed-one {
+  background-color: var(--completed-one-color);
+  color: white;
+  font-weight: bold;
+}
+.completed-half {
+  background-color: var(--completed-half-color);
+  color: white;
+  font-weight: bold;
 }
