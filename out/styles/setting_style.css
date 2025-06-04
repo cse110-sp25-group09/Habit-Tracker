@@ -9,7 +9,12 @@ body {
   background-color: var(--background-color);
   color: var(--setting-text-color);
 }
-
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
 .header {
   justify-content: space-around;
   align-items: center;
@@ -21,6 +26,9 @@ body {
   max-width: auto;
   display: flex;
   color: var(--text-color);
+  opacity: 0;
+  transform: translateY(-20px);
+  animation: fadeInUp 0.5s ease-out forwards;
 }
 
 .nav-bar {
@@ -29,15 +37,15 @@ body {
   align-items: center;
   width: 100%;
   background-color: var(--primary-color);
-  padding-left: 100px;
-  padding-right: 100px;
-  padding-top: 0.75rem;
-  padding-bottom: 0.75rem;
+  padding: 0.75rem 0;
   z-index: 1;
   position: fixed;
   bottom: 0;
   margin: auto;
   max-width: auto;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 0.5s ease-out forwards;
 }
 
 .nav-item {
@@ -61,6 +69,9 @@ body {
   justify-content: left;
   padding-top: 100px; /* Adjust based on header height */
   font-size: 1.2rem;
+  opacity: 0;
+  transform: translateX(-20px);
+  animation: fadeInUp 1s ease-out forwards;
 }
 
 .theme-selection {

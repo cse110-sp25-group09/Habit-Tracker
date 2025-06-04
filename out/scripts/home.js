@@ -50,6 +50,10 @@ class HabitCard extends HTMLElement {
 
     shadow.innerHTML = `
     <style>
+      *{
+        font-family: 'Commissioner', sans-serif;
+        box-sizing: border-box;
+      } 
       .flip-card {
         background-color: transparent;
         perspective: 1000px;
@@ -102,7 +106,6 @@ class HabitCard extends HTMLElement {
         background-color: var(--back-card-color);
         color: var(--text-color-back-of-card);
         transform: rotateY(180deg);
-        
        
       }
 
@@ -119,7 +122,7 @@ class HabitCard extends HTMLElement {
       .flip-card-back p {
         margin: 0.5em 0;
         font-size: 0.75em;
-        line-height: 1.4;
+        line-height: 1.2;
         max-width: 90%;
         word-wrap: break-word;
         word-break: break-word;
