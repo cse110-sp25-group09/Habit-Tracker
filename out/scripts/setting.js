@@ -1,6 +1,6 @@
 const themeSelect = document.getElementById('theme-select');
 const body = document.body; // Add this line!
-
+import { localStorageAdapter } from '/out/scripts/crud.js';
 // On change, save the selection
 themeSelect.addEventListener('change', (e) => {
   const selectedTheme = e.target.value;
@@ -60,5 +60,30 @@ document.addEventListener('DOMContentLoaded', function () {
   // Settings button navigation
   settings_select.addEventListener('click', () => {
     window.location.href = 'settings.html';
+  });
+
+  // Reset Cards logic
+  const resetButton = document.getElementById('reset-cards');
+  resetButton.addEventListener('click', () => {
+    const confirmReset = window.confirm(
+      'Are you sure you want to delete all your cards? This action cannot be undone.',
+    );
+
+    if (confirmReset) {
+      // Loop through all keys and delete only the ones matching UUID pattern
+      const keys = localStorageAdapter.keys();
+      const uuidRegex =
+        /^id[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
+      keys.forEach((key) => {
+        if (uuidRegex.test(key)) {
+          localStorageAdapter.del(key);
+        }
+      });
+
+      alert('All cards have been reset.');
+      // Optionally reload or redirect
+      window.location.reload();
+    }
   });
 });
