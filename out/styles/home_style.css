@@ -31,13 +31,13 @@
   font-size: 1.5rem;
 }
 
-h2{
+h2 {
   background: var(--gradient-color);
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
-h4{
+h4 {
   font-size: 1.5rem;
   font-weight: 600;
   color: grey;
