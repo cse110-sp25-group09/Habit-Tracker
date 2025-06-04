@@ -1,6 +1,6 @@
 //below is the code for the menu bar
 // Wait for the DOM to load before referencing elements
-import { getHabitsForToday, createHabit, deleteHabit } from './CRUD.js';
+import { getHabitsForDay, createHabit, deleteHabit } from './CRUD.js';
 
 document.addEventListener('DOMContentLoaded', function () {
   const home_select = document.getElementById('home-selection');
