@@ -416,7 +416,6 @@ function populateCards() {
       'card-completed',
       isHabitComplete(habits[i][0]) ? 'true' : 'false',
     );
-    console.log(habits[i][0] + 'is' + isHabitComplete(habits[i][0]));
     document.getElementById('card-container').appendChild(newCard);
   }
 }
