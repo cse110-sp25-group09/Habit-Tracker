@@ -265,6 +265,8 @@ class HabitCard extends HTMLElement {
       e.stopPropagation();
       const isChecked = checkbox.checked;
       const idElement = this.shadowRoot.querySelector('#card_id');
+      const cardFront = this.shadowRoot.querySelector(`#card-front-id`);
+
 
       if(isChecked){
           if (idElement) {
@@ -272,7 +274,10 @@ class HabitCard extends HTMLElement {
             logHabitCompleted(cardId);
             // console.log("i got complete");
             // console.log(cardId);
-            console.log(cardId + "after complete is " + isHabitComplete(cardId));
+            // console.log(cardId + "after complete is " + isHabitComplete(cardId));
+            if(cardFront){
+              cardFront.style.background = getComputedStyle(document.documentElement).getPropertyValue('--streak-color');
+            }
 
           }
       }
@@ -283,6 +288,9 @@ class HabitCard extends HTMLElement {
             removeHabitCompletion(cardId);
             // console.log("i got uncomplete");
             // console.log(cardId);
+            if(cardFront){
+              cardFront.style.background = getComputedStyle(document.documentElement).getPropertyValue('--card-color');
+            }
 
           }
         }
