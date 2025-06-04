@@ -2,7 +2,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: sans-serif;
+  font-family: 'Commissioner', sans-serif;
 }
 
 .app-header {
@@ -13,17 +13,42 @@
   padding: 0.75rem;
   position: fixed;
   margin: auto;
-  max-width: 400px;
+  max-width: auto;
   display: flex;
   color: var(--text-color);
 }
+.app-subheader {
+  justify-content: left;
+  align-items: left;
+  height: auto;
+  width: 100%;
+  padding-top: 5rem;
+  padding-left: 1rem;
+  padding-bottom: 1rem;
+  position: fixed;
+  max-width: auto;
+  display: block;
+  font-size: 1.5rem;
+}
 
+h2{
+  background: var(--gradient-color);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+h4{
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: grey;
+  line-height: 2;
+}
 body {
   background-color: var(--background-color);
 }
 
 .app {
-  max-width: 400px;
+  max-width: auto;
   margin: auto;
   background-color: var(--app-background-color);
   display: flex;
@@ -59,7 +84,7 @@ body {
   position: fixed;
   bottom: 0;
   margin: auto;
-  max-width: 400px;
+  max-width: auto;
   z-index: 200;
 }
 
@@ -93,11 +118,15 @@ body {
 
 #card-container {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-  padding: 3.5rem;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: flex-start;
+  min-height: auto;
+  width: 100%;
+  margin-top: 8rem;
+  padding: 3rem;
+  padding-left: 1rem;
 }
 
 #submit-habit {
