@@ -227,23 +227,14 @@ function calculateStreak(habit) {
 }
 
 export function isHabitComplete(habitID, day = new Date()) {
-  let habit = getHabitById(habitID);
+  const habit = getHabitById(habitID);
+  if (habit.logs.length === 0) return false;
 
-  if (habit.logs.length === 0) {
-    return false;
-  }
   day.setHours(0, 0, 0, 0);
-  for (let completedDay in habit.logs) {
-    completedDay = new Date(completedDay);
-
-    if (completedDay == NaN) {
-      throw new Error('Invalid last completion');
-    }
+  for (const log of habit.logs) {
+    const completedDay = new Date(log);
     completedDay.setHours(0, 0, 0, 0);
-
-    if (day.getTime() == completedDay.getTime()) {
-      return true;
-    }
+    if (day.getTime() === completedDay.getTime()) return true;
   }
   return false;
 }
@@ -258,6 +249,8 @@ export function logHabitCompleted(habitID) {
   if (habit) {
     habit.logs.push(new Date().toLocaleString());
     habit.streak = calculateStreak(habit);
+    localStorage.setItem(habitID, JSON.stringify(habit));
+
     return true;
   }
   throw new Error('Invalid habit passed');
