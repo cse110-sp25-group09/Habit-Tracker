@@ -236,8 +236,10 @@ function showDetailedView() {
   cardsHidden = true;
 
   const habits = getStoredHabits();
-  const activeHabits = habits.filter(habit => isHabitActiveOnDate(habit, currentDate));
-  
+  const activeHabits = habits.filter((habit) =>
+    isHabitActiveOnDate(habit, currentDate),
+  );
+
   if (activeHabits.length === 0) {
     console.log('No habits for today');
     return;
@@ -287,7 +289,7 @@ function showDetailedView() {
     <div style="margin-bottom: 20px;">
   `;
 
-  activeHabits.forEach(habit => {
+  activeHabits.forEach((habit) => {
     const isCompleted = isHabitCompletedOnDate(habit, currentDate);
     detailHTML += `
       <div class="habit-detail-item" data-id="${habit.id}" style="
@@ -343,14 +345,16 @@ function showDetailedView() {
   document.body.appendChild(overlay);
 
   // Add event listeners
-  document.getElementById('close-detail').addEventListener('click', closeDetailedView);
+  document
+    .getElementById('close-detail')
+    .addEventListener('click', closeDetailedView);
   overlay.addEventListener('click', (e) => {
     if (e.target === overlay) closeDetailedView();
   });
 
   // Add habit toggle listeners
-  document.querySelectorAll('.habit-detail-item').forEach(item => {
-    item.addEventListener('click', function() {
+  document.querySelectorAll('.habit-detail-item').forEach((item) => {
+    item.addEventListener('click', function () {
       const habitId = this.getAttribute('data-id');
       toggleHabitCompletion(habitId);
     });
@@ -363,7 +367,7 @@ function closeDetailedView() {
   if (overlay) {
     overlay.remove();
   }
-  
+
   // Show the calendar cards again
   const calendarContainer = document.querySelector('.calendar-container');
   calendarContainer.style.display = 'flex';
@@ -373,7 +377,7 @@ function closeDetailedView() {
 // Toggle habit completion
 function toggleHabitCompletion(habitId) {
   const habits = getStoredHabits();
-  const habit = habits.find(h => h.id === habitId);
+  const habit = habits.find((h) => h.id === habitId);
   if (!habit) return;
 
   const dateStr = currentDate.toDateString();
@@ -381,7 +385,7 @@ function toggleHabitCompletion(habitId) {
 
   if (isHabitCompletedOnDate(habit, currentDate)) {
     // Remove completion
-    habit.logs = habit.logs.filter(d => d !== dateStr);
+    habit.logs = habit.logs.filter((d) => d !== dateStr);
   } else {
     // Add completion
     habit.logs.push(dateStr);
@@ -392,7 +396,7 @@ function toggleHabitCompletion(habitId) {
 
   // Update UI
   updateHabitsForDays();
-  
+
   // Refresh the detailed view
   closeDetailedView();
   setTimeout(() => showDetailedView(), 100);
@@ -441,12 +445,12 @@ function setupEventListeners() {
   document
     .getElementById('prev-day')
     .addEventListener('click', () => handleDayClick(-1));
-  
+
   // Current day click handler
   document
     .getElementById('current-day')
     .addEventListener('click', handleCurrentDayClick);
-    
+
   document
     .getElementById('next-day')
     .addEventListener('click', () => handleDayClick(1));

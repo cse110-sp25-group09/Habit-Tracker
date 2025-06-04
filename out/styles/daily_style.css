@@ -78,9 +78,9 @@ body {
   right: 0;
   bottom: 0;
   background: linear-gradient(
-      45deg,
-      rgba(255, 255, 255, 0.1),
-      rgba(255, 255, 255, 0.05)
+    45deg,
+    rgba(255, 255, 255, 0.1),
+    rgba(255, 255, 255, 0.05)
   );
   border-radius: 15px;
   pointer-events: none;
@@ -178,22 +178,22 @@ body {
 /* Mobile responsiveness */
 @media (max-width: 400px) {
   .calendar-container {
-      gap: 10px;
-      max-width: 320px;
+    gap: 10px;
+    max-width: 320px;
   }
 
   .day-card {
-      width: 100px;
-      height: 140px;
-      font-size: 14px;
+    width: 100px;
+    height: 140px;
+    font-size: 14px;
   }
 
   .day-name {
-      font-size: 16px;
+    font-size: 16px;
   }
 
   .day-date {
-      font-size: 11px;
+    font-size: 11px;
   }
 }
 
@@ -201,6 +201,6 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .day-card,
   .habit-dot {
-      transition: none;
+    transition: none;
   }
 }
