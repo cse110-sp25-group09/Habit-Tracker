@@ -226,24 +226,15 @@ function calculateStreak(habit) {
   }
 }
 
-function isHabitComplete(habitID, day = new Date()) {
-  let habit = getHabitById(habitID);
+export function isHabitComplete(habitID, day = new Date()) {
+  const habit = getHabitById(habitID);
+  if (habit.logs.length === 0) return false;
 
-  if (habit.logs.length === 0) {
-    return false;
-  }
   day.setHours(0, 0, 0, 0);
-  for (let completedDay in habit.logs) {
-    completedDay = new Date(completedDay);
-
-    if (completedDay == NaN) {
-      throw new Error('Invalid last completion');
-    }
+  for (const log of habit.logs) {
+    const completedDay = new Date(log);
     completedDay.setHours(0, 0, 0, 0);
-
-    if (day.getTime() == completedDay.getTime()) {
-      return true;
-    }
+    if (day.getTime() === completedDay.getTime()) return true;
   }
   return false;
 }
@@ -253,22 +244,26 @@ function isHabitComplete(habitID, day = new Date()) {
  * @param {String} habitID - the string ID of the habit being deleted
  * @returns {boolean} true if habit completion is logged successfully, false otherwise
  */
-function logHabitCompleted(habitID) {
+export function logHabitCompleted(habitID) {
   let habit = getHabitById(habitID);
   if (habit) {
     habit.logs.push(new Date().toLocaleString());
     habit.streak = calculateStreak(habit);
-    //return true;
+    localStorage.setItem(habitID, JSON.stringify(habit));
+
+    return true;
   }
   throw new Error('Invalid habit passed');
   //return false; // what is the benefit of returning boolean instead of throwing an error in a void function in this context ?
 }
 
-function removeHabitCompletion(habitID) {
-  let habit = getHabitById(habitID);
+export function removeHabitCompletion(habitID, adapter = localStorageAdapter) {
+  let habit = getHabitById(habitID, adapter);
   if (habit) {
     habit.logs.pop();
     habit.streak = calculateStreak(habit);
+    adapter.set(habitID, JSON.stringify(habit)); // ← persist update
+    return true;
   }
   throw new Error('Invalid habit passed');
 }

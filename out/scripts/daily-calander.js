@@ -1,8 +1,26 @@
 // Daily Calendar Module for Habit Tracker
 // Handles the three-card carousel display and navigation
 
+// Navigation event listeners
+
+const home_select = document.getElementById('home-selection');
+const calendar_select = document.getElementById('calendar-selection');
+const settings_select = document.getElementById('settings-selection');
+
+home_select?.addEventListener('click', () => {
+  window.location.href = 'home-page.html';
+});
+calendar_select?.addEventListener('click', () => {
+  window.location.href = 'monthly-calendar.html';
+});
+settings_select?.addEventListener('click', () => {
+  window.location.href = 'settings.html';
+});
+
 // Calendar state
 let currentDate = new Date();
+let cardsHidden = false;
+
 const dayNames = [
   'Sunday',
   'Monday',
@@ -29,26 +47,19 @@ const monthNames = [
 
 // Initialize calendar
 function initCalendar() {
-  console.log('Initializing daily calendar...');
-
-  // Debug: Check if required elements exist
-  const requiredElements = ['prev-day', 'current-day', 'next-day'];
-  for (let id of requiredElements) {
-    const element = document.getElementById(id);
-    if (!element) {
-      console.error(`Required element not found: ${id}`);
-      return;
-    }
+  const requiredIds = ['prev-day', 'current-day', 'next-day'];
+  const missing = requiredIds.filter((id) => !document.getElementById(id));
+  if (missing.length > 0) {
+    setTimeout(initCalendar, 100);
+    return;
   }
 
   updateCalendarDisplay();
   updateHabitsForDays();
   setupEventListeners();
-
-  console.log('Daily calendar initialized successfully');
 }
 
-// Update the visual display of the calendar
+// Update the visual display of the three cards
 function updateCalendarDisplay() {
   const prevDate = new Date(currentDate);
   prevDate.setDate(currentDate.getDate() - 1);
@@ -56,86 +67,104 @@ function updateCalendarDisplay() {
   const nextDate = new Date(currentDate);
   nextDate.setDate(currentDate.getDate() + 1);
 
-  // Update previous day
-  const prevCard = document.getElementById('prev-day');
-  prevCard.querySelector('.day-name').textContent = dayNames[prevDate.getDay()];
-  prevCard.querySelector('.day-date').textContent =
-    `${monthNames[prevDate.getMonth()]} ${prevDate.getDate()}`;
+  function fillCard(cardId, dateObj) {
+    const card = document.getElementById(cardId);
+    if (!card) return;
+    const dayNameEl = card.querySelector('.day-name');
+    const dayDateEl = card.querySelector('.day-date');
 
-  // Update current day
-  const currentCard = document.getElementById('current-day');
-  currentCard.querySelector('.day-name').textContent =
-    dayNames[currentDate.getDay()];
-  currentCard.querySelector('.day-date').textContent =
-    `${monthNames[currentDate.getMonth()]} ${currentDate.getDate()}`;
-
-  // Update next day
-  const nextCard = document.getElementById('next-day');
-  nextCard.querySelector('.day-name').textContent = dayNames[nextDate.getDay()];
-  nextCard.querySelector('.day-date').textContent =
-    `${monthNames[nextDate.getMonth()]} ${nextDate.getDate()}`;
-}
-
-// Get habits using the existing CRUD functions
-function getStoredHabits() {
-  // Try to use the existing getAllHabits function if available
-  if (typeof getAllHabits === 'function') {
-    return getAllHabits() || [];
-  }
-
-  // Fallback to direct localStorage access with the structure from your files
-  const habitsData = localStorage.getItem('habits');
-  if (habitsData) {
-    return JSON.parse(habitsData);
-  }
-
-  // Try getting individual habit objects using the CRUD pattern
-  const habits = [];
-  const keys = Object.keys(localStorage);
-  for (let key of keys) {
-    if (key.startsWith('id')) {
-      // Habit IDs start with 'id' based on your CRUD
-      try {
-        const habitData = localStorage.getItem(key);
-        if (habitData) {
-          const habit = JSON.parse(habitData);
-          habit.id = key; // Add the ID to the habit object
-          habits.push(habit);
-        }
-      } catch (e) {
-        console.warn('Failed to parse habit:', key);
-      }
+    if (dayNameEl) {
+      dayNameEl.textContent = dayNames[dateObj.getDay()];
+    }
+    if (dayDateEl) {
+      dayDateEl.textContent = `${monthNames[dateObj.getMonth()]} ${dateObj.getDate()}`;
     }
   }
+
+  fillCard('prev-day', prevDate);
+  fillCard('current-day', currentDate);
+  fillCard('next-day', nextDate);
+}
+
+// Fetch habits with multiple fallbacks
+function getStoredHabits() {
+  if (typeof window.getAllHabits === 'function') {
+    try {
+      const all = window.getAllHabits();
+      if (Array.isArray(all)) return all;
+    } catch {}
+  }
+
+  try {
+    const rawAll = localStorage.getItem('habits');
+    if (rawAll) {
+      const parsed = JSON.parse(rawAll);
+      if (Array.isArray(parsed)) return parsed;
+    }
+  } catch {}
+
+  const habits = [];
+  try {
+    Object.keys(localStorage).forEach((key) => {
+      if (key.startsWith('id')) {
+        try {
+          const raw = localStorage.getItem(key);
+          if (raw) {
+            const h = JSON.parse(raw);
+            h.id = key;
+            habits.push(h);
+          }
+        } catch {}
+      }
+    });
+  } catch {}
   return habits;
 }
 
-// Check if a habit should be active on a given date based on your CRUD structure
+// Check if habit is active on date
 function isHabitActiveOnDate(habit, date) {
-  // Use startDateTime from your CRUD structure
-  const habitStart = new Date(habit.startDateTime || Date.now());
-  const daysDiff = Math.floor((date - habitStart) / (1000 * 60 * 60 * 24));
+  try {
+    const checkDate = new Date(date);
+    checkDate.setHours(0, 0, 0, 0);
+    const todayZero = new Date();
+    todayZero.setHours(0, 0, 0, 0);
 
-  // Use habitFrequency from your CRUD structure
-  const frequencyDays = parseInt(habit.habitFrequency) || 1;
+    if (
+      checkDate.getTime() === todayZero.getTime() &&
+      typeof window.isHabitForToday === 'function'
+    ) {
+      try {
+        return window.isHabitForToday(habit);
+      } catch {}
+    }
 
-  return daysDiff >= 0 && daysDiff % frequencyDays === 0;
+    const start = new Date(habit.startDateTime);
+    if (isNaN(start.getTime())) return false;
+
+    const diffMs = date.getTime() - start.getTime();
+    const daysDiff = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+    const freq = parseInt(habit.habitFrequency, 10) || 1;
+    return daysDiff >= 0 && daysDiff % freq === 0;
+  } catch {
+    return false;
+  }
 }
 
-// Check if a habit was completed on a specific date using your log structure
+// Check if habit is completed on date
 function isHabitCompletedOnDate(habit, date) {
-  const dateStr = date.toDateString();
-  // Use the logs array from your CRUD structure
-  return habit.logs && habit.logs.includes(dateStr);
+  try {
+    const dateStr = date.toDateString();
+    return Array.isArray(habit.logs) && habit.logs.includes(dateStr);
+  } catch {
+    return false;
+  }
 }
 
-// Update habit indicators for all three days
+// Update habit indicators
 function updateHabitsForDays() {
   const habits = getStoredHabits();
-
   const prevDate = new Date(currentDate);
   prevDate.setDate(currentDate.getDate() - 1);
-
   const nextDate = new Date(currentDate);
   nextDate.setDate(currentDate.getDate() + 1);
 
@@ -144,147 +173,351 @@ function updateHabitsForDays() {
   updateHabitIndicators('next-habits', habits, nextDate);
 }
 
-// Update habit indicators for a specific day
-function updateHabitIndicators(elementId, habits, date) {
-  const container = document.getElementById(elementId);
-  if (!container) {
-    console.warn(`Container not found: ${elementId}`);
-    return;
-  }
-
+function updateHabitIndicators(containerId, habits, date) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
   container.innerHTML = '';
 
-  console.log(
-    `Updating habits for ${elementId}:`,
-    habits.length,
-    'habits found',
-  );
-
-  const activeHabits = habits.filter((habit) =>
-    isHabitActiveOnDate(habit, date),
-  );
-  console.log(`Active habits for ${date.toDateString()}:`, activeHabits.length);
-
-  activeHabits.forEach((habit, index) => {
+  const activeList = habits.filter((h) => isHabitActiveOnDate(h, date));
+  activeList.forEach((habit) => {
     const dot = document.createElement('div');
     dot.classList.add('habit-dot');
-
-    if (isHabitCompletedOnDate(habit, date)) {
-      dot.classList.add('completed');
-      console.log(
-        `Habit ${habit.habitName || habit.name || index} completed on ${date.toDateString()}`,
-      );
-    } else {
-      dot.classList.add('pending');
-      console.log(
-        `Habit ${habit.habitName || habit.name || index} pending on ${date.toDateString()}`,
-      );
-    }
-
-    // Add title for debugging
-    dot.title = habit.habitName || habit.name || `Habit ${index + 1}`;
-
+    dot.classList.add(
+      isHabitCompletedOnDate(habit, date) ? 'completed' : 'pending',
+    );
+    dot.title = habit.habitName || 'Unnamed Habit';
     container.appendChild(dot);
   });
 }
 
-// Navigate the calendar
+// Navigate calendar
 function navigateCalendar(direction) {
-  currentDate.setDate(currentDate.getDate() + direction);
+  const newDate = new Date(currentDate);
+  newDate.setDate(newDate.getDate() + direction);
+  currentDate = newDate;
   updateCalendarDisplay();
   updateHabitsForDays();
 }
 
-// Handle day card clicks
-function handleDayClick(dayOffset) {
-  const targetDate = new Date(currentDate);
-  targetDate.setDate(currentDate.getDate() + dayOffset);
-  currentDate = targetDate;
-  updateCalendarDisplay();
-  updateHabitsForDays();
+// Handle day clicks
+function handleDayClick(offset) {
+  navigateCalendar(offset);
 }
 
-// Handle touch/swipe gestures for mobile
+// Show detailed view
+function handleCurrentDayClick() {
+  showDetailedView();
+}
+
+// Build detailed view overlay
+function showDetailedView() {
+  const calend = document.querySelector('.calendar-container');
+  if (calend) calend.style.display = 'none';
+  cardsHidden = true;
+
+  const habits = getStoredHabits();
+  const activeList = habits.filter((h) => isHabitActiveOnDate(h, currentDate));
+
+  const overlay = document.createElement('div');
+  overlay.id = 'habit-detail-overlay';
+  overlay.style.cssText = `
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: #f5f5f5;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 1000;
+  `;
+
+  const contentContainer = document.createElement('div');
+  contentContainer.style.cssText = `
+    max-width: 400px;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  `;
+
+  // Header
+  const header = document.createElement('div');
+  header.style.cssText = `
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    padding: 20px 0;
+    background: #7c8efc;
+    color: white;
+  `;
+
+  const dayNameEl = document.createElement('div');
+  dayNameEl.textContent = dayNames[currentDate.getDay()];
+  dayNameEl.style.cssText = `
+    font-size: 1.5rem;
+    font-weight: 600;
+    line-height: 1.2;
+  `;
+
+  const dateEl = document.createElement('div');
+  dateEl.textContent = `${monthNames[currentDate.getMonth()]} ${currentDate.getDate()}`;
+  dateEl.style.cssText = `
+    font-size: 1rem;
+    line-height: 1.1;
+    margin-top: 5px;
+  `;
+
+  const countEl = document.createElement('div');
+  countEl.textContent = `${activeList.length} habit${activeList.length === 1 ? '' : 's'}`;
+  countEl.style.cssText = `
+    font-size: 0.9rem;
+    opacity: 0.9;
+    margin-top: 8px;
+    line-height: 1.1;
+  `;
+
+  header.appendChild(dayNameEl);
+  header.appendChild(dateEl);
+  header.appendChild(countEl);
+  contentContainer.appendChild(header);
+
+  // Habit cards container
+  const cardContainer = document.createElement('div');
+  cardContainer.style.cssText = `
+    background-color: #fff;
+    width: 100%;
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 0 20px;
+  `;
+
+  if (activeList.length === 0) {
+    const emptyMsg = document.createElement('p');
+    emptyMsg.textContent = 'No habits for this day';
+    emptyMsg.style.cssText = `
+      text-align: center;
+      color: #888;
+      margin-top: 2rem;
+    `;
+    cardContainer.appendChild(emptyMsg);
+  } else {
+    activeList.forEach((habit) => {
+      const isCompleted = isHabitCompletedOnDate(habit, currentDate);
+      const habitCard = document.createElement('div');
+      habitCard.className = 'habit-card';
+      habitCard.style.cssText = `
+        display: flex;
+        align-items: center;
+        padding: 12px;
+        margin: 12px 0;
+        background: ${isCompleted ? '#e8f5e8' : '#f8f8f8'};
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background 0.2s;
+      `;
+      habitCard.dataset.id = habit.id ?? habit.habitId;
+
+      // Add hover effect
+      habitCard.addEventListener('mouseenter', () => {
+        habitCard.style.background = isCompleted ? '#d4f0d4' : '#eeeeee';
+      });
+      habitCard.addEventListener('mouseleave', () => {
+        habitCard.style.background = isCompleted ? '#e8f5e8' : '#f8f8f8';
+      });
+
+      // Checkbox icon
+      const icon = document.createElement('div');
+      icon.style.cssText = `
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: ${isCompleted ? '#4caf50' : '#ddd'};
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        font-size: 12px;
+        margin-right: 12px;
+      `;
+      icon.textContent = isCompleted ? '✓' : '';
+
+      // Habit name
+      const nameDiv = document.createElement('div');
+      nameDiv.style.cssText = `
+        flex-grow: 1;
+        font-weight: 500;
+        color: #333;
+      `;
+      nameDiv.textContent = habit.habitName || 'Unnamed Habit';
+
+      habitCard.appendChild(icon);
+      habitCard.appendChild(nameDiv);
+      habitCard.addEventListener('click', () => {
+        toggleHabitCompletion(habit.id ?? habit.habitId);
+      });
+      cardContainer.appendChild(habitCard);
+    });
+  }
+
+  contentContainer.appendChild(cardContainer);
+
+  // Close button
+  const closeBtn = document.createElement('button');
+  closeBtn.textContent = '✕ Close';
+  closeBtn.style.cssText = `
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 12px 24px;
+    background: #7c8efc;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+  `;
+  closeBtn.addEventListener('click', closeDetailedView);
+  contentContainer.appendChild(closeBtn);
+
+  overlay.appendChild(contentContainer);
+  document.body.appendChild(overlay);
+}
+
+// Close detailed view
+function closeDetailedView() {
+  const overlay = document.getElementById('habit-detail-overlay');
+  if (overlay) overlay.remove();
+
+  const calend = document.querySelector('.calendar-container');
+  if (calend) calend.style.display = 'flex';
+
+  cardsHidden = false;
+}
+
+// Toggle habit completion
+function toggleHabitCompletion(habitId) {
+  if (typeof window.logHabitCompleted === 'function') {
+    try {
+      if (window.logHabitCompleted(habitId)) {
+        refreshUI();
+        return;
+      }
+    } catch {}
+  }
+
+  let habitObj = null;
+  try {
+    if (typeof window.readHabit === 'function') {
+      try {
+        const raw = window.readHabit(habitId);
+        habitObj = raw
+          ? typeof raw === 'string'
+            ? JSON.parse(raw)
+            : raw
+          : null;
+      } catch {}
+    }
+
+    if (!habitObj) {
+      const all = getStoredHabits();
+      habitObj = all.find((h) => (h.id ?? h.habitId) === habitId);
+    }
+
+    if (!habitObj) return;
+
+    const dateStr = currentDate.toDateString();
+    habitObj.logs = Array.isArray(habitObj.logs) ? habitObj.logs : [];
+    const wasCompleted = habitObj.logs.includes(dateStr);
+
+    if (wasCompleted) {
+      habitObj.logs = habitObj.logs.filter((d) => d !== dateStr);
+    } else {
+      habitObj.logs.push(dateStr);
+      if (typeof window.calculateStreak === 'function') {
+        try {
+          habitObj.habitStreak = window.calculateStreak(habitObj);
+        } catch {}
+      }
+    }
+
+    localStorage.setItem(habitId, JSON.stringify(habitObj));
+    refreshUI();
+  } catch {}
+}
+
+// Refresh UI after toggle
+function refreshUI() {
+  updateHabitsForDays();
+  closeDetailedView();
+  setTimeout(showDetailedView, 100);
+}
+
+// Touch handling
 let touchStartX = 0;
 let touchEndX = 0;
 
-function handleTouchStart(event) {
-  touchStartX = event.changedTouches[0].screenX;
+function handleTouchStart(e) {
+  touchStartX = e.changedTouches[0].screenX;
 }
-
-function handleTouchEnd(event) {
-  touchEndX = event.changedTouches[0].screenX;
+function handleTouchEnd(e) {
+  touchEndX = e.changedTouches[0].screenX;
   handleSwipe();
 }
-
 function handleSwipe() {
-  const swipeThreshold = 50;
-  const swipeDistance = touchEndX - touchStartX;
+  const threshold = 50;
+  const dx = touchEndX - touchStartX;
+  if (Math.abs(dx) > threshold) {
+    navigateCalendar(dx > 0 ? -1 : 1);
+  }
+}
 
-  if (Math.abs(swipeDistance) > swipeThreshold) {
-    if (swipeDistance > 0) {
-      navigateCalendar(-1); // Swipe right - go to previous day
-    } else {
-      navigateCalendar(1); // Swipe left - go to next day
+// Keyboard navigation
+function handleKeyDown(e) {
+  if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+    e.preventDefault();
+    navigateCalendar(e.key === 'ArrowLeft' ? -1 : 1);
+
+    if (cardsHidden) {
+      const existing = document.getElementById('habit-detail-overlay');
+      if (existing) existing.remove();
+      showDetailedView();
     }
+  } else if (e.key === 'Escape' && cardsHidden) {
+    e.preventDefault();
+    closeDetailedView();
   }
 }
 
-// Handle keyboard navigation
-function handleKeyDown(event) {
-  if (event.key === 'ArrowLeft') {
-    navigateCalendar(-1);
-  } else if (event.key === 'ArrowRight') {
-    navigateCalendar(1);
-  }
-}
-
-// Setup all event listeners
+// Setup event listeners
 function setupEventListeners() {
-  // Day card click handlers
-  document
-    .getElementById('prev-day')
-    .addEventListener('click', () => handleDayClick(-1));
-  document
-    .getElementById('next-day')
-    .addEventListener('click', () => handleDayClick(1));
+  const prevCard = document.getElementById('prev-day');
+  const currCard = document.getElementById('current-day');
+  const nextCard = document.getElementById('next-day');
 
-  // Keyboard navigation
+  if (prevCard) prevCard.addEventListener('click', () => handleDayClick(-1));
+  if (currCard) currCard.addEventListener('click', handleCurrentDayClick);
+  if (nextCard) nextCard.addEventListener('click', () => handleDayClick(1));
+
   document.addEventListener('keydown', handleKeyDown);
-
-  // Touch/swipe gestures
-  document.addEventListener('touchstart', handleTouchStart);
-  document.addEventListener('touchend', handleTouchEnd);
-
-  // Listen for storage changes to update habit indicators
+  document.addEventListener('touchstart', handleTouchStart, { passive: true });
+  document.addEventListener('touchend', handleTouchEnd, { passive: true });
   window.addEventListener('storage', updateHabitsForDays);
 }
 
-// Initialize the calendar when the page loads
+// Initialize calendar
 document.addEventListener('DOMContentLoaded', initCalendar);
 
-// Expose functions for external use
+// Expose public API
 window.DailyCalendar = {
   navigateCalendar,
   updateHabitsForDays,
   getCurrentDate: () => new Date(currentDate),
   initCalendar,
+  showDetailedView,
+  closeDetailedView,
+  getHabitsForDate: (date) => {
+    const habits = getStoredHabits();
+    return habits.filter((h) => isHabitActiveOnDate(h, date));
+  },
 };
-
-document.addEventListener('DOMContentLoaded', () => {
-  const cards = document.querySelectorAll('.day-card');
-  let activeIndex = 1;
-
-  function updateCards(newIndex) {
-    if (newIndex < 0 || newIndex >= cards.length) return;
-    cards.forEach((card, index) => {
-      card.classList.remove('active', 'inactive');
-      if (index === newIndex) {
-        card.classList.add('active');
-      } else {
-        card.classList.add('inactive');
-      }
-    });
-    activeIndex = newIndex;
-  }
-});

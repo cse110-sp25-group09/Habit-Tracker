@@ -10,7 +10,7 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  max-width: 400px;
+  max-width: auto;
   margin: 0 auto;
   position: relative;
 }
@@ -18,14 +18,15 @@ body {
 .app-header {
   justify-content: space-around;
   align-items: center;
-  width: 100%; /* temp fix */
+  width: 100%;
   background-color: #7c8efc;
   padding: 0.75rem;
   position: fixed;
   margin: auto;
-  max-width: 400px;
+  max-width: auto;
   display: flex;
   color: white;
+  z-index: 101;
 }
 
 .main-content {
@@ -40,33 +41,33 @@ body {
 }
 
 .calendar-container {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  gap: 15px !important;
-  perspective: 1000px !important;
-  width: 100% !important;
-  max-width: 350px !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  perspective: 1000px;
+  width: 100%;
+  max-width: 350px;
   position: relative;
 }
 
 .day-card {
-  width: 120px !important;
-  height: 160px !important;
-  border-radius: 15px !important;
-  display: flex !important;
-  flex-direction: column !important;
-  justify-content: center !important;
-  align-items: center !important;
-  color: white !important;
-  font-size: 16px !important;
-  font-weight: bold !important;
-  cursor: pointer !important;
-  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1) !important;
-  position: relative !important;
-  overflow: hidden !important;
-  backdrop-filter: blur(10px) !important;
+  width: 120px;
+  height: 160px;
+  border-radius: 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
 }
 
 .day-card::before {
@@ -86,24 +87,24 @@ body {
 }
 
 .day-card.active {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
-  transform: scale(1.1) translateZ(0) !important;
-  z-index: 10 !important;
-  box-shadow: 0 15px 30px rgba(102, 126, 234, 0.3) !important;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  transform: scale(1.1) translateZ(0);
+  z-index: 10;
+  box-shadow: 0 15px 30px rgba(102, 126, 234, 0.3);
 }
 
 .day-card.inactive {
-  background: linear-gradient(135deg, #e0e0e0 0%, #c0c0c0 100%) !important;
-  color: #888 !important;
-  transform: scale(0.9) translateZ(-30px) !important;
-  opacity: 0.6 !important;
-  filter: blur(0.5px) !important;
+  background: linear-gradient(135deg, #e0e0e0 0%, #c0c0c0 100%);
+  color: #888;
+  transform: scale(0.9) translateZ(-30px);
+  opacity: 0.6;
+  filter: blur(0.5px);
 }
 
 .day-card.inactive:hover {
-  transform: scale(0.95) translateZ(-20px) !important;
-  opacity: 0.8 !important;
-  filter: blur(0px) !important;
+  transform: scale(0.95) translateZ(-20px);
+  opacity: 0.8;
+  filter: blur(0px);
 }
 
 .day-name {
@@ -153,7 +154,7 @@ body {
   position: fixed;
   bottom: 0;
   margin: auto;
-  max-width: 400px;
+  max-width: auto;
   z-index: 100;
 }
 
@@ -177,14 +178,14 @@ body {
 /* Mobile responsiveness */
 @media (max-width: 400px) {
   .calendar-container {
-    gap: 10px !important;
-    max-width: 320px !important;
+    gap: 10px;
+    max-width: 320px;
   }
 
   .day-card {
-    width: 100px !important;
-    height: 140px !important;
-    font-size: 14px !important;
+    width: 100px;
+    height: 140px;
+    font-size: 14px;
   }
 
   .day-name {
@@ -200,6 +201,6 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .day-card,
   .habit-dot {
-    transition: none !important;
+    transition: none;
   }
 }
