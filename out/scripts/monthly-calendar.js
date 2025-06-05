@@ -155,6 +155,12 @@ export function setupEventListeners() {
 }
 
 window.addEventListener('DOMContentLoaded', () => {
+  const body = document.body;
+  const savedTheme = localStorage.getItem('selectedTheme');
+  if (savedTheme && savedTheme !== 'default') {
+    body.classList.add(`${savedTheme}-theme`);
+  }
   generateCalendar(currentYear);
   setupEventListeners();
+
 });
