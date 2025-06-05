@@ -19,6 +19,7 @@
   opacity: 0;
   transform: translateY(-20px);
   animation: fadeInUp 0.5s ease-out forwards;
+  z-index: 100;
 }
 .app-subheader {
   justify-content: left;
@@ -83,7 +84,7 @@ body {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   position: fixed;
   bottom: 80px;
-  z-index: 10;
+  z-index: 95;
   cursor: pointer;
   opacity: 0;
   animation: fadeInUp 1s ease-out forwards;
@@ -119,19 +120,42 @@ body {
 }
 
 #habit-form {
-  display: none;
   position: fixed;
-  bottom: 140px;
+  bottom: 180px;
   left: 50%;
-  transform: translateX(-50%);
-  background: var(--form-color);
+  background: var(--form-color, #333);
   padding: 1rem;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   border-radius: 1rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
   z-index: 100;
+  transform: translateX(-50%);
   width: 90%;
   max-width: 350px;
+  color: white;
+  text-align: center;
+}
+input[type='text'],
+input[type='textarea'] {
   color: var(--text-color);
+}
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  backdrop-filter: blur(3px);
+  background-color: rgba(0, 0, 0, 0.3); /* optional dim */
+  z-index: 95; /* just behind the modal/form */
+  transition: opacity 0.3s ease;
+  opacity: 1;
+  pointer-events: all;
+}
+
+.overlay.hidden {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
 }
 
 #card-container {
@@ -175,6 +199,7 @@ body {
   color: var(--text-color);
   padding-top: 30px;
   padding-bottom: 30px;
+  margin: 1rem;
   border-radius: 0 0 0 0;
   text-align: center;
   font-weight: bold;
