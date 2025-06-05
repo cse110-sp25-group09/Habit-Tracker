@@ -21,7 +21,9 @@ beforeAll(async () => {
 describe('HabitCard component', () => {
   test('renders name in shadow DOM', () => {
     const el = document.createElement('habit-card');
+    el.setAttribute('card-id', 'test1'); // Required
     el.setAttribute('card-name', 'Read');
+    el.setAttribute('card-completed', 'false'); // Optional but helps full init
     document.body.appendChild(el);
 
     const shadowTitle = el.shadowRoot.getElementById('card_name');
@@ -30,7 +32,9 @@ describe('HabitCard component', () => {
 
   test('renders streak number with orange class', () => {
     const el = document.createElement('habit-card');
+    el.setAttribute('card-id', 'test2'); // Required
     el.setAttribute('card-streak', '5');
+    el.setAttribute('card-completed', 'false'); // To avoid early return
     document.body.appendChild(el);
 
     const streak = el.shadowRoot.getElementById('card_streak');
