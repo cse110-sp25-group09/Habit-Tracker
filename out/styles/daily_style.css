@@ -10,7 +10,7 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  max-width: 400px;
+  max-width: auto;
   margin: 0 auto;
   position: relative;
 }
@@ -23,7 +23,7 @@ body {
   padding: 0.75rem;
   position: fixed;
   margin: auto;
-  max-width: 400px;
+  max-width: auto;
   display: flex;
   color: white;
 }
@@ -153,7 +153,7 @@ body {
   position: fixed;
   bottom: 0;
   margin: auto;
-  max-width: 400px;
+  max-width: auto;
   z-index: 100;
 }
 

@@ -8,7 +8,7 @@
   --back-card-color: #27187e; /*Color of the back of card*/
   --text-color: #f1f2f6; /*Color of the header, text on the form */
   --button-color: #f1f2f6; /* Color of the button text (+) */
-  --app-background-color: #f1f2f6; /*Background color of the app itself */
+  --app-background-color: #ffffff; /*Background color of the app itself */
   --input-border-color: white; /* */
   --completed-day-color: #27187e; /* Color of the completed day */
   --completed-half-color: #aeb8fe; /* Color of the completed half */
@@ -17,6 +17,11 @@
   --setting-text-color: red(0, 0, 0); /* Color of the text in settings*/
   --text-color-front-of-card: white; /* Text color of the front of the card*/
   --text-color-back-of-card: white; /* Text color of the back of the card*/
+  --gradient-color: radial-gradient(
+    116.96% 176.72% at 0% 0%,
+    #758bfd 0%,
+    #27187e 100%
+  ); /* color for welcome text */
   --nav-icon-filter: brightness(0) invert(1);
 }
 
@@ -29,9 +34,9 @@
   --form-color: #ea638c;
   --input-bg-color: #89023e;
   --back-card-color: #ea638c;
-  --text-color: #30343f;
+  --text-color: #ffffff;
   --button-color: white;
-  --app-background-color: #f1f2f6;
+  --app-background-color: #ffffff;
   --input-border-color: #fff;
   --completed-day-color: #89023e;
   --completed-half-color: #ea638c;
@@ -40,6 +45,11 @@
   --setting-text-color: #30343f;
   --text-color-front-of-card: white;
   --text-color-back-of-card: white;
+  --gradient-color: radial-gradient(
+    116.96% 176.72% at 0% 0%,
+    #ea638c 0%,
+    #89023e 100%
+  );
   --nav-icon-filter: brightness(0) invert(1);
 }
 
@@ -54,7 +64,7 @@
   --back-card-color: #00296b;
   --text-color: #ffffff;
   --button-color: white;
-  --app-background-color: #f1f2f6;
+  --app-background-color: #ffffff;
   --input-border-color: #fff;
   --completed-day-color: #00296b;
   --completed-half-color: #1461a9;
@@ -63,5 +73,10 @@
   --setting-text-color: black;
   --text-color-front-of-card: white;
   --text-color-back-of-card: white;
+  --gradient-color: radial-gradient(
+    116.96% 176.72% at 0% 0%,
+    #00509d 0%,
+    #00296b 100%
+  );
   --nav-icon-filter: brightness(0) invert(1);
 }
