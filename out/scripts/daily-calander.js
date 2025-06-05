@@ -492,19 +492,19 @@ function showDetailedView() {
     background-color: #f5f5f5;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: stretch;
     z-index: 1000;
     overflow-y: auto;
   `;
 
   const contentContainer = document.createElement('div');
   contentContainer.style.cssText = `
-    max-width: 500px;
     width: 100%;
     min-height: 100vh;
-    position: relative;
     display: flex;
     flex-direction: column;
+    padding: 0;
+    margin: 0;
   `;
 
   // Header
@@ -536,61 +536,66 @@ function showDetailedView() {
   header.appendChild(countEl);
   contentContainer.appendChild(header);
 
-  // Create hourly schedule
+  // Hourly layout in 2 columns on wide screens
   const scheduleContainer = document.createElement('div');
   scheduleContainer.style.cssText = `
-    background: white;
-    padding: 10px;
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 16px;
+    padding: 16px;
+    box-sizing: border-box;
+    width: 100%;
   `;
 
-  for (let hour = 0; hour < 24; hour++) {
-  const matchingHabits = habits.filter(([_, habit]) => {
-    const time = new Date(habit.startDateTime);
-    return time.getHours() === hour;
-  });
+  const hourSequence = [...Array(24).keys()].slice(6).concat([...Array(6).keys()]);
+  for (const hour of hourSequence) {
+    const matchingHabits = habits.filter(([_, habit]) => {
+      const time = new Date(habit.startDateTime);
+      return time.getHours() === hour;
+    });
 
-  if (matchingHabits.length === 0) continue; // Skip this hour if no habits
+    if (matchingHabits.length === 0) continue;
 
-  const hourBlock = document.createElement('div');
-  hourBlock.style.cssText = `
-    border-top: 1px solid #ddd;
-    padding-top: 8px;
-  `;
+    const hourBlock = document.createElement('div');
+    hourBlock.style.cssText = `
+      border-top: 1px solid #ddd;
+      padding-top: 8px;
+      padding-left: 8px;
+      background: #fff;
+      border-radius: 8px;
+    `;
 
-  const label = document.createElement('div');
-  const ampmHour = hour % 12 === 0 ? 12 : hour % 12;
-  const period = hour < 12 ? 'AM' : 'PM';
-  label.textContent = `${ampmHour}:00 ${period}`;
-  label.style.cssText = `font-weight: bold; color: #555; margin-bottom: 5px;`;
+    const label = document.createElement('div');
+    const ampmHour = hour % 12 === 0 ? 12 : hour % 12;
+    const period = hour < 12 ? 'AM' : 'PM';
+    label.textContent = `${ampmHour}:00 ${period}`;
+    label.style.cssText = `font-weight: bold; color: #555; margin-bottom: 5px;`;
 
-  hourBlock.appendChild(label);
+    hourBlock.appendChild(label);
 
-  matchingHabits.forEach(([habitId, habit]) => {
-    const habitCard = document.createElement('habit-card');
+    matchingHabits.forEach(([habitId, habit]) => {
+      const habitCard = document.createElement('habit-card');
 
-    const freqMap = {
-      1: 'Daily',
-      7: 'Weekly',
-      30: 'Monthly'
-    };
-    const freqStr = freqMap[habit.habitFrequency] || `Every ${habit.habitFrequency} days`;
+      const freqMap = {
+        1: 'Daily',
+        7: 'Weekly',
+        30: 'Monthly'
+      };
+      const freqStr = freqMap[habit.habitFrequency] || `Every ${habit.habitFrequency} days`;
 
-    habitCard.setAttribute('card-name', habit.habitName || 'Untitled Habit');
-    habitCard.setAttribute('card-frequency', freqStr);
-    habitCard.setAttribute('card-description', habit.habitDescription || 'No description');
-    habitCard.setAttribute('card-time', habit.startDateTime || 'No time set');
-    habitCard.setAttribute('card-streak', habit.habitStreak || 0);
-    habitCard.setAttribute('card-id', habitId);
-    habitCard.setAttribute('card-completed', isHabitComplete(habitId, currentDate) ? 'true' : 'false');
+      habitCard.setAttribute('card-name', habit.habitName || 'Untitled Habit');
+      habitCard.setAttribute('card-frequency', freqStr);
+      habitCard.setAttribute('card-description', habit.habitDescription || 'No description');
+      habitCard.setAttribute('card-time', habit.startDateTime || 'No time set');
+      habitCard.setAttribute('card-streak', habit.habitStreak || 0);
+      habitCard.setAttribute('card-id', habitId);
+      habitCard.setAttribute('card-completed', isHabitComplete(habitId, currentDate) ? 'true' : 'false');
 
-    hourBlock.appendChild(habitCard);
-  });
+      hourBlock.appendChild(habitCard);
+    });
 
-  scheduleContainer.appendChild(hourBlock);
-}
+    scheduleContainer.appendChild(hourBlock);
+  }
 
   contentContainer.appendChild(scheduleContainer);
 
@@ -612,6 +617,7 @@ function showDetailedView() {
   overlay.appendChild(contentContainer);
   document.body.appendChild(overlay);
 }
+
 
 // Close detailed view
 function closeDetailedView() {
