@@ -97,6 +97,7 @@ export function createHabit(
 /**
  * @param {String} habitID the string id of the habit being read
  * @param {Object} adapter an object representing our database (currenly only use localStorageAdapter)
+ * @return {String Object} The string encoding of a JSON habit Object
  */
 export function readHabit(habitID, adapter = localStorageAdapter) {
   return adapter.get(habitID);
