@@ -5,6 +5,11 @@
   font-family: sans-serif;
 }
 
+html,
+body {
+  height: 100%;
+}
+
 body {
   font-family: sans-serif;
   margin: 0;
@@ -18,21 +23,21 @@ body {
 #app-layout {
   position: relative;
   width: 100%;
-  max-width: 400px;
+  max-width: 100%;
+  width: 100%;
+  min-height: 100vh;
   margin: 0 auto;
   background-color: white;
   padding-top: 4rem;
-  padding-bottom: 13rem; /* So footer doesn't overlap */
+  padding-bottom: 13rem;
 }
 
 .header {
   position: fixed;
   top: 0;
-  left: 50%;
-  transform: translateX(-50%);
   width: 100%;
-  max-width: 400px;
-
+  max-width: 100%;
+  width: 100%;
   background-color: var(--primary-color);
   padding: 0.75rem;
   display: flex;
@@ -42,12 +47,14 @@ body {
   z-index: 1000;
 }
 
+/* old, stretched control bar
 .controls {
   display: flex;
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  max-width: 400px;
+  max-width: 100%;
+  width: 100%;
   padding: 0.5rem;
   background-color: #f0f4f8;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -55,21 +62,45 @@ body {
   padding-top: 10rem;
   padding: 0;
   gap: 0.5rem;
+} */
+
+.controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: #f0f4f8;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin: 1rem auto;
+  width: 100%;
+  max-width: 700px;
+  gap: 1rem;
+  border-radius: 8px;
+}
+
+.controls .month-label {
+  margin: 0;
+  padding: 0;
 }
 
 #calendar {
   display: flex;
-  scale: 0.9;
-  overflow-x: auto;
-  width: 100%;
-  padding: 0.5rem 0;
+  flex-direction: column;
+  align-items: center;
+  overflow-y: auto;
+  max-height: calc(100vh - 10rem);
   gap: 2rem;
+  padding: 0 1rem 6rem 1rem;
   scroll-behavior: smooth;
   box-sizing: border-box;
+  /* These lines are to hide the scrolling bar */
+  overflow-y: scroll;
+  scrollbar-width: none;
 }
 
 .month {
-  min-width: 100%;
+  width: 100%;
+  max-width: 700px;
   padding: 1rem;
   box-sizing: border-box;
   scroll-snap-align: start;
@@ -78,6 +109,7 @@ body {
 .month-label {
   font-size: clamp(1rem, 1.5vw, 1.2rem);
   font-weight: bold;
+  margin-bottom: 1rem;
 }
 
 .day-header,
@@ -93,9 +125,9 @@ body {
 
 .calendar-grid {
   display: grid;
-  grid-template-columns: repeat(7, 50px);
-  grid-auto-rows: 40px;
-  gap: 7px;
+  grid-template-columns: repeat(7, 1fr);
+  grid-auto-rows: 50px;
+  gap: 10px;
 }
 
 .day-header {
@@ -154,13 +186,14 @@ button:active {
 .nav-bar {
   position: fixed;
   bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
+  /* left: 50%;
+  transform: translateX(-50%); */
   display: flex;
   justify-content: space-around;
   align-items: center;
   width: 100%;
-  max-width: 400px;
+  max-width: 100%;
+  width: 100%;
   background-color: var(--primary-color);
   padding: 0.75rem 0;
   z-index: 999;
