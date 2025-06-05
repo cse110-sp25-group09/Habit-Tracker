@@ -286,6 +286,5 @@ function habitsCompletedOnDay(dateStr) {
   return daysHabits;
 }
 
-isHabit
-logHabitIncomplete()
+
 
