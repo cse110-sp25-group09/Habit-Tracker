@@ -56,167 +56,200 @@ class HabitCard extends HTMLElement {
     const shadow = this.attachShadow({ mode: 'open' });
 
     shadow.innerHTML = `
-    <style>
-      *{
-        font-family: 'Commissioner', sans-serif;
-        box-sizing: border-box;
-      } 
-      .flip-card {
-        background-color: transparent;
-        perspective: 1000px;
-        width: 250px;
-        height: 150px;
-        margin: 1rem;
-        position: relative;
-        cursor: pointer;
-      }
- 
-      .flip-card-inner {
-        width: 100%;
-        height: 100%;
-        transition: transform 0.6s;
-        transform-style: preserve-3d;
-        position: relative;
-      }
- 
-      .flip-card-inner.flipped {
-        transform: rotateY(180deg);
-      }
-
-      .flip-card-front,
-      .flip-card-back {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        border-radius: 1rem;
-        padding: 1rem;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-        font-family: sans-serif;
-        box-sizing: border-box;
-        backface-visibility: hidden;
-        overflow: hidden;
-
-      }
- 
-      .flip-card-front {
-        background: var(--card-color);
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
-        color: var(--text-color-front-of-card);
-      }
- 
-      .flip-card-back {
-        background-color: var(--back-card-color);
-        color: var(--text-color-back-of-card);
-        transform: rotateY(180deg);
-       
-      }
+   <style>
+     *{
+       font-family: 'Commissioner', sans-serif;
+       box-sizing: border-box;
+     }
+     .flip-card {
+       background-color: transparent;
+       perspective: 1000px;
+       width: 250px;
+       height: 150px;
+       margin: 1rem;
+       position: relative;
+       cursor: pointer;
+     }
+     .flip-card-inner {
+       width: 100%;
+       height: 100%;
+       transition: transform 0.6s;
+       transform-style: preserve-3d;
+       position: relative;
+     }
+     .flip-card-inner.flipped {
+       transform: rotateY(180deg);
+     }
 
 
-      #card_name {
-        font-size: 2em;
-        text-align: center;
-      }
+     .flip-card-front,
+     .flip-card-back {
+       position: absolute;
+       top: 0;
+       left: 0;
+       width: 100%;
+       height: 100%;
+       border-radius: 1rem;
+       padding: 1rem;
+       display: flex;
+       justify-content: center;
+       align-items: center;
+       flex-direction: column;
+       font-family: sans-serif;
+       box-sizing: border-box;
+       backface-visibility: hidden;
+       overflow: hidden;
 
 
-      #card_frequency {
-      font-family: sans-serif;
-      }
-      .flip-card-back p {
-        margin: 0.5em 0;
-        font-size: 0.75em;
-        line-height: 1.2;
-        max-width: 90%;
-        word-wrap: break-word;
-        word-break: break-word;
-      }
-      .streak_number{
-        color: var(--streak-color);
-        font-weight:bold;
-      }
+     }
+     .flip-card-front {
+       background: var(--card-color);
+       box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+       color: var(--text-color-front-of-card);
+     }
 
-      .delete-container {
-        margin-top: 0.1em;
-        text-align: center;
-      }
 
-      .delete-btn {
-        background: transparent;
-        color: white;
-        border: none;
-        font-size: 0.9em;
-        cursor: pointer;
-      }
+     .flip-card-front.completed {
+       background: var(--streak-card-color);
+     }
+     .flip-card-front.not-completed {
+       background: var(--card-color);
+       box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+       color: var(--text-color-front-of-card);
+     }
 
-      .confirm-dialog {
-        margin-top: 0.5em;
-        display: flex;
-        margin-bottom: 0.5em;
-        font-size: 0.9em;
 
-      }
-
-      .confirm-dialog button {
-        margin: 0 0.25em;
-        padding: 0.25em 0.5em;
-        font-size: 0.8em;
-        cursor: pointer;
-        border-radius: 4px;
-        border: none;
-      }
-
-      .confirm-yes {
-        background-color: red;
-        color: white;
-        font-size: 0.9em;
-
-      }
-
-      .confirm-no {
-        background-color: gray;
-        color: white;
-        font-size: 0.9em;
-
-      }
     
+     .flip-card-back {
+       background-color: var(--back-card-color);
+       color: var(--text-color-back-of-card);
+       transform: rotateY(180deg);
+     
+     }
 
 
-    </style>
-
-    <div class="flip-card">
-      <div class="flip-card-inner">
-        <div class="flip-card-front">
-          <h1 id="card_name">${this.getAttribute('card-name') || 'Untitled Habit'}</h1>
-          <label style="margin-top: 1rem; display: flex; align-items: center; gap: 0.5rem;">
-            Complete:
-            <input type="checkbox" class="habit-checkbox" />
-          </label>
-        </div>
-        <div class="flip-card-back">
-
-          <p id="card_description">${this.getAttribute('card-description') || 'None'}</p>
-          <p id="card_frequency">${this.getAttribute('card-frequency') || 'None'}</p>
-          <p id="card_time">${this.getAttribute('card-time') || 'None'}</p>
-          <p id="card_streak">${this.getAttribute('card-streak') || 'None'}</p>
-          <p id= "card_id" hidden>${this.getAttribute('card-id') || 'None'}</p>
-          <div class="delete-container">
-            <button class="delete-btn">🗑️</button>
-            <div class="confirm-dialog" hidden>
-              <p  hidden class="delete-dialog">Delete? </p>
-              <button class="confirm-yes" hidden>Yes</button>
-              <button class="confirm-no" hidden>No</button>
-            </div>
-          </div>
 
 
-        </div>
-      </div>
-    </div>
-  `;
+     #card_name {
+       font-size: 2em;
+       text-align: center;
+     }
+
+
+
+
+     #card_frequency {
+     font-family: sans-serif;
+     }
+     .flip-card-back p {
+       margin: 0.5em 0;
+       font-size: 0.75em;
+       line-height: 1.2;
+       max-width: 90%;
+       word-wrap: break-word;
+       word-break: break-word;
+     }
+     .streak_number{
+       color: var(--streak-color);
+       font-weight:bold;
+     }
+
+
+     .delete-container {
+       margin-top: 0.1em;
+       text-align: center;
+     }
+
+
+     .delete-btn {
+       background: transparent;
+       color: white;
+       border: none;
+       font-size: 0.9em;
+       cursor: pointer;
+     }
+
+
+     .confirm-dialog {
+       margin-top: 0.5em;
+       display: flex;
+       margin-bottom: 0.5em;
+       font-size: 0.9em;
+
+
+     }
+
+
+     .confirm-dialog button {
+       margin: 0 0.25em;
+       padding: 0.25em 0.5em;
+       font-size: 0.8em;
+       cursor: pointer;
+       border-radius: 4px;
+       border: none;
+     }
+
+
+     .confirm-yes {
+       background-color: red;
+       color: white;
+       font-size: 0.9em;
+
+
+     }
+
+
+     .confirm-no {
+       background-color: gray;
+       color: white;
+       font-size: 0.9em;
+
+
+     }
+  
+     .habit-checkbox {
+         accent-color: var(--checkbox-color); /* or any color you want */
+     }
+
+
+
+
+   </style>
+
+
+   <div class="flip-card">
+     <div class="flip-card-inner">
+       <div class="flip-card-front">
+         <h1 id="card_name">${this.getAttribute('card-name') || 'Untitled Habit'}</h1>
+         <label style="margin-top: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+           Complete:
+           <input type="checkbox" class="habit-checkbox" />
+         </label>
+       </div>
+       <div class="flip-card-back">
+
+
+         <p id="card_description">${this.getAttribute('card-description') || 'None'}</p>
+         <p id="card_frequency">${this.getAttribute('card-frequency') || 'None'}</p>
+         <p id="card_time">${this.getAttribute('card-time') || 'None'}</p>
+         <p id="card_streak">${this.getAttribute('card-streak') || 'None'}</p>
+         <p id= "card_id" hidden>${this.getAttribute('card-id') || 'None'}</p>
+         <div class="delete-container">
+           <button class="delete-btn">🗑️</button>
+           <div class="confirm-dialog" hidden>
+             <p  hidden class="delete-dialog">Delete? </p>
+             <button class="confirm-yes" hidden>Yes</button>
+             <button class="confirm-no" hidden>No</button>
+           </div>
+         </div>
+
+
+
+
+       </div>
+     </div>
+   </div>
+ `;
     const flipCard = shadow.querySelector('.flip-card');
     const flipInner = shadow.querySelector('.flip-card-inner');
 
@@ -271,6 +304,7 @@ class HabitCard extends HTMLElement {
 
     //listeners for our complete functionality
     const checkbox = shadow.querySelector('.habit-checkbox');
+
     checkbox.addEventListener('click', (e) => {
       e.stopPropagation();
     });
@@ -279,35 +313,27 @@ class HabitCard extends HTMLElement {
       e.stopPropagation();
       const isChecked = checkbox.checked;
       const idElement = this.shadowRoot.querySelector('#card_id');
-      const cardFront = this.shadowRoot.querySelector(`#card-front-id`);
+      const cardFront = this.shadowRoot.querySelector('.flip-card-front');
 
-      if (isChecked) {
-        if (idElement) {
-          const cardId = idElement.textContent.trim();
+      if (!idElement || !cardFront) return;
+
+      const cardId = idElement.textContent.trim();
+
+      if (idElement && cardFront) {
+        const cardId = idElement.textContent.trim();
+
+        if (isChecked) {
           logHabitCompleted(cardId);
-          // console.log("i got complete");
-          // console.log(cardId);
-          //console.log(cardId + "after complete is " + isHabitComplete(cardId));
-          if (cardFront) {
-            cardFront.style.background = getComputedStyle(
-              document.documentElement,
-            ).getPropertyValue('--streak-color');
-          }
-        }
-      } else {
-        if (idElement) {
-          const cardId = idElement.textContent.trim();
+          localStorage.setItem(`habit-${cardId}-completed`, 'true');
 
+          cardFront.classList.remove('not-completed');
+          cardFront.classList.add('completed');
+        } else {
           removeHabitCompletion(cardId);
-          //console.log(cardId + "after complete is " + isHabitComplete(cardId));
+          localStorage.setItem(`habit-${cardId}-completed`, 'false');
 
-          // console.log("i got uncomplete");
-          // console.log(cardId);
-          if (cardFront) {
-            cardFront.style.background = getComputedStyle(
-              document.documentElement,
-            ).getPropertyValue('--card-color');
-          }
+          cardFront.classList.remove('completed');
+          cardFront.classList.add('not-completed');
         }
       }
     });
@@ -325,11 +351,54 @@ class HabitCard extends HTMLElement {
     const streakEl = this.shadowRoot.getElementById('card_streak');
     const idEl = this.shadowRoot.getElementById('card_id');
     const checkbox = this.shadowRoot.querySelector('.habit-checkbox');
+    const cardFront = this.shadowRoot.querySelector('.flip-card-front');
 
+    // Get unique cardId from attribute, not from idEl textContent
+    const cardIdAttr = this.getAttribute('card-id');
+    const cardId = cardIdAttr ? cardIdAttr.trim() : null;
+
+    if (!cardId) {
+      console.warn('Habit card missing unique card-id attribute!');
+      return; // Stop if no valid ID
+    }
+
+    // Load completion state from localStorage or fallback to attribute
+    const savedCompleted = localStorage.getItem(`habit-${cardId}-completed`);
+    const isCompleted = savedCompleted === 'true';
+    const completedState =
+      savedCompleted !== null
+        ? isCompleted
+        : this.getAttribute('card-completed') === 'true';
+
+    // Set checkbox and card front style
+    if (checkbox && cardFront) {
+      checkbox.checked = completedState;
+
+      cardFront.classList.remove('completed', 'not-completed');
+      if (completedState) {
+        cardFront.classList.add('completed');
+      } else {
+        cardFront.classList.add('not-completed');
+      }
+
+      // Add listener to update localStorage and styles on change
+      checkbox.addEventListener('change', () => {
+        if (checkbox.checked) {
+          localStorage.setItem(`habit-${cardId}-completed`, 'true');
+          cardFront.classList.add('completed');
+          cardFront.classList.remove('not-completed');
+        } else {
+          localStorage.setItem(`habit-${cardId}-completed`, 'false');
+          cardFront.classList.remove('completed');
+          cardFront.classList.add('not-completed');
+        }
+      });
+    }
+
+    // Populate other fields
     if (titleEl) {
       titleEl.textContent = this.getAttribute('card-name') || 'Untitled Habit';
     }
-
     if (freqEl) {
       freqEl.textContent = `Frequency: ${this.getAttribute('card-frequency') || 'None'}`;
     }
@@ -340,13 +409,10 @@ class HabitCard extends HTMLElement {
       timeEl.textContent = `Time: ${this.getAttribute('card-time') || 'None'}`;
     }
     if (streakEl) {
-      streakEl.innerHTML = `Current Streak: <span class="streak_number"> ${this.getAttribute('card-streak') || 'None'} </span>`;
+      streakEl.innerHTML = `Current Streak: <span class="streak_number">${this.getAttribute('card-streak') || 'None'}</span>`;
     }
     if (idEl) {
-      idEl.innerHTML = `${this.getAttribute('card-id') || 'None'} `;
-    }
-    if (checkbox) {
-      checkbox.checked = this.getAttribute('card-completed') === 'true';
+      idEl.textContent = cardId; // use trimmed attribute value
     }
   }
 }

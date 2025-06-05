@@ -23,6 +23,8 @@
     #27187e 100%
   ); /* color for welcome text */
   --nav-icon-filter: brightness(0) invert(1);
+  --streak-card-color: #758bfd;
+  --checkbox-color: #b8bcfc;
 }
 
 /* Pink Theme */
@@ -51,6 +53,8 @@
     #89023e 100%
   );
   --nav-icon-filter: brightness(0) invert(1);
+  --streak-card-color: #ea638c;
+  --checkbox-color: #ffc1e0;
 }
 
 /* Tritons Theme */
@@ -79,4 +83,6 @@
     #00296b 100%
   );
   --nav-icon-filter: brightness(0) invert(1);
+  --streak-card-color: #003f88;
+  --checkbox-color: orange;
 }
