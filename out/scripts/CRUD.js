@@ -61,6 +61,7 @@ export function createHabit(
   habitName,
   habitDescription,
   habitFrequency,
+  startDateTime = new Date().toLocaleString(),
   adapter = localStorageAdapter,
 ) {
   if (typeof habitName != 'string') {
@@ -87,7 +88,7 @@ export function createHabit(
     habitName: habitName,
     habitDescription: habitDescription,
     habitFrequency: habitFrequency,
-    startDateTime: new Date().toLocaleString(),
+    startDateTime: startDateTime,
     habitStreak: 0,
     logs: [],
   };
@@ -247,7 +248,7 @@ export function logHabitCompleted(habitID) {
   let habit = getHabitById(habitID);
   if (habit) {
     habit.logs.push(new Date().toLocaleString());
-    habit.habitStreak = calculateStreak(habit);
+    habit.streak = calculateStreak(habit);
     localStorage.setItem(habitID, JSON.stringify(habit));
 
     return true;
@@ -260,7 +261,7 @@ export function removeHabitCompletion(habitID, adapter = localStorageAdapter) {
   let habit = getHabitById(habitID, adapter);
   if (habit) {
     habit.logs.pop();
-    habit.habitStreak = calculateStreak(habit);
+    habit.streak = calculateStreak(habit);
     adapter.set(habitID, JSON.stringify(habit)); // ← persist update
     return true;
   }
