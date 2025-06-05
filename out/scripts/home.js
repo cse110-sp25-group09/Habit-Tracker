@@ -268,6 +268,10 @@ class HabitCard extends HTMLElement {
 
     //listeners for our complete functionality
     const checkbox = shadow.querySelector('.habit-checkbox');
+    checkbox.addEventListener('click', (e) => {
+      e.stopPropagation();
+    });
+
     checkbox.addEventListener('change', (e) => {
       e.stopPropagation();
       const isChecked = checkbox.checked;
@@ -280,7 +284,7 @@ class HabitCard extends HTMLElement {
           logHabitCompleted(cardId);
           // console.log("i got complete");
           // console.log(cardId);
-          // console.log(cardId + "after complete is " + isHabitComplete(cardId));
+          //console.log(cardId + "after complete is " + isHabitComplete(cardId));
           if (cardFront) {
             cardFront.style.background = getComputedStyle(
               document.documentElement,
@@ -292,6 +296,8 @@ class HabitCard extends HTMLElement {
           const cardId = idElement.textContent.trim();
 
           removeHabitCompletion(cardId);
+          //console.log(cardId + "after complete is " + isHabitComplete(cardId));
+
           // console.log("i got uncomplete");
           // console.log(cardId);
           if (cardFront) {
@@ -305,7 +311,7 @@ class HabitCard extends HTMLElement {
   }
 
   static get observedAttributes() {
-    return ['card-name', '.habit-checkbox'];
+    return ['card-name', 'card-completed'];
   }
 
   connectedCallback() {
@@ -416,6 +422,7 @@ function populateCards() {
       'card-completed',
       isHabitComplete(habits[i][0]) ? 'true' : 'false',
     );
+    //console.log("new card " + isHabitComplete(habits[i][0]) );
     document.getElementById('card-container').appendChild(newCard);
   }
 }

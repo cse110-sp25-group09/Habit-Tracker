@@ -257,11 +257,12 @@ export function logHabitCompleted(habitID) {
   //return false; // what is the benefit of returning boolean instead of throwing an error in a void function in this context ?
 }
 
-export function removeHabitCompletion(habitID) {
-  let habit = getHabitById(habitID);
+export function removeHabitCompletion(habitID, adapter = localStorageAdapter) {
+  let habit = getHabitById(habitID, adapter);
   if (habit) {
     habit.logs.pop();
     habit.streak = calculateStreak(habit);
+    adapter.set(habitID, JSON.stringify(habit)); // ← persist update
     return true;
   }
   throw new Error('Invalid habit passed');
