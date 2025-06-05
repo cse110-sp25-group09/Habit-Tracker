@@ -1,6 +1,6 @@
 const themeSelect = document.getElementById('theme-select');
 const body = document.body; // Add this line!
-import { localStorageAdapter } from '/out/scripts/crud.js';
+import { localStorageAdapter } from './out/scripts/crud.js';
 // On change, save the selection
 themeSelect.addEventListener('change', (e) => {
   const selectedTheme = e.target.value;
