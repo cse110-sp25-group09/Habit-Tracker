@@ -394,6 +394,7 @@ document.getElementById('submit-habit').addEventListener('click', () => {
   document.getElementById('habit-time').value = '';
 
   document.getElementById('habit-form').style.display = 'none';
+  document.getElementById('blur-overlay').classList.add('hidden');
 });
 
 window.addEventListener('DOMContentLoaded', () => {
