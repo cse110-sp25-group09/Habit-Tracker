@@ -356,6 +356,11 @@ customElements.define('habit-card', HabitCard);
 // Show form when "+" is clicked
 document.getElementById('create-button').addEventListener('click', () => {
   document.getElementById('habit-form').style.display = 'block';
+  document.getElementById('blur-overlay').classList.remove('hidden');
+});
+document.getElementById('blur-overlay').addEventListener('click', () => {
+  document.getElementById('habit-form').style.display = 'none';
+  document.getElementById('blur-overlay').classList.add('hidden');
 });
 
 // On form submit
@@ -389,6 +394,7 @@ document.getElementById('submit-habit').addEventListener('click', () => {
   document.getElementById('habit-time').value = '';
 
   document.getElementById('habit-form').style.display = 'none';
+  document.getElementById('blur-overlay').classList.add('hidden');
 });
 
 window.addEventListener('DOMContentLoaded', () => {

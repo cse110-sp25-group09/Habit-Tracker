@@ -38,7 +38,7 @@ body {
   width: 100%;
   background-color: var(--primary-color);
   padding: 0.75rem 0;
-  z-index: 1;
+  z-index: 100;
   position: fixed;
   bottom: 0;
   margin: auto;
@@ -86,32 +86,51 @@ body {
   font-size: 1.2rem;
   cursor: pointer;
   margin-top: 20px;
+  border-radius: 10px;
+  border: none;
+}
+#reset-cards:hover {
+  background-color: rgb(99, 0, 0);
 }
 
 #calendar-menu {
   position: absolute;
   bottom: 100%;
   left: 50%;
-  transform: translateX(-50%);
+  transform: translate(-50%, 20px);
   background-color: var(--input-bg-color);
   padding: 5px;
-  z-index: 101;
+  z-index: 95;
+  padding: 10px;
   display: none;
+  text-align: center;
   border: 4px solid var(--form-color);
-  border-radius: 16px;
+  border-radius: 12px;
 }
 
 #calendar-menu.show {
   display: block;
   font-size: 28px;
-  z-index: 101;
   border-radius: 2px solid var(--input-border-color);
+  opacity: 0;
+  animation: fadeIn 0.5s ease-out forwards;
+  border-radius: 12px;
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
 }
 
 #calendar-menu li {
   padding: 5px 0;
   cursor: pointer;
   border-bottom: 2px solid var(--form-color);
+}
+#calendar-menu li:hover {
+  opacity: 0.8;
 }
 
 #calendar-menu li:last-child {

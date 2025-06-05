@@ -19,6 +19,7 @@
   opacity: 0;
   transform: translateY(-20px);
   animation: fadeInUp 0.5s ease-out forwards;
+  z-index: 100;
 }
 .app-subheader {
   justify-content: left;
@@ -83,7 +84,7 @@ body {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   position: fixed;
   bottom: 80px;
-  z-index: 10;
+  z-index: 95;
   cursor: pointer;
   opacity: 0;
   animation: fadeInUp 1s ease-out forwards;
@@ -119,19 +120,42 @@ body {
 }
 
 #habit-form {
-  display: none;
   position: fixed;
-  bottom: 140px;
+  bottom: 180px;
   left: 50%;
-  transform: translateX(-50%);
-  background: var(--form-color);
+  background: var(--form-color, #333);
   padding: 1rem;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   border-radius: 1rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
   z-index: 100;
+  transform: translateX(-50%);
   width: 90%;
   max-width: 350px;
+  color: white;
+  text-align: center;
+}
+input[type='text'],
+input[type='textarea'] {
   color: var(--text-color);
+}
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  backdrop-filter: blur(3px);
+  background-color: rgba(0, 0, 0, 0.3); /* optional dim */
+  z-index: 95; /* just behind the modal/form */
+  transition: opacity 0.3s ease;
+  opacity: 1;
+  pointer-events: all;
+}
+
+.overlay.hidden {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
 }
 
 #card-container {
@@ -163,6 +187,13 @@ body {
   border-color: var(--text-color);
   color: var(--text-color);
   cursor: pointer;
+  margin-bottom: 0.8rem;
+  border: none;
+}
+
+#submit-habit:hover {
+  font-weight: bold;
+  transform: scale(1.05);
 }
 
 #habit-form {
@@ -173,9 +204,10 @@ body {
 #create-card {
   background-color: var(--card-color);
   color: var(--text-color);
-  padding-top: 30px;
-  padding-bottom: 30px;
-  border-radius: 0 0 0 0;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  margin: 0.8rem;
+  border-radius: 16px;
   text-align: center;
   font-weight: bold;
   font-size: 1.2rem;
@@ -187,6 +219,8 @@ label[for='habit-frequency'],
 label[for='habit-time'] {
   font-size: 1.25rem;
   font-weight: bold;
+  padding-right: 0.5rem;
+  color: var(--text-color);
 }
 
 #habit-name,
@@ -210,7 +244,6 @@ label[for='habit-time'] {
   color: var(--text-color);
   margin-top: 1rem;
   border: 2px solid var(--input-border-color);
-  font-family: sans-serif;
 }
 
 #habit-time {
@@ -225,6 +258,7 @@ label[for='habit-time'] {
   margin-bottom: 1rem;
   display: inline-block;
   font-family: sans-serif;
+  border-radius: 4px;
 }
 
 .form-row {
@@ -243,27 +277,30 @@ label[for='habit-time'] {
   position: absolute;
   bottom: 100%;
   left: 50%;
-  transform: translateX(-50%);
+  transform: translate(-50%, 20px);
   background-color: var(--input-bg-color);
   padding: 5px;
-  z-index: 101;
+  z-index: 95;
+  padding: 10px;
   display: none;
+  text-align: center;
   border: 4px solid var(--form-color);
-  border-radius: 16px;
+  border-radius: 12px;
 }
 
 #calendar-menu.show {
   display: block;
   font-size: 28px;
-  z-index: 101;
   border-radius: 2px solid var(--input-border-color);
   opacity: 0;
   animation: fadeIn 0.5s ease-out forwards;
+  border-radius: 12px;
 }
 
 @keyframes fadeIn {
   to {
     opacity: 1;
+    transform: translate(-50%, 0);
   }
 }
 
@@ -271,6 +308,9 @@ label[for='habit-time'] {
   padding: 5px 0;
   cursor: pointer;
   border-bottom: 2px solid var(--form-color);
+}
+#calendar-menu li:hover {
+  opacity: 0.8;
 }
 
 #calendar-menu li:last-child {
