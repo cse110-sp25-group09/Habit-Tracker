@@ -65,14 +65,14 @@ class HabitCard extends HTMLElement {
       }
  
       .flip-card-front {
-        background: var(--card-color, #7c8efc);
+        background: var(--card-color);
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
-        color: var(--text-color-front-of-card, white);
+        color: var(--text-color-front-of-card);
       }
  
       .flip-card-back {
-        background-color: var(--back-card-color, #6b7cff);
-        color: var(--text-color-back-of-card, white);
+        background-color: var(--back-card-color);
+        color: var(--text-color-back-of-card);
         transform: rotateY(180deg);
       }
 
@@ -95,7 +95,7 @@ class HabitCard extends HTMLElement {
       }
       
       .streak_number{
-        color: var(--streak-color, #ffeb3b);
+        color: var(--streak-color);
         font-weight:bold;
       }
 
