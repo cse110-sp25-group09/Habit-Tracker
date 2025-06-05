@@ -214,7 +214,7 @@ label[for='habit-time'] {
   font-size: 1.25rem;
   font-weight: bold;
   padding-right: 0.5rem;
-  color: var(--text-color);;
+  color: var(--text-color);
 }
 
 #habit-name,
