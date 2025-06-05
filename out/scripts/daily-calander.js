@@ -499,7 +499,7 @@ function showDetailedView() {
 
   const contentContainer = document.createElement('div');
   contentContainer.style.cssText = `
-    max-width: 400px;
+    max-width: 500px;
     width: 100%;
     min-height: 100vh;
     position: relative;
@@ -523,76 +523,58 @@ function showDetailedView() {
 
   const dayNameEl = document.createElement('div');
   dayNameEl.textContent = dayNames[currentDate.getDay()];
-  dayNameEl.style.cssText = `
-    font-size: 1.5rem;
-    font-weight: 600;
-    line-height: 1.2;
-  `;
+  dayNameEl.style.fontSize = '1.5rem';
 
   const dateEl = document.createElement('div');
   dateEl.textContent = `${monthNames[currentDate.getMonth()]} ${currentDate.getDate()}`;
-  dateEl.style.cssText = `
-    font-size: 1rem;
-    line-height: 1.1;
-    margin-top: 5px;
-  `;
 
   const countEl = document.createElement('div');
   countEl.textContent = `${habits.length} habit${habits.length === 1 ? '' : 's'}`;
-  countEl.style.cssText = `
-    font-size: 0.9rem;
-    opacity: 0.9;
-    margin-top: 8px;
-    line-height: 1.1;
-  `;
 
   header.appendChild(dayNameEl);
   header.appendChild(dateEl);
   header.appendChild(countEl);
   contentContainer.appendChild(header);
 
-  // Habit cards container
-  const cardContainer = document.createElement('div');
-  cardContainer.style.cssText = `
-    background-color: #fff;
-    width: 100%;
-    flex-grow: 1;
-    overflow-y: auto;
-    padding: 20px;
+  // Create hourly schedule
+  const scheduleContainer = document.createElement('div');
+  scheduleContainer.style.cssText = `
+    background: white;
+    padding: 10px;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    gap: 10px;
+    gap: 16px;
   `;
 
-  if (habits.length === 0) {
-    const emptyMsg = document.createElement('p');
-    emptyMsg.textContent = 'No habits for this day';
-    emptyMsg.style.cssText = `
-      text-align: center;
-      color: #888;
-      margin-top: 2rem;
+  for (let hour = 0; hour < 24; hour++) {
+    const hourBlock = document.createElement('div');
+    hourBlock.style.cssText = `
+      border-top: 1px solid #ddd;
+      padding-top: 8px;
     `;
-    cardContainer.appendChild(emptyMsg);
-  } else {
-    habits.forEach(([habitId, habit]) => {
-      // Create habit card using the custom element
-      const habitCard = document.createElement('habit-card');
-      
-      // Convert frequency number to string
-      let freqStr = '';
-      const freqNum = habit.habitFrequency;
-      if (freqNum === 1) {
-        freqStr = 'Daily';
-      } else if (freqNum === 7) {
-        freqStr = 'Weekly';
-      } else if (freqNum === 30) {
-        freqStr = 'Monthly';
-      } else {
-        freqStr = `Every ${freqNum} days`;
-      }
 
-      // Set all the card attributes
+    const label = document.createElement('div');
+    label.textContent = `${hour.toString().padStart(2, '0')}:00`;
+    label.style.cssText = `font-weight: bold; color: #555; margin-bottom: 5px;`;
+
+    hourBlock.appendChild(label);
+
+    const matchingHabits = habits.filter(([_, habit]) => {
+      const time = new Date(habit.startDateTime);
+      return time.getHours() === hour;
+    });
+
+    matchingHabits.forEach(([habitId, habit]) => {
+      const habitCard = document.createElement('habit-card');
+
+      // Convert frequency number to string
+      const freqMap = {
+        1: 'Daily',
+        7: 'Weekly',
+        30: 'Monthly'
+      };
+      const freqStr = freqMap[habit.habitFrequency] || `Every ${habit.habitFrequency} days`;
+
       habitCard.setAttribute('card-name', habit.habitName || 'Untitled Habit');
       habitCard.setAttribute('card-frequency', freqStr);
       habitCard.setAttribute('card-description', habit.habitDescription || 'No description');
@@ -600,21 +582,19 @@ function showDetailedView() {
       habitCard.setAttribute('card-streak', habit.habitStreak || 0);
       habitCard.setAttribute('card-id', habitId);
       habitCard.setAttribute('card-completed', isHabitComplete(habitId, currentDate) ? 'true' : 'false');
-      
-      cardContainer.appendChild(habitCard);
+
+      hourBlock.appendChild(habitCard);
     });
+
+    scheduleContainer.appendChild(hourBlock);
   }
 
-  contentContainer.appendChild(cardContainer);
+  contentContainer.appendChild(scheduleContainer);
 
-  // Close button
   const closeBtn = document.createElement('button');
   closeBtn.textContent = '✕ Close';
   closeBtn.style.cssText = `
-    position: sticky;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
+    margin: 30px auto;
     padding: 12px 24px;
     background: #7c8efc;
     color: #fff;
@@ -622,7 +602,6 @@ function showDetailedView() {
     border-radius: 8px;
     cursor: pointer;
     font-weight: 500;
-    margin: 20px auto;
   `;
   closeBtn.addEventListener('click', closeDetailedView);
   contentContainer.appendChild(closeBtn);
