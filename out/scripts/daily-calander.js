@@ -547,49 +547,50 @@ function showDetailedView() {
   `;
 
   for (let hour = 0; hour < 24; hour++) {
-    const hourBlock = document.createElement('div');
-    hourBlock.style.cssText = `
-      border-top: 1px solid #ddd;
-      padding-top: 8px;
-    `;
+  const matchingHabits = habits.filter(([_, habit]) => {
+    const time = new Date(habit.startDateTime);
+    return time.getHours() === hour;
+  });
 
-    const label = document.createElement('div');
-    const ampmHour = hour % 12 === 0 ? 12 : hour % 12;
-    const period = hour < 12 ? 'AM' : 'PM';
-    label.textContent = `${ampmHour}:00 ${period}`;
-    label.style.cssText = `font-weight: bold; color: #555; margin-bottom: 5px;`;
+  if (matchingHabits.length === 0) continue; // Skip this hour if no habits
 
-    hourBlock.appendChild(label);
+  const hourBlock = document.createElement('div');
+  hourBlock.style.cssText = `
+    border-top: 1px solid #ddd;
+    padding-top: 8px;
+  `;
 
-    const matchingHabits = habits.filter(([_, habit]) => {
-      const time = new Date(habit.startDateTime);
-      return time.getHours() === hour;
-    });
+  const label = document.createElement('div');
+  const ampmHour = hour % 12 === 0 ? 12 : hour % 12;
+  const period = hour < 12 ? 'AM' : 'PM';
+  label.textContent = `${ampmHour}:00 ${period}`;
+  label.style.cssText = `font-weight: bold; color: #555; margin-bottom: 5px;`;
 
-    matchingHabits.forEach(([habitId, habit]) => {
-      const habitCard = document.createElement('habit-card');
+  hourBlock.appendChild(label);
 
-      // Convert frequency number to string
-      const freqMap = {
-        1: 'Daily',
-        7: 'Weekly',
-        30: 'Monthly'
-      };
-      const freqStr = freqMap[habit.habitFrequency] || `Every ${habit.habitFrequency} days`;
+  matchingHabits.forEach(([habitId, habit]) => {
+    const habitCard = document.createElement('habit-card');
 
-      habitCard.setAttribute('card-name', habit.habitName || 'Untitled Habit');
-      habitCard.setAttribute('card-frequency', freqStr);
-      habitCard.setAttribute('card-description', habit.habitDescription || 'No description');
-      habitCard.setAttribute('card-time', habit.startDateTime || 'No time set');
-      habitCard.setAttribute('card-streak', habit.habitStreak || 0);
-      habitCard.setAttribute('card-id', habitId);
-      habitCard.setAttribute('card-completed', isHabitComplete(habitId, currentDate) ? 'true' : 'false');
+    const freqMap = {
+      1: 'Daily',
+      7: 'Weekly',
+      30: 'Monthly'
+    };
+    const freqStr = freqMap[habit.habitFrequency] || `Every ${habit.habitFrequency} days`;
 
-      hourBlock.appendChild(habitCard);
-    });
+    habitCard.setAttribute('card-name', habit.habitName || 'Untitled Habit');
+    habitCard.setAttribute('card-frequency', freqStr);
+    habitCard.setAttribute('card-description', habit.habitDescription || 'No description');
+    habitCard.setAttribute('card-time', habit.startDateTime || 'No time set');
+    habitCard.setAttribute('card-streak', habit.habitStreak || 0);
+    habitCard.setAttribute('card-id', habitId);
+    habitCard.setAttribute('card-completed', isHabitComplete(habitId, currentDate) ? 'true' : 'false');
 
-    scheduleContainer.appendChild(hourBlock);
-  }
+    hourBlock.appendChild(habitCard);
+  });
+
+  scheduleContainer.appendChild(hourBlock);
+}
 
   contentContainer.appendChild(scheduleContainer);
 
