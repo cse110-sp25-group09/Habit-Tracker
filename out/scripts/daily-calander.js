@@ -554,7 +554,9 @@ function showDetailedView() {
     `;
 
     const label = document.createElement('div');
-    label.textContent = `${hour.toString().padStart(2, '0')}:00`;
+    const ampmHour = hour % 12 === 0 ? 12 : hour % 12;
+    const period = hour < 12 ? 'AM' : 'PM';
+    label.textContent = `${ampmHour}:00 ${period}`;
     label.style.cssText = `font-weight: bold; color: #555; margin-bottom: 5px;`;
 
     hourBlock.appendChild(label);
