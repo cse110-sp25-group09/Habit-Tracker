@@ -52,7 +52,7 @@ body {
   align-items: center;
   color: var(--text-color);
   z-index: 1000;
-  transform : translateY(-20px);
+  transform: translateY(-20px);
   opacity: 0;
   animation: fadeInUp 1s ease-out forwards;
 }
@@ -106,7 +106,7 @@ body {
   /* These lines are to hide the scrolling bar */
   overflow-y: scroll;
   scrollbar-width: none;
-  transform : translateY(-20px);
+  transform: translateY(-20px);
   opacity: 0;
   animation: fadeInUp 1s ease-out forwards;
 }
@@ -211,7 +211,7 @@ button:active {
   padding: 0.75rem 0;
   z-index: 999;
   box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
-  transform : translateY(-20px);
+  transform: translateY(-20px);
   opacity: 0;
   animation: fadeInUp 1s ease-out forwards;
 }

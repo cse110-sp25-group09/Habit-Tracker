@@ -162,5 +162,4 @@ window.addEventListener('DOMContentLoaded', () => {
   }
   generateCalendar(currentYear);
   setupEventListeners();
-
 });
