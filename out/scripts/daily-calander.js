@@ -8,7 +8,7 @@ import {
   logHabitCompleted,
   removeHabitCompletion,
   getAllHabits,
-  getHabitById
+  getHabitById,
 } from './CRUD.js';
 
 // Import and define the HabitCard custom element
@@ -235,13 +235,13 @@ class HabitCard extends HTMLElement {
 
       if (idElement) {
         const cardId = idElement.textContent.trim();
-        
+
         if (isChecked) {
           logHabitCompleted(cardId);
         } else {
           removeHabitCompletion(cardId);
         }
-        
+
         // Update the calendar indicators
         if (window.DailyCalendar) {
           window.DailyCalendar.updateHabitsForDays();
@@ -251,7 +251,15 @@ class HabitCard extends HTMLElement {
   }
 
   static get observedAttributes() {
-    return ['card-name', 'card-completed', 'card-frequency', 'card-description', 'card-time', 'card-streak', 'card-id'];
+    return [
+      'card-name',
+      'card-completed',
+      'card-frequency',
+      'card-description',
+      'card-time',
+      'card-streak',
+      'card-id',
+    ];
   }
 
   connectedCallback() {
@@ -278,23 +286,23 @@ class HabitCard extends HTMLElement {
     if (freqEl) {
       freqEl.textContent = `Frequency: ${this.getAttribute('card-frequency') || 'None'}`;
     }
-    
+
     if (descrEl) {
       descrEl.textContent = `Description: ${this.getAttribute('card-description') || 'None'}`;
     }
-    
+
     if (timeEl) {
       timeEl.textContent = `Time: ${this.getAttribute('card-time') || 'None'}`;
     }
-    
+
     if (streakEl) {
       streakEl.innerHTML = `Current Streak: <span class="streak_number"> ${this.getAttribute('card-streak') || '0'} </span>`;
     }
-    
+
     if (idEl) {
       idEl.textContent = this.getAttribute('card-id') || 'None';
     }
-    
+
     if (checkbox) {
       checkbox.checked = this.getAttribute('card-completed') === 'true';
     }
@@ -392,16 +400,16 @@ function updateCalendarDisplay() {
 function getHabitsForSpecificDate(date) {
   const allHabits = getAllHabits();
   if (!allHabits) return [];
-  
+
   // Filter habits that should be active on the given date
   const activeHabits = [];
-  
+
   for (const [habitId, habit] of allHabits) {
     if (isHabitActiveOnDate(habit, date)) {
       activeHabits.push([habitId, habit]);
     }
   }
-  
+
   return activeHabits;
 }
 
@@ -419,7 +427,7 @@ function isHabitActiveOnDate(habit, date) {
 
     const timeDiff = targetDate.getTime() - startDate.getTime();
     const daysDiff = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
-    
+
     return daysDiff % habit.habitFrequency === 0;
   } catch {
     return false;
@@ -444,11 +452,11 @@ function updateHabitIndicators(containerId, date) {
   container.innerHTML = '';
 
   const habits = getHabitsForSpecificDate(date);
-  
+
   habits.forEach(([habitId, habit]) => {
     const dot = document.createElement('div');
     dot.classList.add('habit-dot');
-    
+
     // Check if habit is completed on this date
     const isCompleted = isHabitComplete(habitId, date);
     dot.classList.add(isCompleted ? 'completed' : 'pending');
@@ -547,7 +555,9 @@ function showDetailedView() {
     width: 100%;
   `;
 
-  const hourSequence = [...Array(24).keys()].slice(6).concat([...Array(6).keys()]);
+  const hourSequence = [...Array(24).keys()]
+    .slice(6)
+    .concat([...Array(6).keys()]);
   for (const hour of hourSequence) {
     const matchingHabits = habits.filter(([_, habit]) => {
       const time = new Date(habit.startDateTime);
@@ -579,17 +589,24 @@ function showDetailedView() {
       const freqMap = {
         1: 'Daily',
         7: 'Weekly',
-        30: 'Monthly'
+        30: 'Monthly',
       };
-      const freqStr = freqMap[habit.habitFrequency] || `Every ${habit.habitFrequency} days`;
+      const freqStr =
+        freqMap[habit.habitFrequency] || `Every ${habit.habitFrequency} days`;
 
       habitCard.setAttribute('card-name', habit.habitName || 'Untitled Habit');
       habitCard.setAttribute('card-frequency', freqStr);
-      habitCard.setAttribute('card-description', habit.habitDescription || 'No description');
+      habitCard.setAttribute(
+        'card-description',
+        habit.habitDescription || 'No description',
+      );
       habitCard.setAttribute('card-time', habit.startDateTime || 'No time set');
       habitCard.setAttribute('card-streak', habit.habitStreak || 0);
       habitCard.setAttribute('card-id', habitId);
-      habitCard.setAttribute('card-completed', isHabitComplete(habitId, currentDate) ? 'true' : 'false');
+      habitCard.setAttribute(
+        'card-completed',
+        isHabitComplete(habitId, currentDate) ? 'true' : 'false',
+      );
 
       hourBlock.appendChild(habitCard);
     });
@@ -617,7 +634,6 @@ function showDetailedView() {
   overlay.appendChild(contentContainer);
   document.body.appendChild(overlay);
 }
-
 
 // Close detailed view
 function closeDetailedView() {
