@@ -1,23 +1,23 @@
 /**
  * Daily Calendar Module for Habit Tracker
  * Handles the three-card carousel display and navigation
- * 
+ *
  * @fileoverview This module manages the daily calendar view with a three-card carousel
  * showing previous, current, and next day. It handles habit display, completion tracking,
  * and provides both touch and keyboard navigation.
- * 
+ *
  * @author Your Name
  * @version 1.0.0
  */
 
 // Import functions from CRUD.js
-import { 
-  getAllHabits, 
-  getHabitById, 
+import {
+  getAllHabits,
+  getHabitById,
   readHabit,
   updateHabit,
   ratioOfCompleted,
-  getHabitsForDay
+  getHabitsForDay,
 } from './CRUD.js';
 
 // Navigation event listeners
@@ -135,14 +135,14 @@ function updateCalendarDisplay() {
 /**
  * Fetch all habits from storage using CRUD.js functions
  * Handles different return formats and provides fallback error handling
- * 
+ *
  * @returns {Object[]} Array of habit objects with normalized structure
  */
 function getStoredHabits() {
   try {
     const allHabits = getAllHabits();
     if (!allHabits) return [];
-    
+
     // getAllHabits returns array of [habitId, habitObject] pairs
     if (Array.isArray(allHabits) && allHabits.length > 0) {
       // If it's already in the expected format, return as is
@@ -162,7 +162,7 @@ function getStoredHabits() {
 /**
  * Check if a habit is active on a specific date using CRUD.js logic
  * Falls back to frequency-based calculation if CRUD functions fail
- * 
+ *
  * @param {Object} habit - The habit object to check
  * @param {Date} date - The date to check activity for
  * @returns {boolean} True if the habit is active on the given date
@@ -174,13 +174,13 @@ function isHabitActiveOnDate(habit, date) {
       ...habit,
       startDateTime: habit.startDateTime,
       habitFrequency: habit.habitFrequency,
-      logs: habit.logs || []
+      logs: habit.logs || [],
     };
-    
+
     // Use getHabitsForDay from CRUD.js to check if habit is active
     const habitsForDay = getHabitsForDay(date);
     if (!habitsForDay) return false;
-    
+
     // Check if this habit is in the list of habits for the day
     const habitId = habit.id || habit.habitId;
     return habitsForDay.some(([id, habitObj]) => id === habitId);
@@ -204,7 +204,7 @@ function isHabitActiveOnDate(habit, date) {
 /**
  * Check if a habit is completed on a specific date using CRUD.js logic
  * Falls back to checking logs directly if CRUD functions are unavailable
- * 
+ *
  * @param {Object} habit - The habit object to check
  * @param {Date} date - The date to check completion for
  * @returns {boolean} True if the habit is completed on the given date
@@ -213,12 +213,12 @@ function isHabitCompletedOnDate(habit, date) {
   try {
     const habitId = habit.id || habit.habitId;
     if (!habitId) return false;
-    
+
     // Try to use CRUD.js isHabitComplete function if available
     if (typeof window.isHabitComplete === 'function') {
       return window.isHabitComplete(habitId, date);
     }
-    
+
     // Fallback to checking logs directly
     const dateStr = date.toDateString();
     return Array.isArray(habit.logs) && habit.logs.includes(dateStr);
@@ -246,7 +246,7 @@ function updateHabitsForDays() {
 /**
  * Update habit indicators for a specific day container
  * Creates colored dots representing each active habit's completion status
- * 
+ *
  * @param {string} containerId - The ID of the container element to update
  * @param {Object[]} habits - Array of all habit objects
  * @param {Date} date - The date to display habits for
@@ -271,7 +271,7 @@ function updateHabitIndicators(containerId, habits, date) {
 /**
  * Navigate the calendar by a specified number of days
  * Updates the current date and refreshes the display
- * 
+ *
  * @param {number} direction - Number of days to navigate (positive for forward, negative for backward)
  */
 function navigateCalendar(direction) {
@@ -284,7 +284,7 @@ function navigateCalendar(direction) {
 
 /**
  * Handle clicks on day cards for navigation
- * 
+ *
  * @param {number} offset - The offset from current day (-1 for previous, 1 for next)
  */
 function handleDayClick(offset) {
@@ -402,7 +402,7 @@ function closeDetailedView() {
 /**
  * Toggle the completion status of a habit for the current date
  * Uses CRUD.js functions with fallback to manual localStorage operations
- * 
+ *
  * @param {string} habitId - The unique identifier of the habit to toggle
  */
 function toggleHabitCompletion(habitId) {
@@ -456,7 +456,7 @@ function toggleHabitCompletion(habitId) {
       habitObj.logs = habitObj.logs.filter((d) => d !== dateStr);
     } else {
       habitObj.logs.push(dateStr);
-      
+
       // Try to update streak using CRUD function
       if (typeof window.calculateStreak === 'function') {
         try {
@@ -470,7 +470,11 @@ function toggleHabitCompletion(habitId) {
     // Save using CRUD updateHabit if available, otherwise use localStorage
     try {
       if (typeof updateHabit === 'function') {
-        updateHabit(habitId, ['logs', 'habitStreak'], [habitObj.logs, habitObj.habitStreak || 0]);
+        updateHabit(
+          habitId,
+          ['logs', 'habitStreak'],
+          [habitObj.logs, habitObj.habitStreak || 0],
+        );
       } else {
         localStorage.setItem(habitId, JSON.stringify(habitObj));
       }
@@ -534,7 +538,7 @@ function handleSwipe() {
 /**
  * Handle keyboard navigation events
  * Arrow keys navigate the calendar, Escape closes detailed view
- * 
+ *
  * @param {KeyboardEvent} e - The keyboard event
  */
 function handleKeyDown(e) {
@@ -578,7 +582,7 @@ document.addEventListener('DOMContentLoaded', initCalendar);
 /**
  * Public API for the Daily Calendar module
  * Exposes key functions for external use
- * 
+ *
  * @namespace DailyCalendar
  */
 window.DailyCalendar = {
@@ -587,33 +591,33 @@ window.DailyCalendar = {
    * @param {number} direction - Number of days to navigate
    */
   navigateCalendar,
-  
+
   /**
    * Update habit indicators for all displayed days
    */
   updateHabitsForDays,
-  
+
   /**
    * Get a copy of the current date being displayed
    * @returns {Date} Copy of the current date
    */
   getCurrentDate: () => new Date(currentDate),
-  
+
   /**
    * Initialize the calendar display and event listeners
    */
   initCalendar,
-  
+
   /**
    * Show the detailed view modal for the current day
    */
   showDetailedView,
-  
+
   /**
    * Close the detailed view modal
    */
   closeDetailedView,
-  
+
   /**
    * Get all habits that are active for a specific date
    * @param {Date} date - The date to get habits for
