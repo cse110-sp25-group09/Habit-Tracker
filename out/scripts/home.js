@@ -326,7 +326,7 @@ class HabitCard extends HTMLElement {
           localStorage.setItem(`habit-${cardId}-completed`, 'true');
           cardFront.classList.remove('not-completed');
           cardFront.classList.add('completed');
-          
+
           populateCards();
         } else {
           removeHabitCompletion(cardId);
@@ -334,7 +334,7 @@ class HabitCard extends HTMLElement {
 
           cardFront.classList.remove('completed');
           cardFront.classList.add('not-completed');
-          
+
           populateCards();
         }
       }
