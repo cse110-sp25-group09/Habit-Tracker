@@ -231,7 +231,6 @@ class HabitCard extends HTMLElement {
 
          <p id="card_description">${this.getAttribute('card-description') || 'None'}</p>
          <p id="card_frequency">${this.getAttribute('card-frequency') || 'None'}</p>
-         <p id="card_time">${this.getAttribute('card-time') || 'None'}</p>
          <p id="card_streak">${this.getAttribute('card-streak') || 'None'}</p>
          <p id= "card_id" hidden>${this.getAttribute('card-id') || 'None'}</p>
          <div class="delete-container">
@@ -325,15 +324,18 @@ class HabitCard extends HTMLElement {
         if (isChecked) {
           logHabitCompleted(cardId);
           localStorage.setItem(`habit-${cardId}-completed`, 'true');
-
           cardFront.classList.remove('not-completed');
           cardFront.classList.add('completed');
+
+          populateCards();
         } else {
           removeHabitCompletion(cardId);
           localStorage.setItem(`habit-${cardId}-completed`, 'false');
 
           cardFront.classList.remove('completed');
           cardFront.classList.add('not-completed');
+
+          populateCards();
         }
       }
     });
@@ -347,7 +349,7 @@ class HabitCard extends HTMLElement {
     const titleEl = this.shadowRoot.getElementById('card_name');
     const freqEl = this.shadowRoot.getElementById('card_frequency');
     const descrEl = this.shadowRoot.getElementById('card_description');
-    const timeEl = this.shadowRoot.getElementById('card_time');
+    //const timeEl = this.shadowRoot.getElementById('card_time');
     const streakEl = this.shadowRoot.getElementById('card_streak');
     const idEl = this.shadowRoot.getElementById('card_id');
     const checkbox = this.shadowRoot.querySelector('.habit-checkbox');
@@ -405,9 +407,9 @@ class HabitCard extends HTMLElement {
     if (descrEl) {
       descrEl.textContent = `Description: ${this.getAttribute('card-description') || 'None'}`;
     }
-    if (timeEl) {
-      timeEl.textContent = `Time: ${this.getAttribute('card-time') || 'None'}`;
-    }
+    // if (timeEl) {
+    //   timeEl.textContent = `Time: ${this.getAttribute('card-time') || 'None'}`;
+    // }
     if (streakEl) {
       streakEl.innerHTML = `Current Streak: <span class="streak_number">${this.getAttribute('card-streak') || 'None'}</span>`;
     }
@@ -434,7 +436,7 @@ document.getElementById('submit-habit').addEventListener('click', () => {
   const name = document.getElementById('habit-name').value.trim();
   const frequency = document.getElementById('habit-frequency').value;
   const descr = document.getElementById('habitDescription').value;
-  const timeStr = document.getElementById('habit-time').value;
+  //const timeStr = document.getElementById('habit-time').value;
   let time_dict = { Daily: 1, Weekly: 7, Monthly: 30 };
 
   let streak = 0;
@@ -457,7 +459,7 @@ document.getElementById('submit-habit').addEventListener('click', () => {
   document.getElementById('habit-name').value = '';
   document.getElementById('habitDescription').value = '';
   document.getElementById('habit-frequency').value = 'Daily';
-  document.getElementById('habit-time').value = '';
+  //.getElementById('habit-time').value = '';
 
   document.getElementById('habit-form').style.display = 'none';
   document.getElementById('blur-overlay').classList.add('hidden');
@@ -490,7 +492,7 @@ function populateCards() {
     newCard.setAttribute('card-name', habits[i][1].habitName);
     newCard.setAttribute('card-frequency', freqStr);
     newCard.setAttribute('card-description', habits[i][1].habitDescription);
-    newCard.setAttribute('card-time', habits[i][1].startDateTime);
+    //newCard.setAttribute('card-time', habits[i][1].startDateTime);
     newCard.setAttribute('card-streak', habits[i][1].habitStreak);
     newCard.setAttribute('card-id', habits[i][0]);
     newCard.setAttribute(
