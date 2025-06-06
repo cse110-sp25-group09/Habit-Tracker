@@ -2,11 +2,11 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: sans-serif;
+  font-family: 'Commissioner', sans-serif;
 }
 
 body {
-  background-color: #f5f5f5;
+  background-color: var(--background-color);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -15,22 +15,59 @@ body {
   position: relative;
 }
 
+/* Header Styling */
 .app-header {
   justify-content: space-around;
   align-items: center;
   width: 100%;
-  background-color: #7c8efc;
+  background-color: var(--primary-color);
   padding: 0.75rem;
   position: fixed;
   margin: auto;
   max-width: auto;
   display: flex;
-  color: white;
+  color: var(--text-color);
   z-index: 101;
+  opacity: 0;
+  transform: translateY(-20px);
+  animation: fadeInUp 0.5s ease-out forwards;
 }
 
+.app-subheader {
+  justify-content: left;
+  align-items: left;
+  height: auto;
+  width: 100%;
+  padding-top: 5rem;
+  padding-left: 1rem;
+  padding-bottom: 1rem;
+  position: fixed;
+  max-width: auto;
+  display: block;
+  font-size: 1.5rem;
+  opacity: 0;
+  transform: translateX(-20px);
+  animation: fadeInUp 1s ease-out forwards;
+}
+
+/* Typography */
+h2 {
+  background: var(--gradient-color);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+h4 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: grey;
+  line-height: 2;
+}
+
+/* Main Content */
 .main-content {
-  background-color: #ffffff;
+  background-color: var(--app-background-color);
   flex: 1;
   display: flex;
   justify-content: center;
@@ -40,6 +77,7 @@ body {
   min-height: 100vh;
 }
 
+/* Calendar Container */
 .calendar-container {
   display: flex;
   align-items: center;
@@ -47,10 +85,14 @@ body {
   gap: 15px;
   perspective: 1000px;
   width: 100%;
-  max-width: 350px;
+  max-width: 1200px;
   position: relative;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 0.8s ease-out forwards;
 }
 
+/* Day Cards */
 .day-card {
   width: 120px;
   height: 160px;
@@ -59,7 +101,7 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  color: white;
+  color: var(--text-color);
   font-size: 16px;
   font-weight: bold;
   cursor: pointer;
@@ -87,7 +129,7 @@ body {
 }
 
 .day-card.active {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--gradient-color);
   transform: scale(1.1) translateZ(0);
   z-index: 10;
   box-shadow: 0 15px 30px rgba(102, 126, 234, 0.3);
@@ -119,6 +161,7 @@ body {
   font-weight: normal;
 }
 
+/* Habit Indicators */
 .habits-indicator {
   position: absolute;
   bottom: 15px;
@@ -140,27 +183,31 @@ body {
 }
 
 .habit-dot.pending {
-  background: #ff9800;
+  background: var(--accent-color);
   box-shadow: 0 1px 4px rgba(255, 152, 0, 0.4);
 }
 
+/* Navigation Bar */
 .nav-bar {
   display: flex;
   justify-content: space-around;
   align-items: center;
   width: 100%;
-  background-color: #7c8efc;
+  background-color: var(--primary-color);
   padding: 0.75rem 0;
   position: fixed;
   bottom: 0;
   margin: auto;
   max-width: auto;
-  z-index: 100;
+  z-index: 200;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 0.5s ease-out forwards;
 }
 
 .nav-item {
   font-size: 1.5rem;
-  color: white;
+  color: var(--text-color);
   cursor: pointer;
   transition: transform 0.2s ease;
 }
@@ -172,7 +219,356 @@ body {
 .nav-item img {
   width: 28px;
   height: 28px;
-  filter: brightness(0) invert(1);
+  filter: var(--nav-icon-filter);
+}
+
+/* Calendar Menu Styling */
+#calendar-menu {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--input-bg-color, var(--background-color));
+  padding: 10px;
+  z-index: 300;
+  display: none;
+  border: 2px solid var(--primary-color);
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(10px);
+  min-width: 200px;
+}
+
+#calendar-menu.show {
+  display: block;
+  opacity: 0;
+  animation: fadeInUp 0.3s ease-out forwards;
+}
+
+#calendar-menu li {
+  padding: 12px 16px;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  color: var(--text-color);
+  font-weight: 500;
+  font-size: 1rem;
+  margin: 4px 0;
+}
+
+#calendar-menu li:hover {
+  background-color: var(--accent-color);
+  color: var(--button-color, white);
+  transform: translateX(4px);
+}
+
+#calendar-menu li:active {
+  transform: translateX(2px);
+}
+
+/* List Styling */
+ul {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+/* Detailed View Modal CSS Classes */
+/* Hide calendar during detailed view */
+.calendar-hidden {
+  display: none !important;
+}
+
+/* Modal overlay positioning */
+.habit-detail-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--app-background-color, #f5f5f5);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(2px);
+}
+
+/* Responsive content container */
+.detail-content-container {
+  max-width: 400px;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header styling */
+.detail-header {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  padding: 20px 0;
+  background: var(--primary-color, #7c8efc);
+  color: var(--text-color, white);
+  border-radius: 0 0 15px 15px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.detail-day-name {
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 1.2;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.detail-date {
+  font-size: 1rem;
+  line-height: 1.1;
+  margin-top: 5px;
+  opacity: 0.95;
+}
+
+.detail-count {
+  font-size: 0.9rem;
+  opacity: 0.9;
+  margin-top: 8px;
+  line-height: 1.1;
+  font-weight: 400;
+}
+
+/* Card container and empty state */
+.detail-card-container {
+  background-color: var(--background-color, #fff);
+  width: 100%;
+  flex-grow: 1;
+  overflow-y: auto;
+  padding: 0 20px;
+  border-radius: 15px 15px 0 0;
+  margin-top: -15px;
+  position: relative;
+  z-index: 1;
+}
+
+.detail-empty-message {
+  text-align: center;
+  color: #888;
+  margin-top: 2rem;
+  font-size: 1rem;
+  font-style: italic;
+}
+
+/* Individual habit styling */
+.habit-card {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  margin: 12px 0;
+  background: var(--background-color, #f8f8f8);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  border: 2px solid transparent;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.habit-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  border-color: var(--accent-color, #ff9800);
+}
+
+.habit-card.completed {
+  background: linear-gradient(135deg, #e8f5e8 0%, #d4f0d4 100%);
+  border-color: #4caf50;
+}
+
+.habit-card.completed:hover {
+  background: linear-gradient(135deg, #d4f0d4 0%, #c8e6c8 100%);
+  border-color: #45a049;
+}
+
+/* Checkbox icon styling */
+.habit-icon {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #ddd;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 12px;
+  margin-right: 12px;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+  font-weight: bold;
+}
+
+.habit-icon.completed {
+  background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+  box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
+  border-color: #388e3c;
+  transform: scale(1.1);
+}
+
+/* Habit text styling */
+.habit-name {
+  flex-grow: 1;
+  font-weight: 500;
+  color: var(--accent-color, #333);
+  font-size: 1rem;
+  line-height: 1.2;
+}
+
+.habit-card.completed .habit-name {
+  color: #2e7d32;
+  font-weight: 600;
+}
+
+/* Close button positioning */
+.detail-close-btn {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 12px 24px;
+  background: var(--primary-color, #7c8efc);
+  color: var(--text-color, #fff);
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(124, 142, 252, 0.3);
+  backdrop-filter: blur(10px);
+}
+
+.detail-close-btn:hover {
+  transform: translateX(-50%) translateY(-2px);
+  box-shadow: 0 6px 20px rgba(124, 142, 252, 0.4);
+  background: linear-gradient(135deg, var(--primary-color, #7c8efc) 0%, #6c7ce6 100%);
+}
+
+.detail-close-btn:active {
+  transform: translateX(-50%) translateY(0px);
+  box-shadow: 0 2px 8px rgba(124, 142, 252, 0.3);
+}
+
+/* Animations */
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0) translateX(0);
+  }
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+/* Desktop and tablet responsiveness */
+@media (min-width: 768px) {
+  .calendar-container {
+    gap: 30px;
+    max-width: 1200px;
+  }
+
+  .day-card {
+    width: 180px;
+    height: 240px;
+    font-size: 18px;
+  }
+
+  .day-name {
+    font-size: 24px;
+  }
+
+  .day-date {
+    font-size: 16px;
+  }
+
+  .habit-dot {
+    width: 8px;
+    height: 8px;
+  }
+
+  #calendar-menu {
+    min-width: 220px;
+    padding: 15px;
+  }
+
+  #calendar-menu li {
+    padding: 15px 20px;
+    font-size: 1.1rem;
+  }
+
+  .detail-content-container {
+    max-width: 500px;
+  }
+  
+  .detail-day-name {
+    font-size: 2rem;
+  }
+  
+  .detail-date {
+    font-size: 1.2rem;
+  }
+  
+  .detail-count {
+    font-size: 1rem;
+  }
+  
+  .habit-card {
+    padding: 16px;
+    margin: 16px 0;
+  }
+  
+  .habit-icon {
+    width: 24px;
+    height: 24px;
+    font-size: 14px;
+  }
+  
+  .habit-name {
+    font-size: 1.1rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .calendar-container {
+    gap: 50px;
+  }
+
+  .day-card {
+    width: 220px;
+    height: 280px;
+    font-size: 20px;
+  }
+
+  .day-name {
+    font-size: 28px;
+  }
+
+  .day-date {
+    font-size: 18px;
+  }
+
+  .detail-content-container {
+    max-width: 600px;
+  }
+  
+  .detail-day-name {
+    font-size: 2.5rem;
+  }
+  
+  .detail-date {
+    font-size: 1.4rem;
+  }
 }
 
 /* Mobile responsiveness */
@@ -195,12 +591,42 @@ body {
   .day-date {
     font-size: 11px;
   }
+
+  #calendar-menu {
+    min-width: 180px;
+    left: 20px;
+    transform: none;
+  }
+
+  #calendar-menu li {
+    padding: 10px 12px;
+    font-size: 0.9rem;
+  }
 }
 
 /* Accessibility */
 @media (prefers-reduced-motion: reduce) {
   .day-card,
-  .habit-dot {
+  .habit-dot,
+  .nav-item,
+  .app-header,
+  .nav-bar,
+  .calendar-container,
+  #calendar-menu li,
+  .habit-card,
+  .habit-icon,
+  .detail-close-btn {
     transition: none;
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+
+  .day-card.active {
+    transform: scale(1.1);
+  }
+
+  .day-card.inactive {
+    transform: scale(0.9);
   }
 }
