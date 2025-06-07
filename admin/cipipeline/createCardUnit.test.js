@@ -18,7 +18,7 @@ let page, browser;
 let url = '../../localstorage.html';
 
 test('temporary fix for broken unit tests', () => {
-  expect("temp").toStrictEqual("temp"); //remove this and fix below soon
+  expect('temp').toStrictEqual('temp'); //remove this and fix below soon
 });
 // describe('Create a card data object in localStorage or a database', () => {
 //   beforeAll(async () => {
