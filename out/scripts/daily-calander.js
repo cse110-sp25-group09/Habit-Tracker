@@ -1,15 +1,61 @@
-// Daily Calendar Module for Habit Tracker
-// Handles the three-card carousel display and navigation with full habit cards
+/**
+ * Daily Calendar Module for Habit Tracker
+ * Handles the three-card carousel display and navigation
+ *
+ * @fileoverview This module manages the daily calendar view with a three-card carousel
+ * showing previous, current, and next day. It handles habit display, completion tracking,
+ * and provides both touch and keyboard navigation.
+ *
+ * @author Your Name
+ * @version 1.0.0
+ */
 
 // Import CRUD functions
 import {
-  getHabitsForDay,
   isHabitComplete,
   logHabitCompleted,
   removeHabitCompletion,
   getAllHabits,
-  getHabitById,
 } from './CRUD.js';
+
+document.addEventListener('DOMContentLoaded', function () {
+  const home_select = document.getElementById('home-selection');
+  const settings_select = document.getElementById('settings-selection');
+  const calendarSelection = document.getElementById('calendar-selection');
+  const calendarMenu = document.getElementById('calendar-menu');
+  // Home button navigation
+  home_select.addEventListener('click', () => {
+    window.location.href = 'home-page.html';
+  });
+
+  // Calendar menu toggle
+  calendarSelection.addEventListener('click', function (event) {
+    event.stopPropagation();
+    calendarMenu.classList.toggle('show');
+  });
+
+  // Close the menu if clicking outside
+  document.addEventListener('click', function () {
+    calendarMenu.classList.remove('show');
+  });
+
+  document
+    .getElementById('daily-option')
+    .addEventListener('click', function (event) {
+      window.location.href = 'daily-calendar.html';
+    });
+
+  document
+    .getElementById('monthly-option')
+    .addEventListener('click', function (event) {
+      window.location.href = 'monthly-calendar.html';
+    });
+
+  // Settings button navigation
+  settings_select.addEventListener('click', () => {
+    window.location.href = 'settings.html';
+  });
+});
 
 // Import and define the HabitCard custom element
 class HabitCard extends HTMLElement {
@@ -68,6 +114,15 @@ class HabitCard extends HTMLElement {
         background: var(--card-color);
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
         color: var(--text-color-front-of-card);
+      }
+
+      .flip-card-front.completed {
+       background: var(--streak-card-color);
+      }
+     .flip-card-front.not-completed {
+       background: var(--card-color);
+       box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+       color: var(--text-color-front-of-card);
       }
  
       .flip-card-back {
@@ -147,13 +202,12 @@ class HabitCard extends HTMLElement {
           <h1 id="card_name">${this.getAttribute('card-name') || 'Untitled Habit'}</h1>
           <label style="margin-top: 1rem; display: flex; align-items: center; gap: 0.5rem;">
             Complete:
-            <input type="checkbox" class="habit-checkbox" />
+            <input type="checkbox" class="habit-checkbox" disabled />
           </label>
         </div>
         <div class="flip-card-back">
           <p id="card_description">${this.getAttribute('card-description') || 'None'}</p>
           <p id="card_frequency">${this.getAttribute('card-frequency') || 'None'}</p>
-          <p id="card_time">${this.getAttribute('card-time') || 'None'}</p>
           <p id="card_streak">${this.getAttribute('card-streak') || 'None'}</p>
           <p id="card_id" hidden>${this.getAttribute('card-id') || 'None'}</p>
           <div class="delete-container">
@@ -232,14 +286,19 @@ class HabitCard extends HTMLElement {
       e.stopPropagation();
       const isChecked = checkbox.checked;
       const idElement = this.shadowRoot.querySelector('#card_id');
+      const cardFront = this.shadowRoot.querySelector('.flip-card-front');
 
-      if (idElement) {
+      if (idElement && cardFront) {
         const cardId = idElement.textContent.trim();
 
         if (isChecked) {
           logHabitCompleted(cardId);
+          cardFront.classList.remove('not-completed');
+          cardFront.classList.add('completed');
         } else {
           removeHabitCompletion(cardId);
+          cardFront.classList.remove('completed');
+          cardFront.classList.add('not-completed');
         }
 
         // Update the calendar indicators
@@ -256,7 +315,6 @@ class HabitCard extends HTMLElement {
       'card-completed',
       'card-frequency',
       'card-description',
-      'card-time',
       'card-streak',
       'card-id',
     ];
@@ -274,10 +332,11 @@ class HabitCard extends HTMLElement {
     const titleEl = this.shadowRoot.getElementById('card_name');
     const freqEl = this.shadowRoot.getElementById('card_frequency');
     const descrEl = this.shadowRoot.getElementById('card_description');
-    const timeEl = this.shadowRoot.getElementById('card_time');
+    //const timeEl = this.shadowRoot.getElementById('card_time');
     const streakEl = this.shadowRoot.getElementById('card_streak');
     const idEl = this.shadowRoot.getElementById('card_id');
     const checkbox = this.shadowRoot.querySelector('.habit-checkbox');
+    const cardFront = this.shadowRoot.querySelector('.flip-card-front');
 
     if (titleEl) {
       titleEl.textContent = this.getAttribute('card-name') || 'Untitled Habit';
@@ -291,10 +350,6 @@ class HabitCard extends HTMLElement {
       descrEl.textContent = `Description: ${this.getAttribute('card-description') || 'None'}`;
     }
 
-    if (timeEl) {
-      timeEl.textContent = `Time: ${this.getAttribute('card-time') || 'None'}`;
-    }
-
     if (streakEl) {
       streakEl.innerHTML = `Current Streak: <span class="streak_number"> ${this.getAttribute('card-streak') || '0'} </span>`;
     }
@@ -305,6 +360,9 @@ class HabitCard extends HTMLElement {
 
     if (checkbox) {
       checkbox.checked = this.getAttribute('card-completed') === 'true';
+      if (checkbox.checked) {
+        cardFront.classList.add('completed');
+      }
     }
   }
 }
@@ -312,25 +370,21 @@ class HabitCard extends HTMLElement {
 // Define the custom element
 customElements.define('habit-card', HabitCard);
 
-// Navigation event listeners
-const home_select = document.getElementById('home-selection');
-const calendar_select = document.getElementById('calendar-selection');
-const settings_select = document.getElementById('settings-selection');
-
-home_select?.addEventListener('click', () => {
-  window.location.href = 'home-page.html';
-});
-calendar_select?.addEventListener('click', () => {
-  window.location.href = 'monthly-calendar.html';
-});
-settings_select?.addEventListener('click', () => {
-  window.location.href = 'settings.html';
+window.addEventListener('DOMContentLoaded', () => {
+  const body = document.body;
+  const savedTheme = localStorage.getItem('selectedTheme');
+  if (savedTheme && savedTheme !== 'default') {
+    body.classList.add(`${savedTheme}-theme`);
+  }
 });
 
-// Calendar state
+/** @type {Date} Current date being displayed in the calendar */
 let currentDate = new Date();
+
+/** @type {boolean} Flag indicating if the detailed view cards are currently hidden */
 let cardsHidden = false;
 
+/** @type {string[]} Array of day names for display */
 const dayNames = [
   'Sunday',
   'Monday',
@@ -340,6 +394,8 @@ const dayNames = [
   'Friday',
   'Saturday',
 ];
+
+/** @type {string[]} Array of abbreviated month names for display */
 const monthNames = [
   'Jan',
   'Feb',
@@ -355,7 +411,10 @@ const monthNames = [
   'Dec',
 ];
 
-// Initialize calendar
+/**
+ * Initialize the calendar by checking for required DOM elements and setting up the display
+ * Uses setTimeout to retry if required elements are not yet available
+ */
 function initCalendar() {
   const requiredIds = ['prev-day', 'current-day', 'next-day'];
   const missing = requiredIds.filter((id) => !document.getElementById(id));
@@ -369,7 +428,10 @@ function initCalendar() {
   setupEventListeners();
 }
 
-// Update the visual display of the three cards
+/**
+ * Update the visual display of the three calendar cards (previous, current, next day)
+ * Populates each card with the appropriate day name and date
+ */
 function updateCalendarDisplay() {
   const prevDate = new Date(currentDate);
   prevDate.setDate(currentDate.getDate() - 1);
@@ -396,7 +458,13 @@ function updateCalendarDisplay() {
   fillCard('next-day', nextDate);
 }
 
-// Get habits for a specific date using CRUD functions
+/**
+ * Fetch all habits from storage using CRUD.js functions for a specific date
+ * for a specific date
+ *
+ * @param {Date} date - The date to check activity for
+ * @returns {Object[]} Array of habit objects with normalized structure
+ */
 function getHabitsForSpecificDate(date) {
   const allHabits = getAllHabits();
   if (!allHabits) return [];
@@ -413,7 +481,14 @@ function getHabitsForSpecificDate(date) {
   return activeHabits;
 }
 
-// Check if habit is active on date (using same logic as CRUD)
+/**
+ * Check if a habit is active on a specific date using CRUD.js logic
+ * Falls back to frequency-based calculation if CRUD functions fail
+ *
+ * @param {Object} habit - The habit object to check
+ * @param {Date} date - The date to check activity for
+ * @returns {boolean} True if the habit is active on the given date
+ */
 function isHabitActiveOnDate(habit, date) {
   try {
     const startDate = new Date(habit.startDateTime);
@@ -434,7 +509,9 @@ function isHabitActiveOnDate(habit, date) {
   }
 }
 
-// Update habit indicators for all three cards
+/**
+ * Update habit indicators for all three calendar cards (previous, current, next day)
+ */
 function updateHabitsForDays() {
   const prevDate = new Date(currentDate);
   prevDate.setDate(currentDate.getDate() - 1);
@@ -446,6 +523,13 @@ function updateHabitsForDays() {
   updateHabitIndicators('next-habits', nextDate);
 }
 
+/**
+ * Update habit indicators for a specific day container
+ * Creates colored dots representing each active habit's completion status
+ *
+ * @param {string} containerId - The ID of the container element to update
+ * @param {Date} date - The date to display habits for
+ */
 function updateHabitIndicators(containerId, date) {
   const container = document.getElementById(containerId);
   if (!container) return;
@@ -465,7 +549,12 @@ function updateHabitIndicators(containerId, date) {
   });
 }
 
-// Navigate calendar
+/**
+ * Navigate the calendar by a specified number of days
+ * Updates the current date and refreshes the display
+ *
+ * @param {number} direction - Number of days to navigate (positive for forward, negative for backward)
+ */
 function navigateCalendar(direction) {
   const newDate = new Date(currentDate);
   newDate.setDate(newDate.getDate() + direction);
@@ -474,17 +563,19 @@ function navigateCalendar(direction) {
   updateHabitsForDays();
 }
 
-// Handle day clicks
+/**
+ * Handle clicks on day cards for navigation
+ *
+ * @param {number} offset - The offset from current day (-1 for previous, 1 for next)
+ */
 function handleDayClick(offset) {
   navigateCalendar(offset);
 }
 
-// Show detailed view
-function handleCurrentDayClick() {
-  showDetailedView();
-}
-
-// Build detailed view overlay
+/**
+ * Show the detailed view overlay for the current day
+ * Creates and displays a modal with all active habits and their completion status
+ */
 function showDetailedView() {
   const calend = document.querySelector('.calendar-container');
   if (calend) calend.style.display = 'none';
@@ -522,8 +613,8 @@ function showDetailedView() {
     flex-direction: column;
     text-align: center;
     padding: 20px 0;
-    background: #7c8efc;
-    color: white;
+    background: var(--primary-color);
+    color: var(--text-color);
     position: sticky;
     top: 0;
     z-index: 1001;
@@ -600,7 +691,6 @@ function showDetailedView() {
         'card-description',
         habit.habitDescription || 'No description',
       );
-      habitCard.setAttribute('card-time', habit.startDateTime || 'No time set');
       habitCard.setAttribute('card-streak', habit.habitStreak || 0);
       habitCard.setAttribute('card-id', habitId);
       habitCard.setAttribute(
@@ -621,8 +711,8 @@ function showDetailedView() {
   closeBtn.style.cssText = `
     margin: 30px auto;
     padding: 12px 24px;
-    background: #7c8efc;
-    color: #fff;
+    background: var(--primary-color);
+    color: var(--text-color);
     border: none;
     border-radius: 8px;
     cursor: pointer;
@@ -635,7 +725,9 @@ function showDetailedView() {
   document.body.appendChild(overlay);
 }
 
-// Close detailed view
+/**
+ * Close the detailed view overlay and restore the calendar display
+ */
 function closeDetailedView() {
   const overlay = document.getElementById('habit-detail-overlay');
   if (overlay) overlay.remove();
@@ -646,19 +738,32 @@ function closeDetailedView() {
   cardsHidden = false;
 }
 
-// Touch handling
+/** @type {number} X coordinate where touch started */
 let touchStartX = 0;
+/** @type {number} X coordinate where touch ended */
 let touchEndX = 0;
 
+/**
+ * Handle touch start events for swipe navigation
+ * @param {TouchEvent} e - The touch start event
+ */
 function handleTouchStart(e) {
   touchStartX = e.changedTouches[0].screenX;
 }
 
+/**
+ * Handle touch end events for swipe navigation
+ * @param {TouchEvent} e - The touch end event
+ */
 function handleTouchEnd(e) {
   touchEndX = e.changedTouches[0].screenX;
   handleSwipe();
 }
 
+/**
+ * Process swipe gesture and navigate calendar if threshold is met
+ * Swipe left navigates forward, swipe right navigates backward
+ */
 function handleSwipe() {
   const threshold = 50;
   const dx = touchEndX - touchStartX;
@@ -667,7 +772,12 @@ function handleSwipe() {
   }
 }
 
-// Keyboard navigation
+/**
+ * Handle keyboard navigation events
+ * Arrow keys navigate the calendar, Escape closes detailed view
+ *
+ * @param {KeyboardEvent} e - The keyboard event
+ */
 function handleKeyDown(e) {
   if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
     e.preventDefault();
@@ -684,14 +794,17 @@ function handleKeyDown(e) {
   }
 }
 
-// Setup event listeners
+/**
+ * Set up all event listeners for calendar interaction
+ * Includes click handlers, keyboard navigation, touch gestures, and storage events
+ */
 function setupEventListeners() {
   const prevCard = document.getElementById('prev-day');
   const currCard = document.getElementById('current-day');
   const nextCard = document.getElementById('next-day');
 
   if (prevCard) prevCard.addEventListener('click', () => handleDayClick(-1));
-  if (currCard) currCard.addEventListener('click', handleCurrentDayClick);
+  if (currCard) currCard.addEventListener('click', showDetailedView);
   if (nextCard) nextCard.addEventListener('click', () => handleDayClick(1));
 
   document.addEventListener('keydown', handleKeyDown);
@@ -700,17 +813,53 @@ function setupEventListeners() {
   window.addEventListener('storage', updateHabitsForDays);
 }
 
-// Initialize calendar
+// Initialize calendar when DOM is ready
 document.addEventListener('DOMContentLoaded', initCalendar);
 
-// Expose public API
+/**
+ * Public API for the Daily Calendar module
+ * Exposes key functions for external use
+ *
+ * @namespace DailyCalendar
+ */
 window.DailyCalendar = {
+  /**
+   * Navigate the calendar by specified number of days
+   * @param {number} direction - Number of days to navigate
+   */
   navigateCalendar,
+
+  /**
+   * Update habit indicators for all displayed days
+   */
   updateHabitsForDays,
+
+  /**
+   * Get a copy of the current date being displayed
+   * @returns {Date} Copy of the current date
+   */
   getCurrentDate: () => new Date(currentDate),
+
+  /**
+   * Initialize the calendar display and event listeners
+   */
   initCalendar,
+
+  /**
+   * Show the detailed view modal for the current day
+   */
   showDetailedView,
+
+  /**
+   * Close the detailed view modal
+   */
   closeDetailedView,
+
+  /**
+   * Get all habits that are active for a specific date
+   * @param {Date} date - The date to get habits for
+   * @returns {Object[]} Array of habit objects active on the given date
+   */
   getHabitsForDate: (date) => {
     return getHabitsForSpecificDate(date);
   },

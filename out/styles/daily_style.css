@@ -19,7 +19,7 @@ body {
   justify-content: space-around;
   align-items: center;
   width: 100%;
-  background-color: #7c8efc;
+  background-color: var(--primary-color);
   padding: 0.75rem;
   position: fixed;
   margin: auto;
@@ -47,13 +47,14 @@ body {
   gap: 15px;
   perspective: 1000px;
   width: 100%;
-  max-width: 350px;
+  max-width: 1000px;
   position: relative;
+  margin: 0 auto;
 }
 
 .day-card {
-  width: 120px;
-  height: 160px;
+  width: 200px;
+  height: 240px;
   border-radius: 15px;
   display: flex;
   flex-direction: column;
@@ -87,10 +88,11 @@ body {
 }
 
 .day-card.active {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--card-color);
+  color: var(--text-color-front-of-card);
   transform: scale(1.1) translateZ(0);
   z-index: 10;
-  box-shadow: 0 15px 30px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 15px 30px rgba(234, 102, 219, 0.3);
 }
 
 .day-card.inactive {
@@ -149,7 +151,8 @@ body {
   justify-content: space-around;
   align-items: center;
   width: 100%;
-  background-color: #7c8efc;
+  background-color: var(--primary-color);
+  color: var(--text-color);
   padding: 0.75rem 0;
   position: fixed;
   bottom: 0;
@@ -160,7 +163,7 @@ body {
 
 .nav-item {
   font-size: 1.5rem;
-  color: white;
+  color: var(--text-color);
   cursor: pointer;
   transition: transform 0.2s ease;
 }
@@ -170,9 +173,7 @@ body {
 }
 
 .nav-item img {
-  width: 28px;
-  height: 28px;
-  filter: brightness(0) invert(1);
+  filter: var(--nav-icon-filter);
 }
 
 /* Mobile responsiveness */
