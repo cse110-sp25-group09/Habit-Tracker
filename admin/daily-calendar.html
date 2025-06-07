@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Daily Calendar - Habit Tracker</title>
     <link rel="stylesheet" href="../out/styles/daily_style.css" />
+    <link rel="stylesheet" href="../out/styles/home_style.css" />
     <link rel="stylesheet" href="../out/styles/common_themes.css" />
   </head>
   <body>
@@ -46,17 +47,24 @@
     </div>
 
     <footer class="nav-bar">
-      <div id="home-selection" class="nav-item">
-        <img src="../out/icons/house-solid.svg" alt="home" />
-      </div>
-      <div id="calendar-selection" class="nav-item">
-        <img src="../out/icons/calendar-days-solid.svg" alt="calendar" />
-      </div>
-      <div id="settings-selection" class="nav-item">
-        <img src="../out/icons/gear-solid.svg" alt="settings" />
-      </div>
-    </footer>
+        <div id="home-selection" class="nav-item">
+          <img src="../out/icons/house-solid.svg" alt="home" />
+        </div>
 
+        <div id="calendar-selection" class="nav-item">
+          <img src="../out/icons/calendar-days-solid.svg" alt="calendar" />
+          <div id="calendar-menu">
+            <ul>
+              <li id="daily-option">Daily</li>
+              <li id="monthly-option">Monthly</li>
+            </ul>
+          </div>
+        </div>
+
+        <div id="settings-selection" class="nav-item">
+          <img src="../out/icons/gear-solid.svg" alt="settings" />
+        </div>
+      </footer>
     <script type="module" src="../out/scripts/daily-calander.js"></script>
   </body>
 </html>
