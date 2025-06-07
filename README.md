@@ -12,6 +12,6 @@
  - On the settings page you can click reset cards to delete all your cards. You can also switch themes for the whole website here.
  - On the daily calendar you can scoll and click through your week of habits. By clicking into it, you can see habits for that specific day. The bottom of the card also shows their completion rates.
  - On the monthly calendar you can see a heat map of your completed habits, as a ratio of your total habits for that day.
-## Hope You Enjoy Habit-Tracker
+## Hope Your Enjoy Habit-Tracker!
 Start at: https://cse110-sp25-group09.github.io/Habit-Tracker/admin/home-page.html
 
