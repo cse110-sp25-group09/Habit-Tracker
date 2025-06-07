@@ -1,6 +1,7 @@
-//Menu Navigation Bar
+//Imports helper function for calculating task completion ratios of a given date
 import { ratioOfCompleted } from './CRUD.js';
 
+//Menu Navigation Bar
 const home_select = document.getElementById('home-selection');
 const daily_calendar_select = document.getElementById(
   'daily-calendar-selection',
@@ -21,6 +22,7 @@ settings_select.addEventListener('click', () => {
   window.location.href = 'settings.html';
 });
 
+// Initialize the current year to the current date
 let currentYear = new Date().getFullYear();
 export const monthNames = [
   'January',
@@ -37,6 +39,7 @@ export const monthNames = [
   'December',
 ];
 
+// Function to update the day element's completion status based on tasks completed
 function updateDayCompletion(dayElement, tasksCompleted, totalTasks) {
   // Clear old completion classes
   dayElement.classList.remove(
@@ -55,12 +58,14 @@ function updateDayCompletion(dayElement, tasksCompleted, totalTasks) {
   }
 }
 
+// Function to generate the calendar for a given year
 export function generateCalendar(year) {
   const calendarContainer = document.getElementById('calendar');
   const monthLabel = document.getElementById('month-label');
   calendarContainer.innerHTML = '';
   monthLabel.textContent = year;
 
+  // Clear previous calendar content
   for (let month = 0; month < 12; month++) {
     const monthDiv = document.createElement('div');
     monthDiv.className = 'month';
@@ -108,7 +113,7 @@ export function generateCalendar(year) {
         dayDiv.classList.add('today');
       }
 
-      //console.log(`${day} ${monthNames[month]} ${year}`);
+      //update the day completion status and color coding it
       let date = new Date(year, month, day);
       let ratio = ratioOfCompleted(date);
 
@@ -132,16 +137,7 @@ export function generateCalendar(year) {
   }
 }
 
-// document.getElementById('prev-year').addEventListener('click', () => {
-//   currentYear--;
-//   generateCalendar(currentYear);
-// });
-
-// document.getElementById('next-year').addEventListener('click', () => {
-//   currentYear++;
-//   generateCalendar(currentYear);
-// });
-
+// Function to set up event listeners for year navigation
 export function setupEventListeners() {
   document.getElementById('prev-year').addEventListener('click', () => {
     currentYear--;
@@ -154,6 +150,7 @@ export function setupEventListeners() {
   });
 }
 
+// Function to handle theme selection
 window.addEventListener('DOMContentLoaded', () => {
   const body = document.body;
   const savedTheme = localStorage.getItem('selectedTheme');
@@ -163,3 +160,7 @@ window.addEventListener('DOMContentLoaded', () => {
   generateCalendar(currentYear);
   setupEventListeners();
 });
+
+export function getDaysInMonth(year, month) {
+  return new Date(year, month + 1, 0).getDate();
+}
