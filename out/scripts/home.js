@@ -50,44 +50,42 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 });
 
-
-
 /**
  * HabitCard - A custom HTML element representing a single habit tracking card.
- * 
+ *
  * This component provides an interactive visual representation of a user's habit.
  * It uses Shadow DOM to encapsulate its structure and styles, ensuring clean integration
  * with the rest of the app. The card displays basic habit information on the front,
  * and reveals additional details on the back when clicked (flip animation).
- * 
+ *
  * Core Features:
  * --------------
  * 1. Flip Behavior:
  *    - The card has a front and back face.
  *    - Clicking anywhere on the card flips it to reveal the other side.
- * 
+ *
  * 2. Completion Toggle:
  *    - A checkbox on the front allows users to mark the habit as complete or incomplete.
  *    - Completion state is saved in localStorage and affects the visual styling of the card.
  *    - Completion changes also call `logHabitCompleted()` or `removeHabitCompletion()` and trigger a UI refresh via `populateCards()`.
- * 
+ *
  * 3. Delete Habit:
  *    - The back side contains a delete button with a confirmation prompt.
  *    - On confirmation, the habit is removed from the DOM and `deleteHabit()` is called with the card ID.
- * 
+ *
  * 4. Dynamic Content:
  *    - Card data (name, frequency, description, streak, ID, and completed state) is passed via attributes.
  *    - These attributes are used to populate the card UI and keep it in sync with the app's data model.
- * 
+ *
  * 5. Initialization:
  *    - The component reads initial completion state from localStorage (if available).
  *    - Attributes are used to render current values such as title, frequency, and description.
- * 
+ *
  */
 class HabitCard extends HTMLElement {
   constructor() {
     super();
-     /*Creates a flip card layout with:
+    /*Creates a flip card layout with:
       Front: habit name and completion checkbox
       Back: description, frequency, streak, and delete button */
     const shadow = this.attachShadow({ mode: 'open' });
@@ -295,7 +293,7 @@ class HabitCard extends HTMLElement {
     const yesBtn = this.shadowRoot.querySelector('.confirm-yes');
     const noBtn = this.shadowRoot.querySelector('.confirm-no');
 
-   /*Delete Confirmation
+    /*Delete Confirmation
      shows a confirmation dialog (Yes/No)
      If Yes: Removes card from the DOM*/
     deleteBtn.addEventListener('click', () => {
@@ -475,7 +473,7 @@ document.getElementById('submit-habit').addEventListener('click', () => {
   let streak = 0;
 
   //Validates and Submits Habit
-  if (name !== '') { 
+  if (name !== '') {
     // const newCard = document.createElement('habit-card');
     // newCard.setAttribute('card-name', name);
     // newCard.setAttribute('card-frequency', frequency);
@@ -509,7 +507,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
 /*Gnerates and inserts a list of habit cards into the page 
 based on the current day's habits, with each card reflecting the habit's 
-name,frequency, description, streak, and completion status*/ 
+name,frequency, description, streak, and completion status*/
 function populateCards() {
   document.getElementById('card-container').innerHTML = ''; //clears existing card
   let habits = getHabitsForDay(); //fetches habit for the day
@@ -519,7 +517,7 @@ function populateCards() {
     const newCard = document.createElement('habit-card');
 
     //Converts Frequency Number to a String
-    let freqNum = habits[i][1].habitFrequency; 
+    let freqNum = habits[i][1].habitFrequency;
     let freqStr = '';
     if (freqNum == 1) {
       freqStr = 'Daily';
