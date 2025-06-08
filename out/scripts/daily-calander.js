@@ -379,7 +379,7 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 /** @type {Date} Current date being displayed in the calendar */
-let currentDate = new Date();
+window.currentDate = window.currentDate || new Date();
 
 /** @type {boolean} Flag indicating if the detailed view cards are currently hidden */
 let cardsHidden = false;
@@ -428,6 +428,20 @@ function initCalendar() {
   setupEventListeners();
 }
 
+function fillCard(cardId, dateObj) {
+  const card = document.getElementById(cardId);
+  if (!card) return;
+  const dayNameEl = card.querySelector('.day-name');
+  const dayDateEl = card.querySelector('.day-date');
+
+  if (dayNameEl) {
+    dayNameEl.textContent = dayNames[dateObj.getDay()];
+  }
+  if (dayDateEl) {
+    dayDateEl.textContent = `${monthNames[dateObj.getMonth()]} ${dateObj.getDate()}`;
+  }
+}
+
 /**
  * Update the visual display of the three calendar cards (previous, current, next day)
  * Populates each card with the appropriate day name and date
@@ -438,20 +452,6 @@ function updateCalendarDisplay() {
 
   const nextDate = new Date(currentDate);
   nextDate.setDate(currentDate.getDate() + 1);
-
-  function fillCard(cardId, dateObj) {
-    const card = document.getElementById(cardId);
-    if (!card) return;
-    const dayNameEl = card.querySelector('.day-name');
-    const dayDateEl = card.querySelector('.day-date');
-
-    if (dayNameEl) {
-      dayNameEl.textContent = dayNames[dateObj.getDay()];
-    }
-    if (dayDateEl) {
-      dayDateEl.textContent = `${monthNames[dateObj.getMonth()]} ${dateObj.getDate()}`;
-    }
-  }
 
   fillCard('prev-day', prevDate);
   fillCard('current-day', currentDate);
@@ -646,9 +646,7 @@ function showDetailedView() {
     width: 100%;
   `;
 
-  const hourSequence = [...Array(24).keys()]
-    .slice(6)
-    .concat([...Array(6).keys()]);
+  const hourSequence = [6, 7, 8, 9, 10, 11, 12, 1, 2, 3, 4, 5];
   for (const hour of hourSequence) {
     const matchingHabits = habits.filter(([_, habit]) => {
       const time = new Date(habit.startDateTime);
@@ -854,6 +852,12 @@ window.DailyCalendar = {
    * Close the detailed view modal
    */
   closeDetailedView,
+
+  isHabitActiveOnDate,
+
+  updateHabitIndicators,
+
+  fillCard,
 
   /**
    * Get all habits that are active for a specific date
