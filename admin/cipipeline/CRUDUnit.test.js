@@ -3,11 +3,14 @@
  */
 import {
   createHabit,
+  readHabit, 
+  updateHabit, 
+  deleteHabit, 
   localStorageAdapter,
   reviveHabit,
 } from '../../out/scripts/CRUD.js';
 
-import { jest } from '@jest/globals';
+import { beforeAll, jest } from '@jest/globals';
 import { fileURLToPath } from 'url';
 import { dirname, resolve } from 'path';
 
@@ -59,15 +62,50 @@ describe('Create a habit data object in localStorage', () => {
     );
     const habitData = await localStorage.getItem(testCall1);
     const habitDataRef = {
-
       habitName: 'Drink Water',
       habitDescription: 'Fill glass, lift to mouth and swallow',
       habitFrequency: 1,
+      startDateTime: new Date().toLocaleString(),
       habitStreak: 0,
-      logs: []
-
-    };
+      logs: [] };
     expect(habitData).toEqual(JSON.stringify(habitDataRef));
   });
 });
 
+describe('read a habit data object from localStorage', () => {
+
+  beforeAll( () => {
+       localStorage.clear();
+      // If crypto already exists, we just override randomUUID
+      if (!globalThis.crypto) {
+        globalThis.crypto = {};
+      }
+      // Mock randomUUID
+      globalThis.crypto.randomUUID = jest.fn(() => 'mocked-uuid');
+    }
+  ) 
+  
+  it('can retrieve string habit data from localStorage', async () => {
+    let testCall2 = createHabit("Do something that makes you happy"
+      , "NOT TIKTOK"
+      , 7 
+      , localStorageAdapter)
+    
+    let habitDataRef2 = {habitName: "Do something that makes you happy"
+      , habitDescription: "NOT TIKTOK"
+      , habitFrequency: 7
+      ,  startDateTime: new Date().toLocaleString()
+      , habitStreak: 0
+      , logs: []
+    }
+    const retrievedData = await readHabit(testCall2);
+    const stringifiedDataRef = JSON.stringify(habitDataRef2); 
+    expect(retrievedData).toEqual(stringifiedDataRef); 
+
+    }
+    , 10000
+  )
+
+}); 
+
+  
