@@ -435,30 +435,47 @@ describe('getHabitById + localStorage Integration Tests', () => {
 });
 
 describe('getAllHabits + localStorage Integration Tests', () => {
-  beforeAll(() => {
+  beforeEach(() => {
+    localStorage.clear();
+    let counter = 0;
+    const mockUuid = () => `12345678-1234-1234-8abc-12345678901${counter++}`;
+    
+    if (!globalThis.crypto) {
+      globalThis.crypto = {};
+    }
     globalThis.crypto.randomUUID = jest.fn(mockUuid);
   });
 
-  it('retrieves an array of strings', ()=>{
+  it('retrieves an array of strings', () => {
     let id1 = createHabit("habitName1", "habitDescription1", 1);
     let id2 = createHabit("habitName2", "habitDescription2", 7);
     let id3 = createHabit("habitName3", "habitDescription3", 30);
     let allHabits = getAllHabits();
     expect(Array.isArray(allHabits)).toBe(true);
-  })
+  });
 
-
-
-  it('retrieves all habits created', ()=>{
+  it('retrieves all habits created', () => {
+    console.log('=== Starting test ===');
+    
     let id1 = createHabit("habitName1", "habitDescription1", 1);
-    let id2 = createHabit("habitName2", "habitDescription2", 7);
+    let id2 = createHabit("habitName2", "habitDescription2", 7);  
     let id3 = createHabit("habitName3", "habitDescription3", 30);
+    
+    console.log('Created habit IDs:', [id1, id2, id3]);
+    console.log('localStorage length:', localStorage.length);
+    console.log('localStorage keys:', Object.keys(localStorage));
+    
+    // Check what's actually stored
+    console.log('id1 in localStorage:', localStorage.getItem(id1));
+    console.log('id2 in localStorage:', localStorage.getItem(id2));
+    console.log('id3 in localStorage:', localStorage.getItem(id3));
+    
     let allHabits = getAllHabits();
-    console.log(allHabits);
+    console.log('getAllHabits result:', allHabits);
+    
     expect(allHabits.length).toBe(3);
-  })
+  });
 });
-
 
 /**
  * updateHabit, and the output of passing the logs array into habitReviver are intentionally untested

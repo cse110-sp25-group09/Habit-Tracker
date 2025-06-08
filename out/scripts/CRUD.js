@@ -314,19 +314,3 @@ export function ratioOfCompleted(date = new Date()) {
   }
   return [comp_count, total_count];
 }
-
-/**
- *
- * @param {string} dateStr datestring representing the day being checked
- * @returns list of habit objects
- */
-function habitsCompletedOnDay(dateStr) {
-  let habits = getAllHabits();
-  let daysHabits = [];
-  for (let i = 0; i < habits.length; i++) {
-    if (habits[i].logs.includes(dateStr)) {
-      daysHabits.push(habits[i]);
-    }
-  }
-  return daysHabits;
-}
