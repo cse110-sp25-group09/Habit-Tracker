@@ -51,7 +51,6 @@ describe('HabitCard component', () => {
     expect(checkbox.checked).toBe(true);
   });
 
-
   test('flipping the card toggles flipped class', () => {
     const el = document.createElement('habit-card');
     el.setAttribute('card-id', 'test5');
