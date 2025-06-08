@@ -22,5 +22,5 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Run tests with Jest (ESM-compatible)
+      - name: Run Daily Tests
         run: node --experimental-vm-modules node_modules/jest/bin/jest.js admin/cipipeline/dailyCalendarUnit.test.js
