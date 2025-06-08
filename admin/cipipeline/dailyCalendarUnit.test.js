@@ -4,7 +4,7 @@
 
 import { jest } from '@jest/globals';
 
-// 🧪 Mock all exports used in daily-calander.js
+// Mock all exports used in daily-calander.js
 jest.unstable_mockModule('../../out/scripts/CRUD.js', () => ({
   getAllHabits: jest.fn(),
   isHabitComplete: jest.fn(),
@@ -12,14 +12,17 @@ jest.unstable_mockModule('../../out/scripts/CRUD.js', () => ({
   removeHabitCompletion: jest.fn(),
 }));
 
-// ⬅️ Load mocked CRUD module and daily calendar after the mock
-const { getAllHabits, isHabitComplete } = await import('../../out/scripts/CRUD.js');
+// Load mocked CRUD module and daily calendar after the mock
+const { getAllHabits, isHabitComplete } = await import(
+  '../../out/scripts/CRUD.js'
+);
 await import('../../out/scripts/daily-calander.js');
-
 const { DailyCalendar } = window;
 
 describe('Daily Calendar Module', () => {
   beforeEach(() => {
+    document.body.replaceChildren();
+
     document.body.innerHTML = `
       <div id="prev-day"><div class="day-name"></div><div class="day-date"></div></div>
       <div id="current-day"><div class="day-name"></div><div class="day-date"></div></div>
@@ -28,6 +31,7 @@ describe('Daily Calendar Module', () => {
       <div id="current-habits"></div>
       <div id="next-habits"></div>
     `;
+
     jest.clearAllMocks();
   });
 
@@ -69,7 +73,7 @@ describe('Daily Calendar Module', () => {
         new Map([
           ['habit1', { startDateTime: '2025-06-01', habitFrequency: 2 }],
           ['habit2', { startDateTime: '2025-06-01', habitFrequency: 3 }],
-        ])
+        ]),
       );
 
       const result = DailyCalendar.getHabitsForDate(date);
@@ -104,23 +108,166 @@ describe('Daily Calendar Module', () => {
 
   describe('updateHabitsForDays', () => {
     it('renders habit dots for all 3 containers', () => {
-      const today = new Date();
+      // Ensure currentDate is Thursday, June 5, 2025
+      window.currentDate = new Date('2025-06-05T12:00:00');
+
+      // Mock habits that are active on June 4, 5, and 6
       getAllHabits.mockReturnValue(
         new Map([
-          ['habit1', {
-            habitName: 'Water',
-            startDateTime: today.toISOString(),
-            habitFrequency: 1,
-          }],
-        ])
+          [
+            'habit1',
+            {
+              habitName: 'Water',
+              habitFrequency: 1,
+              startDateTime: '2025-06-01T08:00:00',
+            },
+          ],
+          [
+            'habit2',
+            {
+              habitName: 'Exercise',
+              habitFrequency: 1,
+              startDateTime: '2025-06-01T08:00:00',
+            },
+          ],
+        ]),
       );
-      isHabitComplete.mockReturnValue(true);
+
+      // Make them active
+      window.isHabitActiveOnDate = jest.fn().mockReturnValue(true);
+      window.isHabitComplete = jest.fn().mockReturnValue(true);
 
       DailyCalendar.updateHabitsForDays();
 
-      expect(document.getElementById('prev-habits').children.length).toBeGreaterThan(0);
-      expect(document.getElementById('current-habits').children.length).toBeGreaterThan(0);
-      expect(document.getElementById('next-habits').children.length).toBeGreaterThan(0);
+      expect(
+        document.getElementById('prev-habits').children.length,
+      ).toBeGreaterThan(0);
+      expect(
+        document.getElementById('current-habits').children.length,
+      ).toBeGreaterThan(0);
+      expect(
+        document.getElementById('next-habits').children.length,
+      ).toBeGreaterThan(0);
+    });
+  });
+
+  describe('fillCard', () => {
+    beforeAll(() => {
+      global.dayNames = [
+        'Sunday',
+        'Monday',
+        'Tuesday',
+        'Wednesday',
+        'Thursday',
+        'Friday',
+        'Saturday',
+      ];
+      global.monthNames = [
+        'Jan',
+        'Feb',
+        'Mar',
+        'Apr',
+        'May',
+        'Jun',
+        'Jul',
+        'Aug',
+        'Sep',
+        'Oct',
+        'Nov',
+        'Dec',
+      ];
+    });
+
+    it('fills a card with the correct date and weekday', () => {
+      const date = new Date('2025-06-05T12:00:00'); // ensures it's Thursday in any TZ
+
+      const card = document.createElement('div');
+      card.id = 'test-card';
+      card.innerHTML = `
+    <div class="day-name"></div>
+    <div class="day-date"></div>
+  `;
+      document.body.appendChild(card);
+
+      DailyCalendar.fillCard('test-card', date);
+
+      expect(card.querySelector('.day-name').textContent).toBe('Thursday');
+      expect(card.querySelector('.day-date').textContent).toBe('Jun 5');
+    });
+  });
+
+  describe('updateHabitIndicators', () => {
+    it('renders no dots if there are no habits', () => {
+      const date = new Date('2025-04-04T12:00:00');
+      window.currentDate = date;
+
+      // Clean up old test elements
+      document.body.innerHTML = '';
+
+      const container = document.createElement('div');
+      container.id = 'test-container';
+      document.body.appendChild(container);
+
+      // Reset mocks and mock no habits
+      jest.clearAllMocks();
+      window.getHabitsForSpecificDate = jest.fn().mockReturnValue([]);
+      isHabitComplete.mockReset(); // just in case it's still defined
+
+      DailyCalendar.updateHabitIndicators('test-container', date);
+
+      const dots = container.querySelectorAll('.habit-dot');
+      expect(dots.length).toBe(0);
+    });
+
+    it('adds completed and pending habit dots to a container', () => {
+      const date = new Date('2025-06-05T12:00:00');
+      window.currentDate = date;
+
+      const container = document.createElement('div');
+      container.id = 'test-container';
+      document.body.appendChild(container);
+
+      // Mock habit data
+      window.getHabitsForSpecificDate = jest.fn().mockReturnValue([
+        [
+          'habit1',
+          {
+            habitName: 'Hydrate',
+            habitFrequency: 1,
+            startDateTime: date.toISOString(),
+          },
+        ],
+        [
+          'habit2',
+          {
+            habitName: 'Stretch',
+            habitFrequency: 1,
+            startDateTime: date.toISOString(),
+          },
+        ],
+      ]);
+
+      isHabitComplete.mockReturnValueOnce(true).mockReturnValueOnce(false);
+
+      DailyCalendar.updateHabitIndicators('test-container', date);
+
+      const dots = container.querySelectorAll('.habit-dot');
+      expect(dots.length).toBe(2);
+      expect(dots[0].classList.contains('completed')).toBe(true);
+      expect(dots[1].classList.contains('pending')).toBe(true);
+    });
+  });
+
+  describe('showDetailedView', () => {
+    it('adds a close button with expected text', () => {
+      window.getHabitsForSpecificDate = jest.fn().mockReturnValue([]);
+      isHabitComplete.mockReturnValue(false);
+
+      DailyCalendar.showDetailedView();
+
+      const closeBtn = document.querySelector('#habit-detail-overlay button');
+      expect(closeBtn).toBeTruthy();
+      expect(closeBtn.textContent).toMatch(/\u2715 Close/); // ✕ Close
     });
   });
 });
