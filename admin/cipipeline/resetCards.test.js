@@ -2,14 +2,14 @@
  * @jest-environment jsdom
  */
 import {
-    createHabit,
-    localStorageAdapter,
-    reviveHabit,
-  } from '../../out/scripts/CRUD.js';
-  
-  import { jest } from '@jest/globals';
-  import { fileURLToPath } from 'url';
-  import { dirname, resolve } from 'path';
+  createHabit,
+  localStorageAdapter,
+  reviveHabit,
+} from '../../out/scripts/CRUD.js';
+
+import { jest } from '@jest/globals';
+import { fileURLToPath } from 'url';
+import { dirname, resolve } from 'path';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -33,7 +33,9 @@ describe('Reset Cards functionality', () => {
       }
     });
 
-    expect(localStorage.getItem('id123e4567-e89b-12d3-a456-426614174000')).toBeNull();
+    expect(
+      localStorage.getItem('id123e4567-e89b-12d3-a456-426614174000'),
+    ).toBeNull();
     expect(localStorage.getItem('otherKey')).toBe('some other data');
   });
 });
