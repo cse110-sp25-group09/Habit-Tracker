@@ -30,22 +30,44 @@ describe('Create a habit data object in localStorage', () => {
     globalThis.crypto.randomUUID = jest.fn(() => 'mocked-uuid');
   });
 
-  it('stores habit data in localStorage', async () => {
+  it('creates a new habit data object with an id & 5 specific fields', async()=>{
+    let testCall0 = createHabit(
+      '',
+      '',
+      1,
+    localStorageAdapter,
+    );
+
+    expect(testCall0).toStrictEqual("idmocked-uuid");
+
+    const habitData = localStorage.getItem(testCall0)
+
+    expect(JSON.parse(habitData)).toBeInstanceOf(Object);
+    expect(JSON.parse(habitData)).toHaveProperty('habitName');
+    expect(JSON.parse(habitData)).toHaveProperty('habitDescription');
+    expect(JSON.parse(habitData)).toHaveProperty('habitFrequency');
+    expect(JSON.parse(habitData)).toHaveProperty('habitStreak');
+    expect(JSON.parse(habitData)).toHaveProperty('logs');
+  });
+
+  it('stores correct habit data in localStorage', async () => {
     let testCall1 = createHabit(
       'Drink Water',
       'Fill glass, lift to mouth and swallow',
       1,
       localStorageAdapter,
     );
-    const habitData = localStorage.getItem(testCall1);
+    const habitData = await localStorage.getItem(testCall1);
     const habitDataRef = {
+
       habitName: 'Drink Water',
       habitDescription: 'Fill glass, lift to mouth and swallow',
       habitFrequency: 1,
       habitStreak: 0,
-      logs: [],
+      logs: []
+
     };
-    expect(JSON.parse(habitData)).toStrictEqual(habitDataRef);
+    expect(habitData).toEqual(JSON.stringify(habitDataRef));
   });
 });
 
