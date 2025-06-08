@@ -3,13 +3,14 @@
  */
 import {
   createHabit,
-  readHabit, 
+  readHabit,
   localStorageAdapter,
   logHabitCompleted,
   removeHabitCompletion,
   isHabitComplete,
   getHabitById,
   getAllHabits,
+  deleteHabit
 } from '../../out/scripts/CRUD.js';
 
 import { beforeAll, jest } from '@jest/globals';
@@ -23,7 +24,7 @@ let page, browser;
 let mockUuidCounter = 0;
 const mockUuid = () => `test-uuid-${mockUuidCounter++}`;
 
-describe('Create a habit data object in localStorage', () => {
+describe('CreateHabit + LocalStorage Integration Tests', () => {
   beforeAll(async () => {
     // Dynamically import the script so it works with ESM
     // await import('../../out/scripts/home.js');
@@ -36,17 +37,12 @@ describe('Create a habit data object in localStorage', () => {
     globalThis.crypto.randomUUID = jest.fn(() => 'mocked-uuid');
   });
 
-  it('creates a new habit data object with an id & 5 specific fields', async()=>{
-    let testCall0 = createHabit(
-      '',
-      '',
-      1,
-    localStorageAdapter,
-    );
+  it('creates a new habit data object with an id & 5 specific fields', async () => {
+    let testCall0 = createHabit('', '', 1, localStorageAdapter);
 
-    expect(testCall0).toStrictEqual("idmocked-uuid");
+    expect(testCall0).toStrictEqual('idmocked-uuid');
 
-    const habitData = localStorage.getItem(testCall0)
+    const habitData = localStorage.getItem(testCall0);
 
     expect(JSON.parse(habitData)).toBeInstanceOf(Object);
     expect(JSON.parse(habitData)).toHaveProperty('habitName');
@@ -70,48 +66,45 @@ describe('Create a habit data object in localStorage', () => {
       habitFrequency: 1,
       startDateTime: new Date().toLocaleString(),
       habitStreak: 0,
-      logs: [] };
+      logs: [],
+    };
     expect(habitData).toEqual(JSON.stringify(habitDataRef));
   });
 });
 
-describe('read a habit data object from localStorage', () => {
-
-  beforeAll( () => {
-       localStorage.clear();
-      // If crypto already exists, we just override randomUUID
-      if (!globalThis.crypto) {
-        globalThis.crypto = {};
-      }
-      // Mock randomUUID
-      globalThis.crypto.randomUUID = jest.fn(() => 'mocked-uuid');
+describe('ReadHabit + LocalStorage Integration tests', () => {
+  beforeAll(() => {
+    localStorage.clear();
+    // If crypto already exists, we just override randomUUID
+    if (!globalThis.crypto) {
+      globalThis.crypto = {};
     }
-  ) 
-  
+    // Mock randomUUID
+    globalThis.crypto.randomUUID = jest.fn(() => 'mocked-uuid');
+  });
+
   it('can retrieve string habit data from localStorage', async () => {
-    let testCall2 = createHabit("Do something that makes you happy"
-      , "NOT TIKTOK"
-      , 7 
-      , localStorageAdapter)
-    
-    let habitDataRef2 = {habitName: "Do something that makes you happy"
-      , habitDescription: "NOT TIKTOK"
-      , habitFrequency: 7
-      ,  startDateTime: new Date().toLocaleString()
-      , habitStreak: 0
-      , logs: []
-    }
+    let testCall2 = createHabit(
+      'Do something that makes you happy',
+      'NOT TIKTOK',
+      7,
+      localStorageAdapter,
+    );
+
+    let habitDataRef2 = {
+      habitName: 'Do something that makes you happy',
+      habitDescription: 'NOT TIKTOK',
+      habitFrequency: 7,
+      startDateTime: new Date().toLocaleString(),
+      habitStreak: 0,
+      logs: [],
+    };
     const retrievedData = await readHabit(testCall2);
-    const stringifiedDataRef = JSON.stringify(habitDataRef2); 
-    expect(retrievedData).toEqual(stringifiedDataRef); 
+    const stringifiedDataRef = JSON.stringify(habitDataRef2);
+    expect(retrievedData).toEqual(stringifiedDataRef);
+  }, 10000);
+});
 
-    }
-    , 10000
-  )
-
-}); 
-
-  
 describe('Habit Completion and Logging Tests', () => {
   beforeEach(() => {
     localStorage.clear();
@@ -124,21 +117,21 @@ describe('Habit Completion and Logging Tests', () => {
 
   it('should log habit completion and return true', () => {
     const habitId = createHabit('Daily Exercise', 'Go for a run', 1);
-    
+
     const result = logHabitCompleted(habitId);
     expect(result).toBe(true);
   });
 
   it('should add completion entry to habit logs', () => {
     const habitId = createHabit('Daily Water', 'Drink water', 1);
-    
+
     // Initially no logs
     let habit = getHabitById(habitId);
     expect(habit.logs).toHaveLength(0);
-    
+
     // Log completion
     logHabitCompleted(habitId);
-    
+
     // Should have one log entry
     habit = getHabitById(habitId);
     expect(habit.logs).toHaveLength(1);
@@ -160,27 +153,27 @@ describe('Habit Completion and Logging Tests', () => {
 
   it('should allow multiple completions to be logged', () => {
     const habitId = createHabit('Reading', 'Read daily', 1);
-    
+
     logHabitCompleted(habitId);
     logHabitCompleted(habitId);
     logHabitCompleted(habitId);
-    
+
     const habit = getHabitById(habitId);
     expect(habit.logs).toHaveLength(3);
   });
 
   it('should remove habit completion and return true', () => {
     const habitId = createHabit('Exercise', 'Daily exercise', 1);
-    
+
     // Log completion first
     logHabitCompleted(habitId);
     let habit = getHabitById(habitId);
     expect(habit.logs).toHaveLength(1);
-    
+
     // Remove completion
     const result = removeHabitCompletion(habitId);
     expect(result).toBe(true);
-    
+
     // Should have removed the last log entry
     habit = getHabitById(habitId);
     expect(habit.logs).toHaveLength(0);
@@ -194,11 +187,11 @@ describe('Habit Completion and Logging Tests', () => {
 
   it('should handle removing completion from habit with no logs (pop on empty array)', () => {
     const habitId = createHabit('New Habit', 'Description', 1);
-    
+
     // Should not throw error when calling pop() on empty array
     const result = removeHabitCompletion(habitId);
     expect(result).toBe(true);
-    
+
     const habit = getHabitById(habitId);
     expect(habit.logs).toHaveLength(0);
   });
@@ -206,7 +199,7 @@ describe('Habit Completion and Logging Tests', () => {
   it('should check if habit is complete for today (when not completed)', () => {
     const habitId = createHabit('Daily Habit', 'Description', 1);
     const today = new Date();
-    
+
     // Initially not complete
     expect(isHabitComplete(habitId, today)).toBe(false);
   });
@@ -214,10 +207,10 @@ describe('Habit Completion and Logging Tests', () => {
   it('should check if habit is complete for today (after completion)', () => {
     const habitId = createHabit('Daily Habit', 'Description', 1);
     const today = new Date();
-    
+
     // Log completion
     logHabitCompleted(habitId);
-    
+
     // Should be complete for today
     expect(isHabitComplete(habitId, today)).toBe(true);
   });
@@ -226,17 +219,17 @@ describe('Habit Completion and Logging Tests', () => {
     const habitId = createHabit('Daily Habit', 'Description', 1);
     const yesterday = new Date();
     yesterday.setDate(yesterday.getDate() - 1);
-    
+
     // Log completion for today
     logHabitCompleted(habitId);
-    
+
     // Should not be complete for yesterday
     expect(isHabitComplete(habitId, yesterday)).toBe(false);
   });
 
   it('should handle habit with empty logs when checking completion', () => {
     const habitId = createHabit('New Habit', 'Description', 1);
-    
+
     // Should return false for habit with no completions
     expect(isHabitComplete(habitId)).toBe(false);
   });
@@ -255,16 +248,16 @@ describe('Streak Calculation Tests', () => {
   it('should initialize new habit with streak of 0', () => {
     const habitId = createHabit('New Habit', 'Description', 1);
     const habit = getHabitById(habitId);
-    
+
     expect(habit.habitStreak).toBe(0);
   });
 
   it('should update habitStreak property when logging completion', () => {
     const habitId = createHabit('Daily Habit', 'Description', 1);
-    
+
     logHabitCompleted(habitId);
     const habit = getHabitById(habitId);
-    
+
     // habitStreak should be defined and be a number
     expect(habit.habitStreak).toBeDefined();
     expect(typeof habit.habitStreak).toBe('number');
@@ -272,17 +265,17 @@ describe('Streak Calculation Tests', () => {
 
   it('should recalculate streak when completion is removed', () => {
     const habitId = createHabit('Daily Habit', 'Description', 1);
-    
+
     // Log multiple completions
     logHabitCompleted(habitId);
     logHabitCompleted(habitId);
-    
+
     let habit = getHabitById(habitId);
     const streakAfterTwoLogs = habit.habitStreak;
-    
+
     // Remove one completion
     removeHabitCompletion(habitId);
-    
+
     habit = getHabitById(habitId);
     // Streak should be recalculated (though the calculation has bugs, it will still be a number)
     expect(typeof habit.habitStreak).toBe('number');
@@ -290,10 +283,10 @@ describe('Streak Calculation Tests', () => {
 
   it('should handle streak calculation for habits with single completion', () => {
     const habitId = createHabit('Test Habit', 'Description', 1);
-    
+
     logHabitCompleted(habitId);
     const habit = getHabitById(habitId);
-    
+
     // Should handle single completion without errors
     expect(habit.habitStreak).toBeDefined();
     expect(typeof habit.habitStreak).toBe('number');
@@ -301,10 +294,10 @@ describe('Streak Calculation Tests', () => {
 
   it('should handle streak calculation for weekly habits', () => {
     const habitId = createHabit('Weekly Habit', 'Description', 7);
-    
+
     logHabitCompleted(habitId);
     const habit = getHabitById(habitId);
-    
+
     // Should handle weekly frequency without errors
     expect(habit.habitStreak).toBeDefined();
     expect(typeof habit.habitStreak).toBe('number');
@@ -312,9 +305,9 @@ describe('Streak Calculation Tests', () => {
 
   it('should persist streak updates in localStorage', () => {
     const habitId = createHabit('Persistent Habit', 'Description', 1);
-    
+
     logHabitCompleted(habitId);
-    
+
     // Get habit directly from localStorage
     const habitFromStorage = JSON.parse(localStorage.getItem(habitId));
     expect(habitFromStorage.habitStreak).toBeDefined();
@@ -334,10 +327,10 @@ describe('Integration Tests (Completion + Streak)', () => {
 
   it('should maintain data consistency between logging and checking completion', () => {
     const habitId = createHabit('Consistency Test', 'Description', 1);
-    
+
     // Log completion
     logHabitCompleted(habitId);
-    
+
     // Check that both logs and completion status are updated
     const habit = getHabitById(habitId);
     expect(habit.logs).toHaveLength(1);
@@ -347,11 +340,11 @@ describe('Integration Tests (Completion + Streak)', () => {
 
   it('should maintain data consistency when removing completion', () => {
     const habitId = createHabit('Removal Test', 'Description', 1);
-    
+
     // Log and then remove completion
     logHabitCompleted(habitId);
     removeHabitCompletion(habitId);
-    
+
     // Check that all related data is updated consistently
     const habit = getHabitById(habitId);
     expect(habit.logs).toHaveLength(0);
@@ -361,13 +354,13 @@ describe('Integration Tests (Completion + Streak)', () => {
 
   it('should handle multiple operations on same habit', () => {
     const habitId = createHabit('Multi-op Test', 'Description', 1);
-    
+
     // Multiple operations
     logHabitCompleted(habitId);
     logHabitCompleted(habitId);
     removeHabitCompletion(habitId);
     logHabitCompleted(habitId);
-    
+
     // Should not throw errors and maintain valid state
     const habit = getHabitById(habitId);
     expect(habit.logs).toHaveLength(2);
@@ -375,3 +368,21 @@ describe('Integration Tests (Completion + Streak)', () => {
     expect(isHabitComplete(habitId)).toBe(true);
   });
 });
+
+describe('deleteHabit Integration Tests', () => {
+  beforeAll(() => {
+    localStorage.clear();
+  })
+  it('Can delete one habit by ID', ()=>{
+    let habitID = createHabit(
+      'Care for dog',
+      'Feed, water, walk',
+      1,
+      localStorageAdapter,
+    );
+
+    deleteHabit(habitID);
+    expect(localStorage.getItem(habitID)).toBeNull();
+
+  })
+})
