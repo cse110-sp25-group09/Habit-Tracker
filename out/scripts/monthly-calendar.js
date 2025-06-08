@@ -1,4 +1,4 @@
-//Menu Navigation Bar
+//Imports helper function for calculating task completion ratios of a given date
 import { ratioOfCompleted } from './CRUD.js';
 
 /* Sets up navigation, calendar menu toggle, and loads habit cards on page load */
@@ -41,6 +41,7 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 });
 
+// Initialize the current year to the current date
 let currentYear = new Date().getFullYear();
 export const monthNames = [
   'January',
@@ -57,7 +58,8 @@ export const monthNames = [
   'December',
 ];
 
-function updateDayCompletion(dayElement, tasksCompleted, totalTasks) {
+// Function to update the day element's completion status based on tasks completed
+export function updateDayCompletion(dayElement, tasksCompleted, totalTasks) {
   // Clear old completion classes
   dayElement.classList.remove(
     'completed-day',
@@ -75,12 +77,20 @@ function updateDayCompletion(dayElement, tasksCompleted, totalTasks) {
   }
 }
 
+// Allow tests to access it indirectly
+if (typeof window !== 'undefined') {
+  window.updateDayCompletion = updateDayCompletion;
+  window.generateCalendar = generateCalendar;
+}
+
+// Function to generate the calendar for a given year
 export function generateCalendar(year) {
   const calendarContainer = document.getElementById('calendar');
   const monthLabel = document.getElementById('month-label');
   calendarContainer.innerHTML = '';
   monthLabel.textContent = year;
 
+  // Clear previous calendar content
   for (let month = 0; month < 12; month++) {
     const monthDiv = document.createElement('div');
     monthDiv.className = 'month';
@@ -114,7 +124,7 @@ export function generateCalendar(year) {
     }
 
     // Fill current month
-    const today = new Date(); //this is purely visual, to highlight today's date
+    const today = new Date();
     const todayDate = today.getDate();
     const todayMonth = today.getMonth();
     const todayYear = today.getFullYear();
@@ -128,18 +138,16 @@ export function generateCalendar(year) {
         dayDiv.classList.add('today');
       }
 
-      //console.log(`${day} ${monthNames[month]} ${year}`);
       let date = new Date(year, month, day);
       let ratio = ratioOfCompleted(date);
-
-      updateDayCompletion(dayDiv, ratio[0], ratio[1]); // Assuming 0 tasks completed for now
+      updateDayCompletion(dayDiv, ratio[0], ratio[1]);
 
       grid.appendChild(dayDiv);
     }
 
-    // Fill remaining cells with next month overflow to make full 6 rows (if needed)
+    // Fill remaining cells
     const totalCells = grid.children.length;
-    const totalNeeded = 7 * 6; // 7 days x 6 rows
+    const totalNeeded = 7 * 6;
     for (let i = totalCells; i < totalNeeded; i++) {
       const overflow = document.createElement('div');
       overflow.className = 'day inactive';
@@ -164,6 +172,7 @@ export function setupEventListeners() {
   });
 }
 
+// Function to handle theme selection
 window.addEventListener('DOMContentLoaded', () => {
   const body = document.body;
   const savedTheme = localStorage.getItem('selectedTheme');
