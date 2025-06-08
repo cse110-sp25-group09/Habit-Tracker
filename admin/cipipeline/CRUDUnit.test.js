@@ -10,7 +10,7 @@ import {
   isHabitComplete,
   getHabitById,
   getAllHabits,
-  deleteHabit
+  deleteHabit,
 } from '../../out/scripts/CRUD.js';
 
 import { beforeAll, jest } from '@jest/globals';
@@ -372,8 +372,8 @@ describe('Integration Tests (Completion + Streak)', () => {
 describe('deleteHabit Integration Tests', () => {
   beforeAll(() => {
     localStorage.clear();
-  })
-  it('Can delete one habit by ID', ()=>{
+  });
+  it('Can delete one habit by ID', () => {
     let habitID = createHabit(
       'Care for dog',
       'Feed, water, walk',
@@ -383,6 +383,5 @@ describe('deleteHabit Integration Tests', () => {
 
     deleteHabit(habitID);
     expect(localStorage.getItem(habitID)).toBeNull();
-
-  })
-})
+  });
+});
