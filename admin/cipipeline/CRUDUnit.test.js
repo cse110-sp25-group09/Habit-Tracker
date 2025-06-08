@@ -387,22 +387,55 @@ describe('deleteHabit + localStorage Integration Tests', () => {
   });
 });
 
+
 describe('reviveHabit unit tests', () => {
   it('turns habitFrequency values into Numbers', ()=>{
     let revivedFrequency = reviveHabit("habitFrequency", "7");
     expect(revivedFrequency).toBe(7);
+  });
+  it('turns habitStreak values into Numbers', ()=>{
+    let revivedhabitStreak = reviveHabit("habitStreak", "8");
+    expect(revivedhabitStreak).toBe(8);
   })
 
+  it('leaves habitName values as strings', ()=>{
+    let revivedhabitName = reviveHabit("habitName", "Water plants");
+    expect(revivedhabitName).toBe('Water plants');
+  });
+  it('leaves habitDescription values as strings', ()=>{
+    let revivedhabitDescription = reviveHabit("habitDescription", "Hydrangeas, cacti, etc.");
+    expect(revivedhabitDescription).toBe('Hydrangeas, cacti, etc.');
+  })
 });
 
-/*
-describe('getAllHabits + localStorage Integration Tests', () => {
+describe('getHabitById + localStorage Integration Tests', () => {
   beforeAll(() => {
-    createHabit("habitName1", "habitDescription1", 1);
-    createHabit("habitName2", "habitDescription2", 7);
-    createHabit("habitName3", "habitDescription3", 30);
+    localStorage.clear();
   });
 
+  it("retrieves a valid habit object by ID", ()=>{
+    let testCall3 = createHabit(
+      'Do something that makes you happy',
+      'NOT TIKTOK',
+      7,
+      localStorageAdapter,
+    );
 
-})
-*/
+    let habitDataRef3 = {
+      habitName: 'Do something that makes you happy',
+      habitDescription: 'NOT TIKTOK',
+      habitFrequency: 7,
+      startDateTime: new Date().toLocaleString(),
+      habitStreak: 0,
+      logs: [],
+    };
+    const retrievedData = getHabitById(testCall3);
+    expect(retrievedData).toEqual(habitDataRef3);
+  })
+});
+
+/**
+ * updateHabit, and the output of passing the logs array into habitReviver are intentionally untested
+ * due to time constraints because they are no longer being used
+ * /^idtest-uuid-\d+$/
+ */
