@@ -855,6 +855,8 @@ window.DailyCalendar = {
    */
   closeDetailedView,
 
+  isHabitActiveOnDate,
+
   /**
    * Get all habits that are active for a specific date
    * @param {Date} date - The date to get habits for
