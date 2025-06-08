@@ -1,7 +1,6 @@
 const DAYINMS = 86400000;
 const uuidRegex =
   /^id[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
-//export { getHabitsForToday, createHabit, deleteHabit } from './CRUD.js';
 
 export const localStorageAdapter = {
   get: (key) => localStorage.getItem(key),
@@ -21,7 +20,7 @@ function typeErrorTemplate(stringParam, type) {
  * @return a valid habit object
  */
 export function reviveHabit(key, value) {
-  const numberFields = new Set(["habitFrequency", "habitStreak"]);
+  const numberFields = new Set(['habitFrequency', 'habitStreak']);
   let newValue;
   if (numberFields.has(key)) {
     newValue = Number(value);
@@ -163,9 +162,7 @@ export function getAllHabits(adapter = localStorageAdapter) {
     }
     curHabitObject = adapter.get(keys[i]);
 
-    //console.log(curHabitObject);
     curHabitObject = JSON.parse(curHabitObject, reviveHabit);
-    // console.log(curHabitObject);
 
     habits.push([keys[i], curHabitObject]);
   }
@@ -198,7 +195,6 @@ function calculateStreak(habit) {
   let ms = 0;
   let msLogs = [];
 
-  //Date.parse() is very format permissive, this needs to be tested thoroughly
   logs.forEach((element) => {
     ms = Date.parse(element);
     if (isNaN(ms)) {
@@ -220,7 +216,12 @@ function calculateStreak(habit) {
     }
   }
 }
-
+/**
+ *
+ * @param {String} habitID - the string ID of the habit being tested
+ * @param {Object} habit a JSON object representing a habit(not a habit string !)
+ * @returns {boolean} true if habit was completed, false otherwise
+ */
 export function isHabitComplete(habitID, day = new Date()) {
   const habit = getHabitById(habitID);
   if (habit.logs.length === 0) return false;
@@ -236,7 +237,7 @@ export function isHabitComplete(habitID, day = new Date()) {
 
 /**
  *
- * @param {String} habitID - the string ID of the habit being deleted
+ * @param {String} habitID - the string ID of the habit being logged
  * @returns {boolean} true if habit completion is logged successfully, false otherwise
  */
 export function logHabitCompleted(habitID) {
@@ -249,9 +250,13 @@ export function logHabitCompleted(habitID) {
     return true;
   }
   throw new Error('Invalid habit passed');
-  //return false; // what is the benefit of returning boolean instead of throwing an error in a void function in this context ?
 }
 
+/**
+ *
+ * @param {String} habitID - the string ID of the habit that removing last completion
+ * @returns {boolean} true if habit completion is logged successfully, false otherwise
+ */
 export function removeHabitCompletion(habitID, adapter = localStorageAdapter) {
   let habit = getHabitById(habitID, adapter);
   if (habit) {
@@ -276,8 +281,6 @@ function isHabitForDay(habit, day) {
   }
 
   let daysDiff = Math.floor((currentDate - msStartDate) / DAYINMS);
-  // console.log(daysDiff);
-  // console.log(habit.habitFrequency);
   if (daysDiff % habit.habitFrequency != 0) {
     return false;
   }
@@ -289,7 +292,6 @@ function isHabitForDay(habit, day) {
  */
 export function getHabitsForDay(day = new Date()) {
   let habits = getAllHabits();
-  //console.log(habits);
   if (!habits) {
     return [];
   }
