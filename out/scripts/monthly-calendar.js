@@ -2,11 +2,12 @@
 import { ratioOfCompleted } from './CRUD.js';
 
 /* Sets up navigation, calendar menu toggle, and loads habit cards on page load */
-document.addEventListener('DOMContentLoaded', function () {
+export function initNavigation() {
   const home_select = document.getElementById('home-selection');
   const settings_select = document.getElementById('settings-selection');
   const calendarSelection = document.getElementById('calendar-selection');
   const calendarMenu = document.getElementById('calendar-menu');
+
   // Home button navigation
   home_select.addEventListener('click', () => {
     window.location.href = 'home-page.html';
@@ -39,7 +40,7 @@ document.addEventListener('DOMContentLoaded', function () {
   settings_select.addEventListener('click', () => {
     window.location.href = 'settings.html';
   });
-});
+};
 
 // Initialize the current year to the current date
 let currentYear = new Date().getFullYear();
@@ -181,4 +182,5 @@ window.addEventListener('DOMContentLoaded', () => {
   }
   generateCalendar(currentYear);
   setupEventListeners();
+  initNavigation();
 });
