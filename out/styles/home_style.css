@@ -34,7 +34,7 @@
   display: block;
   font-size: 1.5rem;
   opacity: 0;
-  z-index: 99;
+  z-index: 94;
   transform: translateX(-20px);
   animation: fadeInUp 1s ease-out forwards;
   background-color: var(--app-background-color);
