@@ -1,24 +1,44 @@
 //Menu Navigation Bar
 import { ratioOfCompleted } from './CRUD.js';
 
-const home_select = document.getElementById('home-selection');
-const daily_calendar_select = document.getElementById(
-  'daily-calendar-selection',
-);
-const calendar_select = document.getElementById('calendar-selection');
-const settings_select = document.getElementById('settings-selection');
+/* Sets up navigation, calendar menu toggle, and loads habit cards on page load */
+document.addEventListener('DOMContentLoaded', function () {
+  const home_select = document.getElementById('home-selection');
+  const settings_select = document.getElementById('settings-selection');
+  const calendarSelection = document.getElementById('calendar-selection');
+  const calendarMenu = document.getElementById('calendar-menu');
+  // Home button navigation
+  home_select.addEventListener('click', () => {
+    window.location.href = 'home-page.html';
+  });
 
-home_select.addEventListener('click', () => {
-  window.location.href = 'home-page.html';
-});
-daily_calendar_select.addEventListener('click', () => {
-  window.location.href = 'daily-calendar.html';
-});
-calendar_select.addEventListener('click', () => {
-  window.location.href = 'monthly-calendar.html';
-});
-settings_select.addEventListener('click', () => {
-  window.location.href = 'settings.html';
+  // Calendar menu toggle
+  calendarSelection.addEventListener('click', function (event) {
+    event.stopPropagation();
+    calendarMenu.classList.toggle('show');
+  });
+
+  // Close the menu if clicking outside
+  document.addEventListener('click', function () {
+    calendarMenu.classList.remove('show');
+  });
+
+  document
+    .getElementById('daily-option')
+    .addEventListener('click', function (event) {
+      window.location.href = 'daily-calendar.html';
+    });
+
+  document
+    .getElementById('monthly-option')
+    .addEventListener('click', function (event) {
+      window.location.href = 'monthly-calendar.html';
+    });
+
+  // Settings button navigation
+  settings_select.addEventListener('click', () => {
+    window.location.href = 'settings.html';
+  });
 });
 
 let currentYear = new Date().getFullYear();
@@ -131,16 +151,6 @@ export function generateCalendar(year) {
     calendarContainer.appendChild(monthDiv);
   }
 }
-
-// document.getElementById('prev-year').addEventListener('click', () => {
-//   currentYear--;
-//   generateCalendar(currentYear);
-// });
-
-// document.getElementById('next-year').addEventListener('click', () => {
-//   currentYear++;
-//   generateCalendar(currentYear);
-// });
 
 export function setupEventListeners() {
   document.getElementById('prev-year').addEventListener('click', () => {

@@ -133,6 +133,7 @@ class HabitCard extends HTMLElement {
        box-sizing: border-box;
        backface-visibility: hidden;
        overflow: hidden;
+       text-align: center;
 
 
      }
