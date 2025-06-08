@@ -94,7 +94,7 @@ describe('Leap Year Handling and Day Class Application', () => {
 });
 
 describe('Navigation Menu', () => {
-  beforeAll (()=> {
+  beforeAll(() => {
     initNavigation();
   });
   beforeEach(() => {
@@ -103,7 +103,7 @@ describe('Navigation Menu', () => {
     window.location = { href: '' };
   });
 
-  test('Navigates To home-page.html', () => {
+  test('Navigates to home-page.html', () => {
     document.getElementById('home-selection').click();
     expect(window.location.href).toBe('home-page.html');
   });
@@ -114,13 +114,13 @@ describe('Navigation Menu', () => {
     expect(window.location.href).toBe('daily-calendar.html');
   });
 
-  test('navigates to monthly-calendar.html on calendar-selection click', () => {
+  test('Navigates to monthly-calendar.html', () => {
     document.getElementById('calendar-selection').click();
     document.getElementById('monthly-option').click();
     expect(window.location.href).toBe('monthly-calendar.html');
   });
 
-  test('navigates to settings.html on settings-selection click', () => {
+  test('Navigates to settings.html', () => {
     document.getElementById('settings-selection').click();
     expect(window.location.href).toBe('settings.html');
   });

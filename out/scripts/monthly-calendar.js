@@ -1,7 +1,9 @@
 //Imports helper function for calculating task completion ratios of a given date
 import { ratioOfCompleted } from './CRUD.js';
 
-/* Sets up navigation, calendar menu toggle, and loads habit cards on page load */
+/**
+ * @return sets up navigation and menu toggle behavior for the page
+ */
 export function initNavigation() {
   const home_select = document.getElementById('home-selection');
   const settings_select = document.getElementById('settings-selection');
@@ -24,12 +26,14 @@ export function initNavigation() {
     calendarMenu.classList.remove('show');
   });
 
+  // Daily calendar button navigation
   document
     .getElementById('daily-option')
     .addEventListener('click', function (event) {
       window.location.href = 'daily-calendar.html';
     });
 
+  // Monthly calendar button navigation
   document
     .getElementById('monthly-option')
     .addEventListener('click', function (event) {
@@ -40,7 +44,7 @@ export function initNavigation() {
   settings_select.addEventListener('click', () => {
     window.location.href = 'settings.html';
   });
-};
+}
 
 // Initialize the current year to the current date
 let currentYear = new Date().getFullYear();
@@ -59,7 +63,12 @@ export const monthNames = [
   'December',
 ];
 
-// Function to update the day element's completion status based on tasks completed
+/**
+ * @param dayElement HTML element representing a calendar day
+ * @param tasksCompleted number of tasks completed on that day
+ * @param totalTasks total number of tasks scheduled on that day
+ * @return updates the CSS class of the day element based on completion ratio for heat mapping
+ */
 export function updateDayCompletion(dayElement, tasksCompleted, totalTasks) {
   // Clear old completion classes
   dayElement.classList.remove(
@@ -84,7 +93,10 @@ if (typeof window !== 'undefined') {
   window.generateCalendar = generateCalendar;
 }
 
-// Function to generate the calendar for a given year
+/**
+ * @param year the year to generate the calendar for
+ * @return populates the DOM with monthly calendars and completion status
+ */
 export function generateCalendar(year) {
   const calendarContainer = document.getElementById('calendar');
   const monthLabel = document.getElementById('month-label');
@@ -161,6 +173,9 @@ export function generateCalendar(year) {
   }
 }
 
+/**
+ * @return adds click listeners for previous and next year buttons
+ */
 export function setupEventListeners() {
   document.getElementById('prev-year').addEventListener('click', () => {
     currentYear--;
@@ -173,7 +188,7 @@ export function setupEventListeners() {
   });
 }
 
-// Function to handle theme selection
+// Applies saved theme, generates the calendar, sets up listeners and navigation bar
 window.addEventListener('DOMContentLoaded', () => {
   const body = document.body;
   const savedTheme = localStorage.getItem('selectedTheme');
