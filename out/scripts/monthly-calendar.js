@@ -1,25 +1,45 @@
 //Imports helper function for calculating task completion ratios of a given date
 import { ratioOfCompleted } from './CRUD.js';
 
-//Menu Navigation Bar
-const home_select = document.getElementById('home-selection');
-const daily_calendar_select = document.getElementById(
-  'daily-calendar-selection',
-);
-const calendar_select = document.getElementById('calendar-selection');
-const settings_select = document.getElementById('settings-selection');
+/* Sets up navigation, calendar menu toggle, and loads habit cards on page load */
+document.addEventListener('DOMContentLoaded', function () {
+  const home_select = document.getElementById('home-selection');
+  const settings_select = document.getElementById('settings-selection');
+  const calendarSelection = document.getElementById('calendar-selection');
+  const calendarMenu = document.getElementById('calendar-menu');
+  
+  // Home button navigation
+  home_select.addEventListener('click', () => {
+    window.location.href = 'home-page.html';
+  });
 
-home_select.addEventListener('click', () => {
-  window.location.href = 'home-page.html';
-});
-daily_calendar_select.addEventListener('click', () => {
-  window.location.href = 'daily-calendar.html';
-});
-calendar_select.addEventListener('click', () => {
-  window.location.href = 'monthly-calendar.html';
-});
-settings_select.addEventListener('click', () => {
-  window.location.href = 'settings.html';
+  // Calendar menu toggle
+  calendarSelection.addEventListener('click', function (event) {
+    event.stopPropagation();
+    calendarMenu.classList.toggle('show');
+  });
+
+  // Close the menu if clicking outside
+  document.addEventListener('click', function () {
+    calendarMenu.classList.remove('show');
+  });
+
+  document
+    .getElementById('daily-option')
+    .addEventListener('click', function (event) {
+      window.location.href = 'daily-calendar.html';
+    });
+
+  document
+    .getElementById('monthly-option')
+    .addEventListener('click', function (event) {
+      window.location.href = 'monthly-calendar.html';
+    });
+
+  // Settings button navigation
+  settings_select.addEventListener('click', () => {
+    window.location.href = 'settings.html';
+  });
 });
 
 // Initialize the current year to the current date
@@ -105,7 +125,7 @@ export function generateCalendar(year) {
     }
 
     // Fill current month
-    const today = new Date(); //this is purely visual, to highlight today's date
+    const today = new Date();
     const todayDate = today.getDate();
     const todayMonth = today.getMonth();
     const todayYear = today.getFullYear();
@@ -119,18 +139,16 @@ export function generateCalendar(year) {
         dayDiv.classList.add('today');
       }
 
-      //update the day completion status and color coding it
       let date = new Date(year, month, day);
       let ratio = ratioOfCompleted(date);
-
-      updateDayCompletion(dayDiv, ratio[0], ratio[1]); // Assuming 0 tasks completed for now
+      updateDayCompletion(dayDiv, ratio[0], ratio[1]);
 
       grid.appendChild(dayDiv);
     }
 
-    // Fill remaining cells with next month overflow to make full 6 rows (if needed)
+    // Fill remaining cells
     const totalCells = grid.children.length;
-    const totalNeeded = 7 * 6; // 7 days x 6 rows
+    const totalNeeded = 7 * 6;
     for (let i = totalCells; i < totalNeeded; i++) {
       const overflow = document.createElement('div');
       overflow.className = 'day inactive';
@@ -143,7 +161,6 @@ export function generateCalendar(year) {
   }
 }
 
-// Function to set up event listeners for year navigation
 export function setupEventListeners() {
   document.getElementById('prev-year').addEventListener('click', () => {
     currentYear--;
