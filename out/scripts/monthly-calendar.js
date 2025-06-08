@@ -58,7 +58,7 @@ export function updateDayCompletion(dayElement, tasksCompleted, totalTasks) {
   }
 }
 
- // Allow tests to access it indirectly
+// Allow tests to access it indirectly
 if (typeof window !== 'undefined') {
   window.updateDayCompletion = updateDayCompletion;
   window.generateCalendar = generateCalendar;
@@ -166,5 +166,3 @@ window.addEventListener('DOMContentLoaded', () => {
   generateCalendar(currentYear);
   setupEventListeners();
 });
-
-

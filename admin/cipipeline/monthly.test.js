@@ -9,12 +9,15 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 beforeAll(async () => {
-  const html = readFileSync(resolve(__dirname, '../monthly-calendar.html'), 'utf8');
+  const html = readFileSync(
+    resolve(__dirname, '../monthly-calendar.html'),
+    'utf8',
+  );
   document.body.innerHTML = html;
 
   // Load script and get the exported functions
   const calendarModule = await import('../../out/scripts/monthly-calendar.js');
-  
+
   // Attach functions to window for testing
   window.generateCalendar = calendarModule.generateCalendar;
   window.updateDayCompletion = calendarModule.updateDayCompletion;
@@ -30,10 +33,10 @@ describe('Leap Year Handling and Day Class Application', () => {
   test('Leap year February has 29 days', () => {
     const calendar = document.getElementById('calendar');
     const monthDivs = calendar.querySelectorAll('.month');
-    const februaryMonth = Array.from(monthDivs).find(monthDiv =>
-      monthDiv.querySelector('.month-label')?.textContent.includes('February')
+    const februaryMonth = Array.from(monthDivs).find((monthDiv) =>
+      monthDiv.querySelector('.month-label')?.textContent.includes('February'),
     );
-    
+
     expect(februaryMonth).toBeDefined();
     const days = februaryMonth.querySelectorAll('.day:not(.inactive)');
     expect(days.length).toBe(29);
