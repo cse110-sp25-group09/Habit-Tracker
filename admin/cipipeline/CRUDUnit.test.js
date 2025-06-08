@@ -434,6 +434,32 @@ describe('getHabitById + localStorage Integration Tests', () => {
   })
 });
 
+describe('getAllHabits + localStorage Integration Tests', () => {
+  beforeAll(() => {
+    globalThis.crypto.randomUUID = jest.fn(mockUuid);
+  });
+
+  it('retrieves an array of strings', ()=>{
+    let id1 = createHabit("habitName1", "habitDescription1", 1);
+    let id2 = createHabit("habitName2", "habitDescription2", 7);
+    let id3 = createHabit("habitName3", "habitDescription3", 30);
+    let allHabits = getAllHabits();
+    expect(Array.isArray(allHabits)).toBe(true);
+  })
+
+
+
+  it('retrieves all habits created', ()=>{
+    let id1 = createHabit("habitName1", "habitDescription1", 1);
+    let id2 = createHabit("habitName2", "habitDescription2", 7);
+    let id3 = createHabit("habitName3", "habitDescription3", 30);
+    let allHabits = getAllHabits();
+    console.log(allHabits);
+    expect(allHabits.length).toBe(3);
+  })
+});
+
+
 /**
  * updateHabit, and the output of passing the logs array into habitReviver are intentionally untested
  * due to time constraints because they are no longer being used

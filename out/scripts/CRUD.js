@@ -330,6 +330,3 @@ function habitsCompletedOnDay(dateStr) {
   }
   return daysHabits;
 }
-
-//testing code, pls delete
-let revivedFrequency = reviveHabit("habitFrequency", "7");
