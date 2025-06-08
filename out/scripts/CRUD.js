@@ -31,6 +31,9 @@ export function reviveHabit(key, value) {
     newValue = Date.toLocaleString(newValue); //Gets rid of nonstandard date formatting
   }
   if (isNaN(newValue)) {
+    // console.log(key);
+    // console.log(value);
+    //throw new Error('Invalid habit object');
     return value;
   }
   if (key == 'log') {
