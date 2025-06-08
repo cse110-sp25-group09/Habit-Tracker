@@ -3,7 +3,13 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/svg+xml" href="../out/icons/house-solid.svg" />
+    <link rel="icon" type="image/svg+xml" href="../out/icons/calendar-days-solid.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Commissioner:wght@100..900&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="../out/styles/monthly_style.css" />
     <link rel="stylesheet" href="../out/styles/common_themes.css" />
     <title>Monthly Calendar</title>
@@ -20,23 +26,24 @@
       <div id="calendar"></div>
     </div>
 
-    <footer class="nav-bar">
-      <div id="home-selection" class="nav-item">
-        <img src="../out/icons/house-solid.svg" alt="home" />
-      </div>
-      <div id="daily-calendar-selection" class="nav-item">
-        <img
-          src="../out/icons/calendar-week-page-svgrepo-com.svg"
-          alt="daily-calendar"
-        />
-      </div>
-      <div id="calendar-selection" class="nav-item">
-        <img src="../out/icons/calendar-days-solid.svg" alt="calendar" />
-      </div>
-      <div id="settings-selection" class="nav-item">
-        <img src="../out/icons/gear-solid.svg" alt="settings" />
-      </div>
-    </footer>
+      <footer class="nav-bar">
+        <div id="home-selection" class="nav-item">
+          <img src="../out/icons/house-solid.svg" alt="home" />
+        </div>
+
+        <div id="calendar-selection" class="nav-item">
+          <img src="../out/icons/calendar-days-solid.svg" alt="calendar" />
+          <div id="calendar-menu">
+            <ul>
+              <li id="daily-option">Daily</li>
+              <li id="monthly-option">Monthly</li>
+            </ul>
+          </div>
+        </div>
+        <div id="settings-selection" class="nav-item">
+          <img src="../out/icons/gear-solid.svg" alt="settings" />
+        </div>
+      </footer>
 
     <script type="module" src="../out/scripts/monthly-calendar.js"></script>
   </body>
