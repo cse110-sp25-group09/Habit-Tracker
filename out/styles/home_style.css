@@ -28,14 +28,16 @@
   width: 100%;
   padding-top: 5rem;
   padding-left: 1rem;
-  padding-bottom: 1rem;
+  padding-bottom: 0.5rem;
   position: fixed;
   max-width: auto;
   display: block;
   font-size: 1.5rem;
   opacity: 0;
+  z-index: 94;
   transform: translateX(-20px);
   animation: fadeInUp 1s ease-out forwards;
+  background-color: var(--app-background-color);
 }
 
 @keyframes fadeInUp {
