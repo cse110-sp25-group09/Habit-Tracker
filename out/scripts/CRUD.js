@@ -21,9 +21,9 @@ function typeErrorTemplate(stringParam, type) {
  * @return a valid habit object
  */
 export function reviveHabit(key, value) {
-  const numberFields = new Set('habitFrequency', 'habitStreak');
+  const numberFields = new Set(["habitFrequency", "habitStreak"]);
   let newValue;
-  if (key in numberFields) {
+  if (numberFields.has(key)) {
     newValue = Number(value);
   }
   if (key == 'startDateTime') {
@@ -48,7 +48,6 @@ export function reviveHabit(key, value) {
  * @param habitName string name of habit
  * @param habitDescription string description of the habit
  * @param habitFrequency integer number of days representing a frequency (ex. Daily = 1, Weekly = 7)
- * @param startDateTime date string representing the first occurrence of habit
  * @param adapter defaults to localStorageAdapter, allows means to use other storage methods
  * @type {(habitName : String, habitDescription : String, startDateTime : String, adapter : Object) => String}
  * habitStreak & logs will also be fields of this object, but are not parameters because they are initialized to default values
@@ -331,3 +330,6 @@ function habitsCompletedOnDay(dateStr) {
   }
   return daysHabits;
 }
+
+//testing code, pls delete
+let revivedFrequency = reviveHabit("habitFrequency", "7");

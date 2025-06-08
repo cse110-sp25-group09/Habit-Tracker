@@ -11,6 +11,7 @@ import {
   getHabitById,
   getAllHabits,
   deleteHabit,
+  reviveHabit
 } from '../../out/scripts/CRUD.js';
 
 import { beforeAll, jest } from '@jest/globals';
@@ -369,7 +370,7 @@ describe('Integration Tests (Completion + Streak)', () => {
   });
 });
 
-describe('deleteHabit Integration Tests', () => {
+describe('deleteHabit + localStorage Integration Tests', () => {
   beforeAll(() => {
     localStorage.clear();
   });
@@ -385,3 +386,23 @@ describe('deleteHabit Integration Tests', () => {
     expect(localStorage.getItem(habitID)).toBeNull();
   });
 });
+
+describe('reviveHabit unit tests', () => {
+  it('turns habitFrequency values into Numbers', ()=>{
+    let revivedFrequency = reviveHabit("habitFrequency", "7");
+    expect(revivedFrequency).toBe(7);
+  })
+
+});
+
+/*
+describe('getAllHabits + localStorage Integration Tests', () => {
+  beforeAll(() => {
+    createHabit("habitName1", "habitDescription1", 1);
+    createHabit("habitName2", "habitDescription2", 7);
+    createHabit("habitName3", "habitDescription3", 30);
+  });
+
+
+})
+*/
