@@ -68,7 +68,9 @@ export function updateDayCompletion(dayElement, tasksCompleted, totalTasks) {
   );
 
   // Assign new class based on number of tasks
-  if (tasksCompleted >= totalTasks) {
+  if (totalTasks === 0) {
+    dayElement.classList.add('inactive');
+  } else if (tasksCompleted >= totalTasks) {
     dayElement.classList.add('completed-day');
   } else if (tasksCompleted >= totalTasks / 2) {
     dayElement.classList.add('completed-half');
