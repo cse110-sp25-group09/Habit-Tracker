@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const settings_select = document.getElementById('settings-selection');
   const calendarSelection = document.getElementById('calendar-selection');
   const calendarMenu = document.getElementById('calendar-menu');
+  // Home button navigation
   home_select.addEventListener('click', () => {
     window.location.href = 'home-page.html';
   });
