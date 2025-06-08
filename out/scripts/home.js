@@ -355,14 +355,12 @@ class HabitCard extends HTMLElement {
 
         if (isChecked) {
           logHabitCompleted(cardId);
-          localStorage.setItem(`habit-${cardId}-completed`, 'true');
           cardFront.classList.remove('not-completed');
           cardFront.classList.add('completed');
 
           populateCards();
         } else {
           removeHabitCompletion(cardId);
-          localStorage.setItem(`habit-${cardId}-completed`, 'false');
 
           cardFront.classList.remove('completed');
           cardFront.classList.add('not-completed');
@@ -396,12 +394,7 @@ class HabitCard extends HTMLElement {
     }
 
     // Load completion state from localStorage or fallback to attribute
-    const savedCompleted = localStorage.getItem(`habit-${cardId}-completed`);
-    const isCompleted = savedCompleted === 'true';
-    const completedState =
-      savedCompleted !== null
-        ? isCompleted
-        : this.getAttribute('card-completed') === 'true';
+    const completedState = this.getAttribute('card-completed') === 'true';
 
     // Set checkbox and card front style
     if (checkbox && cardFront) {
@@ -417,11 +410,9 @@ class HabitCard extends HTMLElement {
       // Add listener to update localStorage and styles on change
       checkbox.addEventListener('change', () => {
         if (checkbox.checked) {
-          localStorage.setItem(`habit-${cardId}-completed`, 'true');
           cardFront.classList.add('completed');
           cardFront.classList.remove('not-completed');
         } else {
-          localStorage.setItem(`habit-${cardId}-completed`, 'false');
           cardFront.classList.remove('completed');
           cardFront.classList.add('not-completed');
         }

@@ -51,21 +51,6 @@ describe('HabitCard component', () => {
     expect(checkbox.checked).toBe(true);
   });
 
-  test('checkbox uses localStorage over attribute if present', () => {
-    const key = 'habit-test4-completed';
-    localStorage.setItem(key, 'false');
-
-    const el = document.createElement('habit-card');
-    el.setAttribute('card-id', 'test4');
-    el.setAttribute('card-completed', 'true'); // ignored
-    document.body.appendChild(el);
-
-    const checkbox = el.shadowRoot.querySelector('.habit-checkbox');
-    expect(checkbox.checked).toBe(false);
-
-    localStorage.removeItem(key); // cleanup
-  });
-
   test('flipping the card toggles flipped class', () => {
     const el = document.createElement('habit-card');
     el.setAttribute('card-id', 'test5');
