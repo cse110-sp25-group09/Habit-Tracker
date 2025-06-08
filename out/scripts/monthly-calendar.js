@@ -40,7 +40,7 @@ export const monthNames = [
 ];
 
 // Function to update the day element's completion status based on tasks completed
-function updateDayCompletion(dayElement, tasksCompleted, totalTasks) {
+export function updateDayCompletion(dayElement, tasksCompleted, totalTasks) {
   // Clear old completion classes
   dayElement.classList.remove(
     'completed-day',
@@ -56,12 +56,12 @@ function updateDayCompletion(dayElement, tasksCompleted, totalTasks) {
   } else if (tasksCompleted >= 1) {
     dayElement.classList.add('completed-one');
   }
+}
 
-  // Allow tests to access it indirectly
-  if (typeof window !== 'undefined') {
-    window.updateDayCompletion = updateDayCompletion;
-  }
-  
+ // Allow tests to access it indirectly
+if (typeof window !== 'undefined') {
+  window.updateDayCompletion = updateDayCompletion;
+  window.generateCalendar = generateCalendar;
 }
 
 // Function to generate the calendar for a given year
