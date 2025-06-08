@@ -165,7 +165,7 @@ class HabitCard extends HTMLElement {
 
 
      #card_name {
-       font-size: 2em;
+       font-size: 1.2em;
        text-align: center;
      }
 
@@ -380,7 +380,6 @@ class HabitCard extends HTMLElement {
     const titleEl = this.shadowRoot.getElementById('card_name');
     const freqEl = this.shadowRoot.getElementById('card_frequency');
     const descrEl = this.shadowRoot.getElementById('card_description');
-    //const timeEl = this.shadowRoot.getElementById('card_time');
     const streakEl = this.shadowRoot.getElementById('card_streak');
     const idEl = this.shadowRoot.getElementById('card_id');
     const checkbox = this.shadowRoot.querySelector('.habit-checkbox');
@@ -438,9 +437,6 @@ class HabitCard extends HTMLElement {
     if (descrEl) {
       descrEl.textContent = `Description: ${this.getAttribute('card-description') || 'None'}`;
     }
-    // if (timeEl) {
-    //   timeEl.textContent = `Time: ${this.getAttribute('card-time') || 'None'}`;
-    // }
     if (streakEl) {
       streakEl.innerHTML = `Current Streak: <span class="streak_number">${this.getAttribute('card-streak') || 'None'}</span>`;
     }
@@ -468,21 +464,13 @@ document.getElementById('submit-habit').addEventListener('click', () => {
   const name = document.getElementById('habit-name').value.trim();
   const frequency = document.getElementById('habit-frequency').value;
   const descr = document.getElementById('habitDescription').value;
-  //const timeStr = document.getElementById('habit-time').value;
   let time_dict = { Daily: 1, Weekly: 7, Monthly: 30 }; //Maps Frequency to a Number
   let streak = 0;
 
   //Validates and Submits Habit
   if (name !== '') {
-    // const newCard = document.createElement('habit-card');
-    // newCard.setAttribute('card-name', name);
-    // newCard.setAttribute('card-frequency', frequency);
-    // newCard.setAttribute('card-description', descr);
-    // newCard.setAttribute('card-time', timeStr);
-    // newCard.setAttribute('card-streak', streak);
     let timeNum = time_dict[frequency];
 
-    // document.getElementById('card-container').appendChild(newCard);
     createHabit(name, descr, timeNum);
     populateCards();
   }
@@ -491,8 +479,6 @@ document.getElementById('submit-habit').addEventListener('click', () => {
   document.getElementById('habit-name').value = '';
   document.getElementById('habitDescription').value = '';
   document.getElementById('habit-frequency').value = 'Daily';
-  //.getElementById('habit-time').value = '';
-
   document.getElementById('habit-form').style.display = 'none';
   document.getElementById('blur-overlay').classList.add('hidden');
 });
@@ -512,8 +498,6 @@ function populateCards() {
   document.getElementById('card-container').innerHTML = ''; //clears existing card
   let habits = getHabitsForDay(); //fetches habit for the day
   for (let i = 0; i < habits.length; i++) {
-    //console.log(habits[i][0]);
-    //console.log(habits[i]);
     const newCard = document.createElement('habit-card');
 
     //Converts Frequency Number to a String
@@ -531,14 +515,12 @@ function populateCards() {
     newCard.setAttribute('card-name', habits[i][1].habitName);
     newCard.setAttribute('card-frequency', freqStr);
     newCard.setAttribute('card-description', habits[i][1].habitDescription);
-    //newCard.setAttribute('card-time', habits[i][1].startDateTime);
     newCard.setAttribute('card-streak', habits[i][1].habitStreak);
     newCard.setAttribute('card-id', habits[i][0]);
     newCard.setAttribute(
       'card-completed',
       isHabitComplete(habits[i][0]) ? 'true' : 'false',
     );
-    //console.log("new card " + isHabitComplete(habits[i][0]) );
     document.getElementById('card-container').appendChild(newCard);
   }
 }
