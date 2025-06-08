@@ -56,6 +56,12 @@ function updateDayCompletion(dayElement, tasksCompleted, totalTasks) {
   } else if (tasksCompleted >= 1) {
     dayElement.classList.add('completed-one');
   }
+
+  // Allow tests to access it indirectly
+  if (typeof window !== 'undefined') {
+    window.updateDayCompletion = updateDayCompletion;
+  }
+  
 }
 
 // Function to generate the calendar for a given year
@@ -161,6 +167,4 @@ window.addEventListener('DOMContentLoaded', () => {
   setupEventListeners();
 });
 
-export function getDaysInMonth(year, month) {
-  return new Date(year, month + 1, 0).getDate();
-}
+
