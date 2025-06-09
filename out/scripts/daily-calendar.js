@@ -475,18 +475,6 @@ function updateCalendarDisplay() {
 }
 
 /**
- * Utility function to compare two dates (ignoring time)
- * @param {Date} date1 - First date to compare
- * @param {Date} date2 - Second date to compare
- * @returns {boolean} True if dates are the same day
- */
-function isSameDay(date1, date2) {
-  return date1.getFullYear() === date2.getFullYear() &&
-         date1.getMonth() === date2.getMonth() &&
-         date1.getDate() === date2.getDate();
-}
-
-/**
  * Check if a habit was active (created) on or before a specific date
  * @param {Object} habit - The habit object
  * @param {Date} checkDate - The date to check against
@@ -517,9 +505,17 @@ function isHabitActiveOnDate(habit, checkDate) {
 
   // Check if the habit was created on or before the check date
   // We only compare dates, not times
-  const habitStartDay = new Date(habitStartDate.getFullYear(), habitStartDate.getMonth(), habitStartDate.getDate());
-  const checkDay = new Date(checkDate.getFullYear(), checkDate.getMonth(), checkDate.getDate());
-  
+  const habitStartDay = new Date(
+    habitStartDate.getFullYear(),
+    habitStartDate.getMonth(),
+    habitStartDate.getDate(),
+  );
+  const checkDay = new Date(
+    checkDate.getFullYear(),
+    checkDate.getMonth(),
+    checkDate.getDate(),
+  );
+
   return habitStartDay <= checkDay;
 }
 
@@ -533,12 +529,12 @@ function isHabitActiveOnDate(habit, checkDate) {
 function getHabitsForSpecificDate(date) {
   // Get all habits that would be scheduled for this day
   const allHabits = getHabitsForDay(date) || [];
-  
+
   // Filter out habits that weren't created yet on this date
   const activeHabits = allHabits.filter(([habitId, habit]) => {
     return isHabitActiveOnDate(habit, date);
   });
-  
+
   return activeHabits;
 }
 
