@@ -270,23 +270,31 @@ export function removeHabitCompletion(habitID, adapter = localStorageAdapter) {
 }
 
 /**
- *
- * @param {Object} habit a JSON object representing a habit(not a habit string !)
+ * @param {Object} habit a JSON object representing a habit
  * @param {Date} day the day we are checking the habit is due for
- * @returns boolean true if the given habit needs to be completed today
+ * @returns boolean true if the given habit needs to be completed on the specified day
  */
 function isHabitForDay(habit, day) {
-  let currentDate = day;
-  let msStartDate = Date.parse(habit.startDateTime);
-  if (habit.logs[-1] === currentDate.toDateString()) {
+  // Normalize the specified day to midnight
+  let currentDate = new Date(day);
+  currentDate.setHours(0, 0, 0, 0);
+
+  // Parse and normalize the start date to midnight
+  let startDate = new Date(habit.startDateTime);
+  startDate.setHours(0, 0, 0, 0);
+
+  // Calculate days difference
+  let daysDiff = Math.floor(
+    (currentDate.getTime() - startDate.getTime()) / DAYINMS,
+  );
+
+  // For negative differences (day is before start date), habit is not due
+  if (daysDiff < 0) {
     return false;
   }
 
-  let daysDiff = Math.floor((currentDate - msStartDate) / DAYINMS);
-  if (daysDiff % habit.habitFrequency != 0) {
-    return false;
-  }
-  return true;
+  // Check if the specified day is a scheduled day for this habit
+  return daysDiff % habit.habitFrequency === 0;
 }
 
 /**
@@ -299,11 +307,13 @@ export function getHabitsForDay(day = new Date()) {
   }
   let day_habits = [];
   day.setHours(0, 0, 0, 0);
+
   for (let i = 0; i < habits.length; i++) {
     if (isHabitForDay(habits[i][1], day)) {
       day_habits.push(habits[i]);
     }
   }
+
   return day_habits;
 }
 
