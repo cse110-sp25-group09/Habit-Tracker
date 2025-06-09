@@ -49,7 +49,7 @@ export function reviveHabit(key, value) {
  * @param habitFrequency integer number of days representing a frequency (ex. Daily = 1, Weekly = 7)
  * @param adapter defaults to localStorageAdapter, allows means to use other storage methods
  * @type {(habitName : String, habitDescription : String, startDateTime : String, adapter : Object) => String}
- * habitStreak & logs will also be fields of this object, but are not parameters because they are initialized to default values
+ * habitStreak, startDateTime, and logs will also be fields of this object, but are not parameters because they are initialized to default values
  * @return habitID, a unique ID string
  */
 export function createHabit(
@@ -136,12 +136,12 @@ export function updateHabit(habitID, fields, newValues) {
 }
 
 /**
- *
+ * Deletes the given habit from localStorage
  * @param {String} habitID - the string ID of the habit being deleted
  * @param {Object} adapter defaults to localStorageAdapter, allows us to pass in other storage methods
  */
-export function deleteHabit(cardID, adapter = localStorageAdapter) {
-  adapter.del(cardID);
+export function deleteHabit(habitID, adapter = localStorageAdapter) {
+  adapter.del(habitID);
 }
 
 /**
@@ -170,7 +170,6 @@ export function getAllHabits(adapter = localStorageAdapter) {
 }
 
 /**
- *
  * @param {String} habitID
  * @param {Object} adapter
  * @returns a habit object
@@ -184,7 +183,7 @@ export function getHabitById(habitID, adapter = localStorageAdapter) {
 /**
  *
  * @param {Object} habit a JSON object representing a habit(not a habit string !)
- * @returns
+ * @returns streak, a number representing the integer number of consecutive days the habit has been completed
  */
 function calculateStreak(habit) {
   let logs = habit.logs;
@@ -216,10 +215,11 @@ function calculateStreak(habit) {
     }
   }
 }
+
 /**
  *
- * @param {String} habitID - the string ID of the habit being tested
- * @param {Object} habit a JSON object representing a habit(not a habit string !)
+ * @param {String} habitID the string ID of the habit being tested
+ * @param {Date} day a day object representing the day on which we're checking habit completeness
  * @returns {boolean} true if habit was completed, false otherwise
  */
 export function isHabitComplete(habitID, day = new Date()) {
@@ -254,8 +254,9 @@ export function logHabitCompleted(habitID) {
 
 /**
  *
- * @param {String} habitID - the string ID of the habit that removing last completion
- * @returns {boolean} true if habit completion is logged successfully, false otherwise
+ * @param {String} habitID the string ID of the habit that removing last completion
+ * @param {Object} adapter defaults to localStorageAdapter, allows means to use other storage methods
+ * @returns Boolean true if habit completion is logged successfully, false otherwise
  */
 export function removeHabitCompletion(habitID, adapter = localStorageAdapter) {
   let habit = getHabitById(habitID, adapter);
@@ -269,11 +270,10 @@ export function removeHabitCompletion(habitID, adapter = localStorageAdapter) {
 }
 
 /**
- *
  * @param {Object} habit a JSON object representing a habit(not a habit string !)
- * @returns
+ * @returns boolean true if the given habit needs to be completed today
  */
-function isHabitForDay(habit, day) {
+function isHabitForDay(habit, day ) {
   let currentDate = new Date();
   let msStartDate = Date.parse(habit.startDateTime);
   if (habit.logs[-1] === currentDate.toDateString()) {
@@ -305,6 +305,10 @@ export function getHabitsForDay(day = new Date()) {
   return day_habits;
 }
 
+/**
+ * @param date A date object representing the date for which we're checking habit completion
+ * @returns {(number|number)[]} A number between 0 and 1 representing the proportion of habits completed of those assigned
+ */
 export function ratioOfCompleted(date = new Date()) {
   let habits_id_pairs = getHabitsForDay(date);
   let total_count = habits_id_pairs.length;

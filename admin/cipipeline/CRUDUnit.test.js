@@ -11,7 +11,7 @@ import {
   getHabitById,
   getAllHabits,
   deleteHabit,
-  reviveHabit
+  reviveHabit, getHabitsForDay
 } from '../../out/scripts/CRUD.js';
 
 import { beforeAll, jest } from '@jest/globals';
@@ -460,16 +460,7 @@ describe('getAllHabits + localStorage Integration Tests', () => {
     let id1 = createHabit("habitName1", "habitDescription1", 1);
     let id2 = createHabit("habitName2", "habitDescription2", 7);  
     let id3 = createHabit("habitName3", "habitDescription3", 30);
-    
-    console.log('Created habit IDs:', [id1, id2, id3]);
-    console.log('localStorage length:', localStorage.length);
-    console.log('localStorage keys:', Object.keys(localStorage));
-    
-    // Check what's actually stored
-    console.log('id1 in localStorage:', localStorage.getItem(id1));
-    console.log('id2 in localStorage:', localStorage.getItem(id2));
-    console.log('id3 in localStorage:', localStorage.getItem(id3));
-    
+
     let allHabits = getAllHabits();
     console.log('getAllHabits result:', allHabits);
     
@@ -477,8 +468,43 @@ describe('getAllHabits + localStorage Integration Tests', () => {
   });
 });
 
+
+
+describe('getHabitsForDay Integration Tests', () => {
+    beforeAll(() => {
+
+      let counter = 0;
+      const mockUuid = () => `12345678-1234-1234-8abc-12345678901${counter++}`;
+
+      if (!globalThis.crypto) {
+        globalThis.crypto = {};
+      }
+      globalThis.crypto.randomUUID = jest.fn(mockUuid);
+    });
+
+    beforeEach(() => {
+      localStorage.clear();
+    })
+
+    it('includes habits for today', () => {
+      let todayHabitID = createHabit("Dance", "Do 1000 pliés", 1);
+      let habitsForDay = getHabitsForDay();
+      expect(habitsForDay[0]).toContain(todayHabitID);
+    })
+
+    it ('excludes habits not for today', () => {
+      localStorage.setItem(crypto.randomUUID, "Name", "Desc", 7, "2025-06-07", 0, []);
+      let habitsForDay = getHabitsForDay();
+      expect(habitsForDay).toEqual([]);
+    })
+
+
+
+  }
+)
+
+
 /**
  * updateHabit, and the output of passing the logs array into habitReviver are intentionally untested
  * due to time constraints because they are no longer being used
- * /^idtest-uuid-\d+$/
  */
