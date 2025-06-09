@@ -77,9 +77,22 @@ export function updateDayCompletion(dayElement, tasksCompleted, totalTasks) {
     'completed-half',
   );
 
+  // If the day is in the past, do not modify it
+  const today = new Date();
+  const elementDateStr = dayElement.getAttribute('data-date'); // assumed format: "YYYY-MM-DD"
+  if (elementDateStr) {
+    const elementDate = new Date(elementDateStr);
+    if (
+      elementDate <
+      new Date(today.getFullYear(), today.getMonth(), today.getDate())
+    ) {
+      return; // Don't modify past days
+    }
+  }
+
   // Assign new class based on number of tasks
   if (totalTasks === 0) {
-    dayElement.classList.add('inactive');
+    return; // No tasks, no class change
   } else if (tasksCompleted >= totalTasks) {
     dayElement.classList.add('completed-day');
   } else if (tasksCompleted >= totalTasks / 2) {
