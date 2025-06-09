@@ -275,8 +275,8 @@ export function removeHabitCompletion(habitID, adapter = localStorageAdapter) {
  * @param {Date} day the day we are checking the habit is due for
  * @returns boolean true if the given habit needs to be completed today
  */
-function isHabitForDay(habit, day) {
-  let currentDate = day;
+function isHabitForDay(habit) {
+  let currentDate = new Date();
   let msStartDate = Date.parse(habit.startDateTime);
   if (habit.logs[-1] === currentDate.toDateString()) {
     return false;
@@ -300,7 +300,7 @@ export function getHabitsForDay(day = new Date()) {
   let day_habits = [];
   day.setHours(0, 0, 0, 0);
   for (let i = 0; i < habits.length; i++) {
-    if (isHabitForDay(habits[i][1], day)) {
+    if (isHabitForDay(habits[i][1])) {
       day_habits.push(habits[i]);
     }
   }
