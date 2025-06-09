@@ -54,7 +54,7 @@ The goal of Phase 1 is to establish a basic CI/CD pipeline that ensures code qua
 
 Status(Planned):
 
-- Other testing including e2e (end to end) and pixel testing is also possible so you may decide to use an environment that does numerous things.
+- Pixel testing, potentially automated using tools like Lost Pixel
 - Code Coverage Enforcement -> Enforce minimum coverage thresholds
 - Dependency Vulnerability Scan
 
@@ -66,4 +66,4 @@ Status(In-Progress Items)
 
 ## Conclusion
 
-Phase 1 CI/CD for Habit-Tracker provies basic automated linting, formatting, static analysis, documentation generation, and unit tests—anchored by mandatory peer review—to uphold our code quality and collaboration standards. The next steps focus on extending test coverage into E2E and visual regression, tightening coverage gates, and introducing vulnerability scanning. Key dependencies include selecting an E2E framework, finalizing our coverage thresholds, and configuring security scanners. Once these blockers are cleared, we will be well-positioned to progress into Phase 2 enhancements and deployment automation.
+Phase 1 CI/CD for Habit-Tracker provies basic automated linting, formatting, static analysis, documentation generation, and unit tests—anchored by mandatory peer review—to uphold our code quality and collaboration standards. The next steps focus on extending test coverage into E2E and visual regression, tightening coverage gates, and introducing vulnerability scanning. Key dependencies include finalizing our coverage thresholds, and configuring security scanners. Once these blockers are cleared, we will be well-positioned to progress into Phase 2 enhancements and deployment automation.

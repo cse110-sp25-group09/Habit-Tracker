@@ -3,36 +3,52 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="monthly.css" />
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="../out/icons/calendar-days-solid.svg"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Commissioner:wght@100..900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../out/styles/monthly_style.css" />
+    <link rel="stylesheet" href="../out/styles/common_themes.css" />
     <title>Monthly Calendar</title>
   </head>
 
   <body>
-    <span class="header">Monthly Calendar</span>
-    <div class="controls">
-      <button id="prev-year">Previous Year</button>
-      <span class="month-label" id="month-label"></span>
-      <button id="next-year">Next Year</button>
+    <div id="app-layout">
+      <h1 class="header">Monthly Calendar</h1>
+      <div class="controls">
+        <button id="prev-year">Prev Year</button>
+        <span class="month-label" id="month-label"></span>
+        <button id="next-year">Next Year</button>
+      </div>
+      <div id="calendar"></div>
     </div>
-    <div class="calendar" id="calendar"></div>
 
     <footer class="nav-bar">
       <div id="home-selection" class="nav-item">
-        <img src="/out/icons/house-solid.svg" alt="home" />
+        <img src="../out/icons/house-solid.svg" alt="home" />
       </div>
-      <div id="daily-calendar-selection" class="nav-item">
-        <img
-          src="/out/icons/calendar-week-page-svgrepo-com.svg"
-          alt="daily-calendar"
-        />
-      </div>
+
       <div id="calendar-selection" class="nav-item">
-        <img src="/out/icons/calendar-days-solid.svg" alt="calendar" />
+        <img src="../out/icons/calendar-days-solid.svg" alt="calendar" />
+        <div id="calendar-menu">
+          <ul>
+            <li id="daily-option">Daily</li>
+            <li id="monthly-option">Monthly</li>
+          </ul>
+        </div>
       </div>
       <div id="settings-selection" class="nav-item">
-        <img src="/out/icons/gear-solid.svg" alt="settings" />
+        <img src="../out/icons/gear-solid.svg" alt="settings" />
       </div>
     </footer>
-    <script type="module" src="monthly-calendar.js"></script>
+
+    <script type="module" src="../out/scripts/monthly-calendar.js"></script>
   </body>
 </html>
