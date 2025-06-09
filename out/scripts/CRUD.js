@@ -278,21 +278,23 @@ function isHabitForDay(habit, day) {
   // Normalize the specified day to midnight
   let currentDate = new Date(day);
   currentDate.setHours(0, 0, 0, 0);
-  
+
   // Parse and normalize the start date to midnight
   let startDate = new Date(habit.startDateTime);
   startDate.setHours(0, 0, 0, 0);
-  
+
   // Calculate days difference
-  let daysDiff = Math.floor((currentDate.getTime() - startDate.getTime()) / DAYINMS);
-  
+  let daysDiff = Math.floor(
+    (currentDate.getTime() - startDate.getTime()) / DAYINMS,
+  );
+
   // For negative differences (day is before start date), habit is not due
   if (daysDiff < 0) {
     return false;
   }
-  
+
   // Check if the specified day is a scheduled day for this habit
-  return (daysDiff % habit.habitFrequency === 0);
+  return daysDiff % habit.habitFrequency === 0;
 }
 
 /**
@@ -305,14 +307,14 @@ export function getHabitsForDay(day = new Date()) {
   }
   let day_habits = [];
   day.setHours(0, 0, 0, 0);
-  
+
   for (let i = 0; i < habits.length; i++) {
     let [habitID, habitObj] = habits[i];
     if (isHabitForDay(habitObj, day) && !isHabitComplete(habitID, day)) {
       day_habits.push(habits[i]);
     }
   }
-  
+
   return day_habits;
 }
 
