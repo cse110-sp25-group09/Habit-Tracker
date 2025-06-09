@@ -309,8 +309,7 @@ export function getHabitsForDay(day = new Date()) {
   day.setHours(0, 0, 0, 0);
 
   for (let i = 0; i < habits.length; i++) {
-    let [habitID, habitObj] = habits[i];
-    if (isHabitForDay(habitObj, day)) {
+    if (isHabitForDay(habits[i][1], day)) {
       day_habits.push(habits[i]);
     }
   }
