@@ -67,7 +67,7 @@ export function createHabit(
       typeErrorTemplate(habitDescription, typeof habitDescription),
     );
   }
-  /*
+  /* 
    Choosing to represent frequencies as integer day values to compromise between
    * readability & compatibility with JS Date() objects, which operate in ms
    * */
