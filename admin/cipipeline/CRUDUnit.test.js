@@ -451,19 +451,19 @@ describe('getAllHabits + localStorage Integration Tests', () => {
   });
 
   it('retrieves an array of strings', () => {
-    let id1 = createHabit("habitName1", "habitDescription1", 1);
-    let id2 = createHabit("habitName2", "habitDescription2", 7);
-    let id3 = createHabit("habitName3", "habitDescription3", 30);
+    let id1 = createHabit('habitName1', 'habitDescription1', 1);
+    let id2 = createHabit('habitName2', 'habitDescription2', 7);
+    let id3 = createHabit('habitName3', 'habitDescription3', 30);
     let allHabits = getAllHabits();
     expect(Array.isArray(allHabits)).toBe(true);
   });
 
   it('retrieves all habits created', () => {
     console.log('=== Starting test ===');
-    
-    let id1 = createHabit("habitName1", "habitDescription1", 1);
-    let id2 = createHabit("habitName2", "habitDescription2", 7);  
-    let id3 = createHabit("habitName3", "habitDescription3", 30);
+
+    let id1 = createHabit('habitName1', 'habitDescription1', 1);
+    let id2 = createHabit('habitName2', 'habitDescription2', 7);
+    let id3 = createHabit('habitName3', 'habitDescription3', 30);
 
     let allHabits = getAllHabits();
     console.log('getAllHabits result:', allHabits);
@@ -576,41 +576,41 @@ describe('ratioOfCompleted Tests', () => {
   });
 });
 
-
-
 describe('getHabitsForDay Integration Tests', () => {
-    beforeAll(() => {
+  beforeAll(() => {
+    let counter = 0;
+    const mockUuid = () => `12345678-1234-1234-8abc-12345678901${counter++}`;
 
-      let counter = 0;
-      const mockUuid = () => `12345678-1234-1234-8abc-12345678901${counter++}`;
+    if (!globalThis.crypto) {
+      globalThis.crypto = {};
+    }
+    globalThis.crypto.randomUUID = jest.fn(mockUuid);
+  });
 
-      if (!globalThis.crypto) {
-        globalThis.crypto = {};
-      }
-      globalThis.crypto.randomUUID = jest.fn(mockUuid);
-    });
+  beforeEach(() => {
+    localStorage.clear();
+  });
 
-    beforeEach(() => {
-      localStorage.clear();
-    })
+  it('includes habits for today', () => {
+    let todayHabitID = createHabit('Dance', 'Do 1000 pliés', 1);
+    let habitsForDay = getHabitsForDay();
+    expect(habitsForDay[0]).toContain(todayHabitID);
+  });
 
-    it('includes habits for today', () => {
-      let todayHabitID = createHabit("Dance", "Do 1000 pliés", 1);
-      let habitsForDay = getHabitsForDay();
-      expect(habitsForDay[0]).toContain(todayHabitID);
-    })
-
-    it ('excludes habits not for today', () => {
-      localStorage.setItem(crypto.randomUUID, "Name", "Desc", 7, "2025-06-07", 0, []);
-      let habitsForDay = getHabitsForDay();
-      expect(habitsForDay).toEqual([]);
-    })
-
-
-
-  }
-)
-
+  it('excludes habits not for today', () => {
+    localStorage.setItem(
+      crypto.randomUUID,
+      'Name',
+      'Desc',
+      7,
+      '2025-06-07',
+      0,
+      [],
+    );
+    let habitsForDay = getHabitsForDay();
+    expect(habitsForDay).toEqual([]);
+  });
+});
 
 /**
  * updateHabit, and the output of passing the logs array into habitReviver are intentionally untested
