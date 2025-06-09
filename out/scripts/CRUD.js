@@ -1,6 +1,7 @@
 const DAYINMS = 86400000;
 const uuidRegex =
   /^id[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+//export { getHabitsForToday, createHabit, deleteHabit } from './CRUD.js';
 
 export const localStorageAdapter = {
   get: (key) => localStorage.getItem(key),
@@ -20,9 +21,9 @@ function typeErrorTemplate(stringParam, type) {
  * @return a valid habit object
  */
 export function reviveHabit(key, value) {
-  const numberFields = new Set(['habitFrequency', 'habitStreak']);
+  const numberFields = new Set('habitFrequency', 'habitStreak');
   let newValue;
-  if (numberFields.has(key)) {
+  if (key in numberFields) {
     newValue = Number(value);
   }
   if (key == 'startDateTime') {
@@ -47,9 +48,10 @@ export function reviveHabit(key, value) {
  * @param habitName string name of habit
  * @param habitDescription string description of the habit
  * @param habitFrequency integer number of days representing a frequency (ex. Daily = 1, Weekly = 7)
+ * @param startDateTime date string representing the first occurrence of habit
  * @param adapter defaults to localStorageAdapter, allows means to use other storage methods
  * @type {(habitName : String, habitDescription : String, startDateTime : String, adapter : Object) => String}
- * habitStreak, startDateTime, and logs will also be fields of this object, but are not parameters because they are initialized to default values
+ * habitStreak & logs will also be fields of this object, but are not parameters because they are initialized to default values
  * @return habitID, a unique ID string
  */
 export function createHabit(
@@ -136,12 +138,12 @@ export function updateHabit(habitID, fields, newValues) {
 }
 
 /**
- * Deletes the given habit from localStorage
+ *
  * @param {String} habitID - the string ID of the habit being deleted
  * @param {Object} adapter defaults to localStorageAdapter, allows us to pass in other storage methods
  */
-export function deleteHabit(habitID, adapter = localStorageAdapter) {
-  adapter.del(habitID);
+export function deleteHabit(cardID, adapter = localStorageAdapter) {
+  adapter.del(cardID);
 }
 
 /**
@@ -162,7 +164,9 @@ export function getAllHabits(adapter = localStorageAdapter) {
     }
     curHabitObject = adapter.get(keys[i]);
 
+    //console.log(curHabitObject);
     curHabitObject = JSON.parse(curHabitObject, reviveHabit);
+    // console.log(curHabitObject);
 
     habits.push([keys[i], curHabitObject]);
   }
@@ -170,6 +174,7 @@ export function getAllHabits(adapter = localStorageAdapter) {
 }
 
 /**
+ *
  * @param {String} habitID
  * @param {Object} adapter
  * @returns a habit object
@@ -183,7 +188,7 @@ export function getHabitById(habitID, adapter = localStorageAdapter) {
 /**
  *
  * @param {Object} habit a JSON object representing a habit(not a habit string !)
- * @returns streak, a number representing the integer number of consecutive days the habit has been completed
+ * @returns
  */
 function calculateStreak(habit) {
   let logs = habit.logs;
@@ -194,6 +199,7 @@ function calculateStreak(habit) {
   let ms = 0;
   let msLogs = [];
 
+  //Date.parse() is very format permissive, this needs to be tested thoroughly
   logs.forEach((element) => {
     ms = Date.parse(element);
     if (isNaN(ms)) {
@@ -216,12 +222,6 @@ function calculateStreak(habit) {
   }
 }
 
-/**
- *
- * @param {String} habitID the string ID of the habit being tested
- * @param {Date} day a day object representing the day on which we're checking habit completeness
- * @returns {boolean} true if habit was completed, false otherwise
- */
 export function isHabitComplete(habitID, day = new Date()) {
   const habit = getHabitById(habitID);
   if (habit.logs.length === 0) return false;
@@ -237,7 +237,7 @@ export function isHabitComplete(habitID, day = new Date()) {
 
 /**
  *
- * @param {String} habitID - the string ID of the habit being logged
+ * @param {String} habitID - the string ID of the habit being deleted
  * @returns {boolean} true if habit completion is logged successfully, false otherwise
  */
 export function logHabitCompleted(habitID) {
@@ -250,14 +250,9 @@ export function logHabitCompleted(habitID) {
     return true;
   }
   throw new Error('Invalid habit passed');
+  //return false; // what is the benefit of returning boolean instead of throwing an error in a void function in this context ?
 }
 
-/**
- *
- * @param {String} habitID the string ID of the habit that removing last completion
- * @param {Object} adapter defaults to localStorageAdapter, allows means to use other storage methods
- * @returns Boolean true if habit completion is logged successfully, false otherwise
- */
 export function removeHabitCompletion(habitID, adapter = localStorageAdapter) {
   let habit = getHabitById(habitID, adapter);
   if (habit) {
@@ -272,17 +267,18 @@ export function removeHabitCompletion(habitID, adapter = localStorageAdapter) {
 /**
  *
  * @param {Object} habit a JSON object representing a habit(not a habit string !)
- * @param {Date} day the day we are checking the habit is due for
- * @returns boolean true if the given habit needs to be completed today
+ * @returns
  */
 function isHabitForDay(habit, day) {
-  let currentDate = day;
+  let currentDate = new Date();
   let msStartDate = Date.parse(habit.startDateTime);
   if (habit.logs[-1] === currentDate.toDateString()) {
     return false;
   }
 
   let daysDiff = Math.floor((currentDate - msStartDate) / DAYINMS);
+  // console.log(daysDiff);
+  // console.log(habit.habitFrequency);
   if (daysDiff % habit.habitFrequency != 0) {
     return false;
   }
@@ -294,6 +290,7 @@ function isHabitForDay(habit, day) {
  */
 export function getHabitsForDay(day = new Date()) {
   let habits = getAllHabits();
+  //console.log(habits);
   if (!habits) {
     return [];
   }
@@ -307,10 +304,6 @@ export function getHabitsForDay(day = new Date()) {
   return day_habits;
 }
 
-/**
- * @param date A date object representing the date for which we're checking habit completion
- * @returns {(number|number)[]} A number between 0 and 1 representing the proportion of habits completed of those assigned
- */
 export function ratioOfCompleted(date = new Date()) {
   let habits_id_pairs = getHabitsForDay(date);
   let total_count = habits_id_pairs.length;
@@ -321,4 +314,20 @@ export function ratioOfCompleted(date = new Date()) {
     }
   }
   return [comp_count, total_count];
+}
+
+/**
+ *
+ * @param {string} dateStr datestring representing the day being checked
+ * @returns list of habit objects
+ */
+function habitsCompletedOnDay(dateStr) {
+  let habits = getAllHabits();
+  let daysHabits = [];
+  for (let i = 0; i < habits.length; i++) {
+    if (habits[i].logs.includes(dateStr)) {
+      daysHabits.push(habits[i]);
+    }
+  }
+  return daysHabits;
 }
