@@ -216,19 +216,6 @@ function calculateStreak(habit) {
   }
 }
 
-export function isHabitComplete(habitID, day = new Date()) {
-  const habit = getHabitById(habitID);
-  if (habit.logs.length === 0) return false;
-
-  day.setHours(0, 0, 0, 0);
-  for (const log of habit.logs) {
-    const completedDay = new Date(log);
-    completedDay.setHours(0, 0, 0, 0);
-    if (day.getTime() === completedDay.getTime()) return true;
-  }
-  return false;
-}
-
 /**
  *
  * @param {String} habitID the string ID of the habit being tested
