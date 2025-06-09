@@ -310,7 +310,7 @@ export function getHabitsForDay(day = new Date()) {
 
   for (let i = 0; i < habits.length; i++) {
     let [habitID, habitObj] = habits[i];
-    if (isHabitForDay(habitObj, day) && !isHabitComplete(habitID, day)) {
+    if (isHabitForDay(habitObj, day)) {
       day_habits.push(habits[i]);
     }
   }
