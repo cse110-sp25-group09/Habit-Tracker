@@ -271,10 +271,13 @@ export function removeHabitCompletion(habitID, adapter = localStorageAdapter) {
 
 /**
  * @param {Object} habit a JSON object representing a habit(not a habit string !)
+ * @param {Date} day the day we are checking the habit is due for
  * @returns boolean true if the given habit needs to be completed today
  */
 function isHabitForDay(habit, day ) {
   let currentDate = new Date();
+function isHabitForDay(habit, day) {
+  let currentDate = day;
   let msStartDate = Date.parse(habit.startDateTime);
   if (habit.logs[-1] === currentDate.toDateString()) {
     return false;
