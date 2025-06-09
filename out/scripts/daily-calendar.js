@@ -6,7 +6,7 @@
  * showing previous, current, and next day. It handles habit display, completion tracking,
  * and provides both touch and keyboard navigation.
  *
- * @author Your Name
+ * @author Taha Masood and Brendan Keane
  * @version 1.0.0
  */
 
@@ -15,7 +15,6 @@ import {
   isHabitComplete,
   logHabitCompleted,
   removeHabitCompletion,
-  getAllHabits,
   getHabitsForDay,
 } from './CRUD.js';
 
@@ -379,6 +378,7 @@ class HabitCard extends HTMLElement {
 // Define the custom element
 customElements.define('habit-card', HabitCard);
 
+// Applies theme to the page
 window.addEventListener('DOMContentLoaded', () => {
   const body = document.body;
   const savedTheme = localStorage.getItem('selectedTheme');
@@ -437,6 +437,13 @@ function initCalendar() {
   setupEventListeners();
 }
 
+/**
+ * Populates a calendar card element with the correct day name and date
+ * If the card element or its children cannot be found, the function safely returns
+ *
+ * @param {string} cardId - The ID of the DOM element representing the calendar car
+ * @param {Date} dateObj - A valid JavaScript Date object representing the date to display
+ */
 function fillCard(cardId, dateObj) {
   const card = document.getElementById(cardId);
   if (!card) return;
@@ -843,36 +850,16 @@ document.addEventListener('DOMContentLoaded', initCalendar);
  * @namespace DailyCalendar
  */
 window.DailyCalendar = {
-  /**
-   * Navigate the calendar by specified number of days
-   * @param {number} direction - Number of days to navigate
-   */
   navigateCalendar,
 
-  /**
-   * Update habit indicators for all displayed days
-   */
   updateHabitsForDays,
 
-  /**
-   * Get a copy of the current date being displayed
-   * @returns {Date} Copy of the current date
-   */
   getCurrentDate: () => new Date(currentDate),
 
-  /**
-   * Initialize the calendar display and event listeners
-   */
   initCalendar,
 
-  /**
-   * Show the detailed view modal for the current day
-   */
   showDetailedView,
 
-  /**
-   * Close the detailed view modal
-   */
   closeDetailedView,
 
   updateHabitIndicators,
