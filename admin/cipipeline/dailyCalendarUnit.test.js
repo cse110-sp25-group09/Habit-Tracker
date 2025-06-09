@@ -13,7 +13,7 @@ jest.unstable_mockModule('../../out/scripts/CRUD.js', () => ({
 }));
 
 // Load mocked CRUD module and daily calendar after the mock
-const { getAllHabits, isHabitComplete } = await import(
+const { getAllHabits, isHabitComplete, getHabitsForDay } = await import(
   '../../out/scripts/CRUD.js'
 );
 await import('../../out/scripts/daily-calander.js');
@@ -210,7 +210,7 @@ describe('Daily Calendar Module', () => {
 
       // Reset mocks and mock no habits
       jest.clearAllMocks();
-      window.getHabitsForSpecificDate = jest.fn().mockReturnValue([]);
+      window.getHabitsForDay = jest.fn().mockReturnValue([]);
       isHabitComplete.mockReset(); // just in case it's still defined
 
       DailyCalendar.updateHabitIndicators('test-container', date);
@@ -228,7 +228,7 @@ describe('Daily Calendar Module', () => {
       document.body.appendChild(container);
 
       // Mock habit data
-      window.getHabitsForSpecificDate = jest.fn().mockReturnValue([
+      window.getHabitsForDay = jest.fn().mockReturnValue([
         [
           'habit1',
           {
@@ -260,7 +260,7 @@ describe('Daily Calendar Module', () => {
 
   describe('showDetailedView', () => {
     it('adds a close button with expected text', () => {
-      window.getHabitsForSpecificDate = jest.fn().mockReturnValue([]);
+      window.getHabitsForDay = jest.fn().mockReturnValue([]);
       isHabitComplete.mockReturnValue(false);
 
       DailyCalendar.showDetailedView();
