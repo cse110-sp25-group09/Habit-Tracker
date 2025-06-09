@@ -11,7 +11,8 @@ import {
   getHabitById,
   getAllHabits,
   deleteHabit,
-  reviveHabit
+  reviveHabit,
+  ratioOfCompleted
 } from '../../out/scripts/CRUD.js';
 
 import { beforeAll, jest } from '@jest/globals';
@@ -477,8 +478,111 @@ describe('getAllHabits + localStorage Integration Tests', () => {
   });
 });
 
+describe('ratioOfCompleted Tests', () => {
+  beforeEach(() => {
+    localStorage.clear();
+    mockUuidCounter = 0;
+    if (!globalThis.crypto) {
+      globalThis.crypto = {};
+    }
+    globalThis.crypto.randomUUID = jest.fn(mockUuid);
+  });
+
+  it('should return [0, 0] when no habits exist', () => {
+    expect(ratioOfCompleted()).toEqual([0, 0]);
+  });
+
+  it('should return an array of two numbers', () => {
+    createHabit('Daily Exercise', 'Go for a run', 1);
+    const result = ratioOfCompleted();
+    
+    expect(Array.isArray(result)).toBe(true);
+    expect(result).toHaveLength(2);
+    expect(typeof result[0]).toBe('number');
+    expect(typeof result[1]).toBe('number');
+  });
+
+  it('should have completed count less than or equal to total count', () => {
+    createHabit('Daily Exercise', 'Go for a run', 1);
+    createHabit('Daily Reading', 'Read a book', 1);
+    
+    const result = ratioOfCompleted();
+    expect(result[0]).toBeLessThanOrEqual(result[1]);
+  });
+
+  it('should have non-negative values', () => {
+    createHabit('Daily Exercise', 'Go for a run', 1);
+    const habitId = createHabit('Daily Reading', 'Read a book', 1);
+    logHabitCompleted(habitId);
+    
+    const result = ratioOfCompleted();
+    expect(result[0]).toBeGreaterThanOrEqual(0);
+    expect(result[1]).toBeGreaterThanOrEqual(0);
+  });
+
+  it('should work with date parameter', () => {
+    createHabit('Daily Exercise', 'Go for a run', 1);
+    const today = new Date();
+    const result = ratioOfCompleted(today);
+    
+    expect(Array.isArray(result)).toBe(true);
+    expect(result).toHaveLength(2);
+    expect(typeof result[0]).toBe('number');
+    expect(typeof result[1]).toBe('number');
+  });
+
+  it('should handle multiple habit completions', () => {
+    const habitId1 = createHabit('Daily Exercise', 'Go for a run', 1);
+    const habitId2 = createHabit('Daily Reading', 'Read a book', 1);
+    
+    const initialResult = ratioOfCompleted();
+    
+    logHabitCompleted(habitId1);
+    const afterFirstCompletion = ratioOfCompleted();
+    
+    logHabitCompleted(habitId2);
+    const afterSecondCompletion = ratioOfCompleted();
+    
+    // Completed count should not decrease
+    expect(afterFirstCompletion[0]).toBeGreaterThanOrEqual(initialResult[0]);
+    expect(afterSecondCompletion[0]).toBeGreaterThanOrEqual(afterFirstCompletion[0]);
+  });
+
+  it('should handle removing completions', () => {
+    const habitId = createHabit('Daily Exercise', 'Go for a run', 1);
+    
+    logHabitCompleted(habitId);
+    const afterCompletion = ratioOfCompleted();
+    
+    removeHabitCompletion(habitId);
+    const afterRemoval = ratioOfCompleted();
+    
+    // Total count should remain the same or similar
+    expect(Math.abs(afterRemoval[1] - afterCompletion[1])).toBeLessThanOrEqual(1);
+    // Completed count should not increase after removal
+    expect(afterRemoval[0]).toBeLessThanOrEqual(afterCompletion[0]);
+  });
+
+  it('should handle same habit completed multiple times', () => {
+    const habitId = createHabit('Daily Exercise', 'Go for a run', 1);
+    
+    logHabitCompleted(habitId);
+    logHabitCompleted(habitId);
+    logHabitCompleted(habitId);
+    
+    const finalResult = ratioOfCompleted();
+    
+    // Should handle multiple completions without errors
+    expect(Array.isArray(finalResult)).toBe(true);
+    expect(finalResult).toHaveLength(2);
+  });
+});
+
 /**
  * updateHabit, and the output of passing the logs array into habitReviver are intentionally untested
  * due to time constraints because they are no longer being used
  * /^idtest-uuid-\d+$/
+ * 
+ * We also did not test calculateStreak and isHabitForDay as they are private functions that should not
+ * be exported by the code and are instead tested when testing global functions.
  */
