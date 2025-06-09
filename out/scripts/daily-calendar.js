@@ -475,15 +475,71 @@ function updateCalendarDisplay() {
 }
 
 /**
+ * Utility function to compare two dates (ignoring time)
+ * @param {Date} date1 - First date to compare
+ * @param {Date} date2 - Second date to compare
+ * @returns {boolean} True if dates are the same day
+ */
+function isSameDay(date1, date2) {
+  return date1.getFullYear() === date2.getFullYear() &&
+         date1.getMonth() === date2.getMonth() &&
+         date1.getDate() === date2.getDate();
+}
+
+/**
+ * Check if a habit was active (created) on or before a specific date
+ * @param {Object} habit - The habit object
+ * @param {Date} checkDate - The date to check against
+ * @returns {boolean} True if habit was active on the given date
+ */
+function isHabitActiveOnDate(habit, checkDate) {
+  if (!habit.startDateTime) {
+    // If no start date, assume it's always been active (backward compatibility)
+    return true;
+  }
+
+  // Parse the habit's start date
+  let habitStartDate;
+  try {
+    habitStartDate = new Date(habit.startDateTime);
+    // If parsing fails, try alternative parsing
+    if (isNaN(habitStartDate.getTime())) {
+      habitStartDate = new Date(Date.parse(habit.startDateTime));
+    }
+    // If still invalid, assume it's always been active
+    if (isNaN(habitStartDate.getTime())) {
+      return true;
+    }
+  } catch (error) {
+    // If any error in parsing, assume it's always been active
+    return true;
+  }
+
+  // Check if the habit was created on or before the check date
+  // We only compare dates, not times
+  const habitStartDay = new Date(habitStartDate.getFullYear(), habitStartDate.getMonth(), habitStartDate.getDate());
+  const checkDay = new Date(checkDate.getFullYear(), checkDate.getMonth(), checkDate.getDate());
+  
+  return habitStartDay <= checkDay;
+}
+
+/**
  * Fetch all habits from storage using CRUD.js getHabitsForDay function
- * for a specific date - this now uses the same logic as the home page
+ * for a specific date - now filters out habits that weren't created yet
  *
  * @param {Date} date - The date to check activity for
- * @returns {Object[]} Array of habit objects with normalized structure
+ * @returns {Object[]} Array of habit objects with normalized structure that were active on the given date
  */
 function getHabitsForSpecificDate(date) {
-  // Use the same function as home page - getHabitsForDay from CRUD.js
-  return getHabitsForDay(date) || [];
+  // Get all habits that would be scheduled for this day
+  const allHabits = getHabitsForDay(date) || [];
+  
+  // Filter out habits that weren't created yet on this date
+  const activeHabits = allHabits.filter(([habitId, habit]) => {
+    return isHabitActiveOnDate(habit, date);
+  });
+  
+  return activeHabits;
 }
 
 /**
