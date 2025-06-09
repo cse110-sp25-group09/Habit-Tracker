@@ -28,7 +28,6 @@ document.addEventListener('DOMContentLoaded', function () {
       window.location.href = 'daily-calendar.html';
     });
 
-
   document
     .getElementById('monthly-option')
     .addEventListener('click', function (event) {
@@ -327,7 +326,6 @@ document.getElementById('submit-habit').addEventListener('click', () => {
   document.getElementById('habit-form').style.display = 'none';
 });
 
-
 window.addEventListener('DOMContentLoaded', () => {
   const body = document.body;
   const savedTheme = localStorage.getItem('selectedTheme');
@@ -354,4 +352,3 @@ function populateCards() {
 
 // mark as complete / change color / add check
 //delete = delete id and populate
-
