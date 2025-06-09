@@ -6,7 +6,7 @@
  * showing previous, current, and next day. It handles habit display, completion tracking,
  * and provides both touch and keyboard navigation.
  *
- * @author Your Name
+ * @author Taha Masood and Brendan Keane
  * @version 1.0.0
  */
 
@@ -15,7 +15,7 @@ import {
   isHabitComplete,
   logHabitCompleted,
   removeHabitCompletion,
-  getAllHabits,
+  getHabitsForDay,
 } from './CRUD.js';
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -132,7 +132,7 @@ class HabitCard extends HTMLElement {
       }
 
       #card_name {
-        font-size: 2em;
+        font-size: 1.5em;
         text-align: center;
       }
 
@@ -194,6 +194,10 @@ class HabitCard extends HTMLElement {
         color: white;
         font-size: 0.9em;
       }
+
+      .habit-checkbox {
+        accent-color: var(--checkbox-color);
+      }
     </style>
 
     <div class="flip-card">
@@ -202,7 +206,7 @@ class HabitCard extends HTMLElement {
           <h1 id="card_name">${this.getAttribute('card-name') || 'Untitled Habit'}</h1>
           <label style="margin-top: 1rem; display: flex; align-items: center; gap: 0.5rem;">
             Complete:
-            <input type="checkbox" class="habit-checkbox" disabled />
+            <input type="checkbox" class="habit-checkbox" />
           </label>
         </div>
         <div class="flip-card-back">
@@ -332,7 +336,6 @@ class HabitCard extends HTMLElement {
     const titleEl = this.shadowRoot.getElementById('card_name');
     const freqEl = this.shadowRoot.getElementById('card_frequency');
     const descrEl = this.shadowRoot.getElementById('card_description');
-    //const timeEl = this.shadowRoot.getElementById('card_time');
     const streakEl = this.shadowRoot.getElementById('card_streak');
     const idEl = this.shadowRoot.getElementById('card_id');
     const checkbox = this.shadowRoot.querySelector('.habit-checkbox');
@@ -358,10 +361,15 @@ class HabitCard extends HTMLElement {
       idEl.textContent = this.getAttribute('card-id') || 'None';
     }
 
-    if (checkbox) {
-      checkbox.checked = this.getAttribute('card-completed') === 'true';
-      if (checkbox.checked) {
+    if (checkbox && cardFront) {
+      const isCompleted = this.getAttribute('card-completed') === 'true';
+      checkbox.checked = isCompleted;
+
+      cardFront.classList.remove('completed', 'not-completed');
+      if (isCompleted) {
         cardFront.classList.add('completed');
+      } else {
+        cardFront.classList.add('not-completed');
       }
     }
   }
@@ -370,6 +378,7 @@ class HabitCard extends HTMLElement {
 // Define the custom element
 customElements.define('habit-card', HabitCard);
 
+// Applies theme to the page
 window.addEventListener('DOMContentLoaded', () => {
   const body = document.body;
   const savedTheme = localStorage.getItem('selectedTheme');
@@ -428,6 +437,13 @@ function initCalendar() {
   setupEventListeners();
 }
 
+/**
+ * Populates a calendar card element with the correct day name and date
+ * If the card element or its children cannot be found, the function safely returns
+ *
+ * @param {string} cardId - The ID of the DOM element representing the calendar car
+ * @param {Date} dateObj - A valid JavaScript Date object representing the date to display
+ */
 function fillCard(cardId, dateObj) {
   const card = document.getElementById(cardId);
   if (!card) return;
@@ -459,54 +475,67 @@ function updateCalendarDisplay() {
 }
 
 /**
- * Fetch all habits from storage using CRUD.js functions for a specific date
- * for a specific date
- *
- * @param {Date} date - The date to check activity for
- * @returns {Object[]} Array of habit objects with normalized structure
+ * Check if a habit was active (created) on or before a specific date
+ * @param {Object} habit - The habit object
+ * @param {Date} checkDate - The date to check against
+ * @returns {boolean} True if habit was active on the given date
  */
-function getHabitsForSpecificDate(date) {
-  const allHabits = getAllHabits();
-  if (!allHabits) return [];
-
-  // Filter habits that should be active on the given date
-  const activeHabits = [];
-
-  for (const [habitId, habit] of allHabits) {
-    if (isHabitActiveOnDate(habit, date)) {
-      activeHabits.push([habitId, habit]);
-    }
+function isHabitActiveOnDate(habit, checkDate) {
+  if (!habit.startDateTime) {
+    // If no start date, assume it's always been active (backward compatibility)
+    return true;
   }
 
-  return activeHabits;
+  // Parse the habit's start date
+  let habitStartDate;
+  try {
+    habitStartDate = new Date(habit.startDateTime);
+    // If parsing fails, try alternative parsing
+    if (isNaN(habitStartDate.getTime())) {
+      habitStartDate = new Date(Date.parse(habit.startDateTime));
+    }
+    // If still invalid, assume it's always been active
+    if (isNaN(habitStartDate.getTime())) {
+      return true;
+    }
+  } catch (error) {
+    // If any error in parsing, assume it's always been active
+    return true;
+  }
+
+  // Check if the habit was created on or before the check date
+  // We only compare dates, not times
+  const habitStartDay = new Date(
+    habitStartDate.getFullYear(),
+    habitStartDate.getMonth(),
+    habitStartDate.getDate(),
+  );
+  const checkDay = new Date(
+    checkDate.getFullYear(),
+    checkDate.getMonth(),
+    checkDate.getDate(),
+  );
+
+  return habitStartDay <= checkDay;
 }
 
 /**
- * Check if a habit is active on a specific date using CRUD.js logic
- * Falls back to frequency-based calculation if CRUD functions fail
+ * Fetch all habits from storage using CRUD.js getHabitsForDay function
+ * for a specific date - now filters out habits that weren't created yet
  *
- * @param {Object} habit - The habit object to check
  * @param {Date} date - The date to check activity for
- * @returns {boolean} True if the habit is active on the given date
+ * @returns {Object[]} Array of habit objects with normalized structure that were active on the given date
  */
-function isHabitActiveOnDate(habit, date) {
-  try {
-    const startDate = new Date(habit.startDateTime);
-    if (isNaN(startDate.getTime())) return false;
+function getHabitsForSpecificDate(date) {
+  // Get all habits that would be scheduled for this day
+  const allHabits = getHabitsForDay(date) || [];
 
-    const targetDate = new Date(date);
-    targetDate.setHours(0, 0, 0, 0);
-    startDate.setHours(0, 0, 0, 0);
+  // Filter out habits that weren't created yet on this date
+  const activeHabits = allHabits.filter(([habitId, habit]) => {
+    return isHabitActiveOnDate(habit, date);
+  });
 
-    if (targetDate < startDate) return false;
-
-    const timeDiff = targetDate.getTime() - startDate.getTime();
-    const daysDiff = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
-
-    return daysDiff % habit.habitFrequency === 0;
-  } catch {
-    return false;
-  }
+  return activeHabits;
 }
 
 /**
@@ -573,6 +602,26 @@ function handleDayClick(offset) {
 }
 
 /**
+ * Get the hour from a habit's start date time
+ * @param {Object} habit - The habit object
+ * @returns {number} - The hour (0-23)
+ */
+function getHabitHour(habit) {
+  if (!habit.startDateTime) return 12; // default to noon if no start time
+
+  const startDate = new Date(habit.startDateTime);
+  if (isNaN(startDate.getTime())) {
+    // If parsing fails, try to parse as a locale string
+    const parsedDate = new Date(Date.parse(habit.startDateTime));
+    if (isNaN(parsedDate.getTime())) {
+      return 12; // default to noon if parsing fails
+    }
+    return parsedDate.getHours();
+  }
+  return startDate.getHours();
+}
+
+/**
  * Show the detailed view overlay for the current day
  * Creates and displays a modal with all active habits and their completion status
  */
@@ -635,71 +684,103 @@ function showDetailedView() {
   header.appendChild(countEl);
   contentContainer.appendChild(header);
 
-  // Hourly layout in 2 columns on wide screens
+  // Habit cards container - organized by hour
   const scheduleContainer = document.createElement('div');
   scheduleContainer.style.cssText = `
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    display: flex;
+    flex-direction: column;
     gap: 16px;
     padding: 16px;
     box-sizing: border-box;
     width: 100%;
   `;
 
-  const hourSequence = [6, 7, 8, 9, 10, 11, 12, 1, 2, 3, 4, 5];
-  for (const hour of hourSequence) {
-    const matchingHabits = habits.filter(([_, habit]) => {
-      const time = new Date(habit.startDateTime);
-      return time.getHours() === hour;
-    });
+  // Group habits by hour
+  const habitsByHour = {};
+  habits.forEach(([habitId, habit]) => {
+    const hour = getHabitHour(habit);
+    if (!habitsByHour[hour]) {
+      habitsByHour[hour] = [];
+    }
+    habitsByHour[hour].push([habitId, habit]);
+  });
 
-    if (matchingHabits.length === 0) continue;
+  // Sort hours and display habits
+  const sortedHours = Object.keys(habitsByHour)
+    .map((h) => parseInt(h))
+    .sort((a, b) => a - b);
 
-    const hourBlock = document.createElement('div');
-    hourBlock.style.cssText = `
-      border-top: 1px solid #ddd;
-      padding-top: 8px;
-      padding-left: 8px;
-      background: #fff;
-      border-radius: 8px;
+  if (sortedHours.length === 0) {
+    // No habits for this day
+    const noHabitsMsg = document.createElement('div');
+    noHabitsMsg.textContent = 'No habits scheduled for this day';
+    noHabitsMsg.style.cssText = `
+      text-align: center;
+      padding: 40px;
+      font-size: 1.2em;
+      color: #666;
     `;
+    scheduleContainer.appendChild(noHabitsMsg);
+  } else {
+    sortedHours.forEach((hour) => {
+      const hourBlock = document.createElement('div');
+      hourBlock.style.cssText = `
+        border-top: 2px solid #ddd;
+        padding: 16px;
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      `;
 
-    const label = document.createElement('div');
-    const ampmHour = hour % 12 === 0 ? 12 : hour % 12;
-    const period = hour < 12 ? 'AM' : 'PM';
-    label.textContent = `${ampmHour}:00 ${period}`;
-    label.style.cssText = `font-weight: bold; color: #555; margin-bottom: 5px;`;
+      const label = document.createElement('div');
+      const ampmHour = hour === 0 ? 12 : hour > 12 ? hour - 12 : hour;
+      const period = hour < 12 ? 'AM' : 'PM';
+      label.textContent = `${ampmHour}:00 ${period}`;
+      label.style.cssText = `font-weight: bold; color: #555; margin-bottom: 16px; font-size: 1.1em;`;
 
-    hourBlock.appendChild(label);
+      hourBlock.appendChild(label);
 
-    matchingHabits.forEach(([habitId, habit]) => {
-      const habitCard = document.createElement('habit-card');
+      // Create a container for habit cards in this hour
+      const cardsContainer = document.createElement('div');
+      cardsContainer.style.cssText = `
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 16px;
+      `;
 
-      const freqMap = {
-        1: 'Daily',
-        7: 'Weekly',
-        30: 'Monthly',
-      };
-      const freqStr =
-        freqMap[habit.habitFrequency] || `Every ${habit.habitFrequency} days`;
+      habitsByHour[hour].forEach(([habitId, habit]) => {
+        const habitCard = document.createElement('habit-card');
 
-      habitCard.setAttribute('card-name', habit.habitName || 'Untitled Habit');
-      habitCard.setAttribute('card-frequency', freqStr);
-      habitCard.setAttribute(
-        'card-description',
-        habit.habitDescription || 'No description',
-      );
-      habitCard.setAttribute('card-streak', habit.habitStreak || 0);
-      habitCard.setAttribute('card-id', habitId);
-      habitCard.setAttribute(
-        'card-completed',
-        isHabitComplete(habitId, currentDate) ? 'true' : 'false',
-      );
+        const freqMap = {
+          1: 'Daily',
+          7: 'Weekly',
+          30: 'Monthly',
+        };
+        const freqStr =
+          freqMap[habit.habitFrequency] || `Every ${habit.habitFrequency} days`;
 
-      hourBlock.appendChild(habitCard);
+        habitCard.setAttribute(
+          'card-name',
+          habit.habitName || 'Untitled Habit',
+        );
+        habitCard.setAttribute('card-frequency', freqStr);
+        habitCard.setAttribute(
+          'card-description',
+          habit.habitDescription || 'No description',
+        );
+        habitCard.setAttribute('card-streak', habit.habitStreak || 0);
+        habitCard.setAttribute('card-id', habitId);
+        habitCard.setAttribute(
+          'card-completed',
+          isHabitComplete(habitId, currentDate) ? 'true' : 'false',
+        );
+
+        cardsContainer.appendChild(habitCard);
+      });
+
+      hourBlock.appendChild(cardsContainer);
+      scheduleContainer.appendChild(hourBlock);
     });
-
-    scheduleContainer.appendChild(hourBlock);
   }
 
   contentContainer.appendChild(scheduleContainer);
@@ -821,39 +902,17 @@ document.addEventListener('DOMContentLoaded', initCalendar);
  * @namespace DailyCalendar
  */
 window.DailyCalendar = {
-  /**
-   * Navigate the calendar by specified number of days
-   * @param {number} direction - Number of days to navigate
-   */
   navigateCalendar,
 
-  /**
-   * Update habit indicators for all displayed days
-   */
   updateHabitsForDays,
 
-  /**
-   * Get a copy of the current date being displayed
-   * @returns {Date} Copy of the current date
-   */
   getCurrentDate: () => new Date(currentDate),
 
-  /**
-   * Initialize the calendar display and event listeners
-   */
   initCalendar,
 
-  /**
-   * Show the detailed view modal for the current day
-   */
   showDetailedView,
 
-  /**
-   * Close the detailed view modal
-   */
   closeDetailedView,
-
-  isHabitActiveOnDate,
 
   updateHabitIndicators,
 
