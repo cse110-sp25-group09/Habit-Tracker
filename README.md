@@ -1,22 +1,90 @@
-# Habit-Tracker
+# Team 9's WONDERFUL
+## HABIT TRACKER
+- Track, Create, and Crush Your Habits in Style!  
+- Welcome to a world where productivity meets fun. 
+- Build better habits and watch your progress bloom!
+**Monthly & Daily Calendar To Keep Track Of Your Streaks**
 
-## Goal
 
-- Our goal was to have a robust way to visualize your habits and goals for the day!
-- This program will allow you to track and record completions for your habits throughout the day, week, and month.
+---
 
-## How it Works
+## Table of Contents
+- [About Us](#about-us)
 
-- Simply click the create button, add a name, add a desciption, and set the frequency you'd like to be notified
-- After you press create card, it'll appear on your dashboard! It also will appear on your daily and monthly record!
-- To complete it for the day, click the checkbox on the front of the card, and to undo completion click it again!
-- To slip the card, click anywhere but the checkbox or trashcan
-- On the back you can see your info, to delete this card you can click the trashcan and follow its directions.
-- To change pages, you can click the nav bar at the bottom, clicking the icon of the page you wish to go to, and selecting daily or monthly for the calendars
-- On the settings page you can click reset cards to delete all your cards. You can also switch themes for the whole website here.
-- On the daily calendar you can scoll and click through your week of habits. By clicking into it, you can see habits for that specific day. The bottom of the card also shows their completion rates.
-- On the monthly calendar you can see a heat map of your completed habits, as a ratio of your total habits for that day.
 
-## Hope Your Enjoy Habit-Tracker!
+- [Getting Started](#getting-started)
+- [Features](#features)
+- [Home Page](#home-page)
+- [Calendar View](#calendar-view)
+- [Settings](#settings)
+- [How to Use](#how-to-use)
+- [Documentation](#documentation)
+- [Contributing](#contributing)
 
-Start at: https://cse110-sp25-group09.github.io/Habit-Tracker/admin/home-page.html
+---
+
+## About Us
+We’re on a mision, dedicated to creating digital tools that empower you to stay on track and be your best self.  
+Our Habit Tracker is designed to help you form, monitor, and maintain habits — because consistency is key!
+
+---
+
+## Getting Started
+To start using our Habit Tracker, simply click the link below:
+
+👉 [**Launch Habit Tracker**](#)
+
+That’s it! Your journey to a better you begins here.
+
+Home Page 
+
+---
+
+## Features
+
+### Home Page
+The **Home Page** is the central hub of your habit journey. Here’s what you’ll find:
+
+- **Your Habits**: A dynamic list of the habits you’re building.
+- **Create a Habit**: Click the **+** button to open the form and start crafting your new habit.
+- **Habit Details**: For each habit, see the name, description, and how often you’re working on it.
+
+### Calendar View
+Stay on top of your habits with our **Calendar View**!
+
+- **Daily & Monthly Views**: Quickly toggle between daily or monthly overviews to track your habit streaks and see your progress visually.
+- **Streaks & Misses**: Keep tabs on your consistency and know exactly where you stand.
+
+### Settings
+Need to adjust your experience? Head over to the **Settings** page:
+
+- Manage notifications, theme preferences, and more (coming soon!).
+- **Reset Data**: Wipe your habits and start fresh. ⚠️ These changes cannot be reversed!
+
+---
+
+## How to Use
+
+### Creating a Habit
+1. Click the **+** button to open the **Habit Creation Form**.
+2. Fill in:
+   - **Habit Name**
+   - **Description**
+   - **Frequency** (Daily, Weekly, or Monthly)
+3. Click **Create Habit** and watch it appear in your habit list!
+
+### Navigating
+- Use the bottom navigation bar to switch between **Home**, **Calendar**, and **Settings**.
+- Click on any habit to **inspect details** or **update** (coming soon!).
+
+---
+
+## Documentation
+For a deeper dive into the components and functionality, check out our technical documentation.
+
+---
+
+**The Digital Realm of Habits awaits.**  
+Start your streak, conquer your goals, and **become the best version of yourself**!
+
+— * Team 9 *
