@@ -1,5 +1,4 @@
-# Team 9's WONDERFUL
-## HABIT TRACKER
+# Team 9's WONDERFUL HABIT TRACKER
 - Track, Create, and Crush Your Habits in Style!  
 - Welcome to a world where productivity meets fun. 
 - Build better habits and watch your progress bloom!
@@ -9,17 +8,17 @@
 ---
 
 ## Table of Contents
-- [About Us](#about-us)
-
-
-- [Getting Started](#getting-started)
-- [Features](#features)
-- [Home Page](#home-page)
-- [Calendar View](#calendar-view)
-- [Settings](#settings)
-- [How to Use](#how-to-use)
-- [Documentation](#documentation)
-- [Contributing](#contributing)
+- [Team 9's WONDERFUL HABIT TRACKER](#team-9s-wonderful-habit-tracker)
+  - [Table of Contents](#table-of-contents)
+  - [About Us](#about-us)
+  - [Getting Started](#getting-started)
+  - [Features](#features)
+    - [Home Page](#home-page)
+    - [Calendar View](#calendar-view)
+    - [Settings](#settings)
+  - [How to Use](#how-to-use)
+    - [Creating a Habit](#creating-a-habit)
+    - [Navigating](#navigating)
 
 ---
 
@@ -32,7 +31,7 @@ Our Habit Tracker is designed to help you form, monitor, and maintain habits —
 ## Getting Started
 To start using our Habit Tracker, simply click the link below:
 
-👉 [**Launch Habit Tracker**](#)
+👉 [**Launch Habit Tracker**](https://cse110-sp25-group09.github.io/Habit-Tracker/admin/home-page.html)
 
 That’s it! Your journey to a better you begins here.
 
@@ -43,6 +42,7 @@ Home Page
 ## Features
 
 ### Home Page
+![Home Page](.github/images/home.png)
 The **Home Page** is the central hub of your habit journey. Here’s what you’ll find:
 
 - **Your Habits**: A dynamic list of the habits you’re building.
@@ -53,6 +53,9 @@ The **Home Page** is the central hub of your habit journey. Here’s what you’
 Stay on top of your habits with our **Calendar View**!
 
 - **Daily & Monthly Views**: Quickly toggle between daily or monthly overviews to track your habit streaks and see your progress visually.
+  ![Daily Scroll](.github/images/daily-scroll.png)
+  ![History of that Day](.github/images/day-history.png)
+  ![Monthly Calender](.github/images/monthly.png)
 - **Streaks & Misses**: Keep tabs on your consistency and know exactly where you stand.
 
 ### Settings
@@ -79,12 +82,6 @@ Need to adjust your experience? Head over to the **Settings** page:
 
 ---
 
-## Documentation
-For a deeper dive into the components and functionality, check out our technical documentation.
-
----
-
 **The Digital Realm of Habits awaits.**  
 Start your streak, conquer your goals, and **become the best version of yourself**!
-
 — * Team 9 *
