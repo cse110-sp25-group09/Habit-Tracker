@@ -4,7 +4,6 @@
 - Build better habits and watch your progress bloom!
 **Monthly & Daily Calendar To Keep Track Of Your Streaks**
 
-
 ---
 
 ## Table of Contents
