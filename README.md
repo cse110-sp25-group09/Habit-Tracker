@@ -81,7 +81,8 @@ Need to adjust your experience? Head over to the **Settings** page:
 - Click on any habit to **inspect details** or **update** (coming soon!).
 
 ---
-
+## [PUBLIC VIDEO DEMO](https://youtu.be/YEM77EYKo6k)
+---
 **The Digital Realm of Habits awaits.**  
 Start your streak, conquer your goals, and **become the best version of yourself**!
 — * Team 9 *
